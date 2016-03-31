@@ -1,0 +1,323 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include "skel/update_radius.h"
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    window_manager  = NULL;
+    trimesh_manager = NULL;
+    skel_manager    = NULL;
+
+    add_window_widget_to_dock();
+    add_trimesh_widget_to_dock();
+    add_skel_widget_to_dock();
+
+    link_gui_to_core();
+    showMaximized();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::link_gui_to_core()
+{
+    connect(ui->actionWindow,   SIGNAL(triggered()),
+            this,               SLOT(add_window_widget_to_dock()));
+
+    connect(ui->actionTrimesh,  SIGNAL(triggered()),
+            this,               SLOT(add_trimesh_widget_to_dock()));
+
+    connect(ui->actionSkel,     SIGNAL(triggered()),
+            this,               SLOT(add_skel_widget_to_dock()));
+
+    connect(window_manager,     SIGNAL(set_full_screen(bool)),
+            this,               SLOT  (set_full_screen(bool)));
+
+    connect(window_manager,     SIGNAL(set_background_color(const QColor &)),
+            this,               SLOT  (set_background_color(const QColor &)));
+
+    connect(trimesh_manager,    SIGNAL(set_draw_mesh(bool)),
+            this,               SLOT  (set_draw_mesh(bool)));
+
+    connect(trimesh_manager,    SIGNAL(load_trimesh(const char *, bool, bool)),
+            this,               SLOT  (load_trimesh(const char *, bool, bool)));
+
+    connect(trimesh_manager,    SIGNAL(set_wireframe(bool)),
+            this,               SLOT  (set_wireframe(bool)));
+
+    connect(trimesh_manager,    SIGNAL(set_flat_shading()),
+            this,               SLOT  (set_flat_shading()));
+
+    connect(trimesh_manager,    SIGNAL(set_smooth_shading()),
+            this,               SLOT  (set_smooth_shading()));
+
+    connect(trimesh_manager,    SIGNAL(set_points_shading()),
+            this,               SLOT  (set_points_shading()));
+
+    connect(trimesh_manager,    SIGNAL(set_enable_vertex_color()),
+            this,               SLOT  (set_enable_vertex_color()));
+
+    connect(trimesh_manager,    SIGNAL(set_enable_triangle_color()),
+            this,               SLOT  (set_enable_triangle_color()));
+
+    connect(trimesh_manager,    SIGNAL(set_vertex_color(const QColor &)),
+            this,               SLOT  (set_vertex_color(const QColor &)));
+
+    connect(trimesh_manager,    SIGNAL(set_triangle_color(const QColor &)),
+            this,               SLOT  (set_triangle_color(const QColor &)));
+
+    connect(trimesh_manager,    SIGNAL(set_wireframe_color(const QColor &)),
+            this,               SLOT  (set_wireframe_color(const QColor &)));
+
+    connect(trimesh_manager,    SIGNAL(set_wireframe_width(int)),
+            this,               SLOT  (set_wireframe_width(int)));
+
+    connect(skel_manager,       SIGNAL(load_skel(const char *)),
+            this,               SLOT  (load_skel(const char *)));
+
+    connect(skel_manager,       SIGNAL(set_draw_skel(bool)),
+            this,               SLOT  (set_draw_skel(bool)));
+
+    connect(skel_manager,       SIGNAL(set_draw_bones(bool)),
+            this,               SLOT  (set_draw_bones(bool)));
+
+    connect(skel_manager,       SIGNAL(set_draw_feature_points(bool)),
+            this,               SLOT  (set_draw_feature_points(bool)));
+
+    connect(skel_manager,       SIGNAL(set_draw_bone_points(bool)),
+            this,               SLOT  (set_draw_bone_points(bool)));
+
+    connect(skel_manager,       SIGNAL(set_draw_max_spheres(bool)),
+            this,               SLOT  (set_draw_max_spheres(bool)));
+
+    connect(skel_manager,       SIGNAL(set_leaf_color(const QColor &)),
+            this,               SLOT  (set_leaf_color(const QColor &)));
+
+    connect(skel_manager,       SIGNAL(set_bone_color(const QColor &)),
+            this,               SLOT  (set_bone_color(const QColor &)));
+
+    connect(skel_manager,       SIGNAL(set_joint_color(const QColor &)),
+            this,               SLOT  (set_joint_color(const QColor &)));
+
+    connect(skel_manager,       SIGNAL(set_skel_standard_color()),
+            this,               SLOT  (set_skel_standard_color()));
+
+    connect(skel_manager,       SIGNAL(set_skel_bone_color()),
+            this,               SLOT  (set_skel_bone_color()));
+
+    connect(skel_manager,       SIGNAL(skel_update_max_spheres()),
+            this,               SLOT(skel_update_max_spheres()));
+}
+
+/*
+ * SLOTS
+*/
+
+void MainWindow::load_trimesh(const char *filename, bool center, bool align_to_PCA)
+{
+    m = DrawableTrimesh(filename);
+
+    if (align_to_PCA) m.align_to_PCA();
+    else if (center)  m.center_bbox();
+
+    ui->glCanvas->clear();
+    ui->glCanvas->push_obj(&m);
+    ui->glCanvas->fit_scene();
+}
+
+void MainWindow::load_skel(const char *filename)
+{
+    s = DrawableSkel(filename);
+    s.set_GLscene_radius(ui->glCanvas->sceneRadius());
+
+    int how_many = ui->glCanvas->push_obj(&s);
+
+    if (how_many < 2) // I need to know the scene radius to properly render the skeleton....
+    {
+        cerr << "WARNING : " << __FILE__ << ", line " << __LINE__ << " : load_skel() : unknown scene radius. Skel rendering may not work properly." << endl;
+    }
+}
+
+void MainWindow::set_full_screen(bool b)
+{
+    ui->glCanvas->setFullScreen(b);
+}
+
+void MainWindow::set_wireframe(bool b)
+{
+    m.set_wireframe(b);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_flat_shading()
+{
+    m.set_flat_shading();
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_smooth_shading()
+{
+    m.set_smooth_shading();
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_points_shading()
+{
+    m.set_points_shading();
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_background_color(const QColor & color)
+{
+    ui->glCanvas->set_clear_color(color);
+}
+
+void MainWindow::set_vertex_color(const QColor & color)
+{
+    m.set_v_color(color.redF(), color.greenF(), color.blueF());
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_triangle_color(const QColor & color)
+{
+    m.set_t_color(color.redF(), color.greenF(), color.blueF());
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_wireframe_color(const QColor & color)
+{
+    m.set_wireframe_color(color.redF(), color.greenF(), color.blueF());
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_enable_vertex_color()
+{
+    m.set_enable_vertex_color();
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_enable_triangle_color()
+{
+    m.set_enable_triangle_color();
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_wireframe_width(int width)
+{
+    m.set_wireframe_width(width);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_draw_mesh(bool b)
+{
+    m.set_draw_mesh(b);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_draw_skel(bool b)
+{
+    s.set_draw_skel(b);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_draw_bones(bool b)
+{
+    s.set_draw_bones(b);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_draw_feature_points(bool b)
+{
+    s.set_draw_feature_points(b);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_draw_bone_points(bool b)
+{
+    s.set_draw_bone_points(b);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_draw_max_spheres(bool b)
+{
+    s.set_draw_max_spheres(b);
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_leaf_color(const QColor & color)
+{
+    s.set_std_leaf_color(color.redF(), color.greenF(), color.blueF());
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_bone_color(const QColor & color)
+{
+    s.set_std_bone_color(color.redF(), color.greenF(), color.blueF());
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_joint_color(const QColor & color)
+{
+    s.set_std_joint_color(color.redF(), color.greenF(), color.blueF());
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_skel_standard_color()
+{
+    s.set_enable_std_color();
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::set_skel_bone_color()
+{
+    s.set_enable_bone_color();
+    ui->glCanvas->updateGL();
+}
+
+void MainWindow::add_window_widget_to_dock()
+{
+    if (!window_manager)
+    {
+        window_manager = new Window_manager(this);
+    }
+    window_manager->show();
+    addDockWidget(Qt::RightDockWidgetArea, window_manager);
+}
+
+void MainWindow::add_trimesh_widget_to_dock()
+{
+    if (!trimesh_manager)
+    {
+        trimesh_manager = new Trimesh_manager(this);
+    }
+    trimesh_manager->show();
+    addDockWidget(Qt::RightDockWidgetArea, trimesh_manager);
+}
+
+void MainWindow::add_skel_widget_to_dock()
+{
+    if (!skel_manager)
+    {
+        skel_manager = new Skel_manager(this);
+    }
+    skel_manager->show();
+    addDockWidget(Qt::RightDockWidgetArea, skel_manager);
+}
+
+void MainWindow::skel_update_max_spheres()
+{
+    if (m.num_triangles() > 0 && s.num_vertices() > 0)
+    {
+        update_max_sphere_radius(s, m.vector_coords(), m.vector_triangles());
+    }
+}

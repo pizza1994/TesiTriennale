@@ -1,0 +1,58 @@
+QT += core gui opengl xml
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET   = SkelEditor
+TEMPLATE = app
+
+LIB_DIR = /Users/cino/Documents/devel/lib
+
+DEFINES += USE_VCG
+DEFINES += USE_CGAL
+
+LIBS += -framework QGLViewer
+LIBS += -L$$LIB_DIR/CGAL-4.3/lib -lCGAL
+LIBS += -lboost_system
+
+# unnecessary to compile but useful for text auto completion on QtCreator...
+INCLUDEPATH += /System/Library/Frameworks/QGLViewer.framework/headers
+INCLUDEPATH += $$LIB_DIR/vcglib_old/
+
+SOURCES += main.cpp
+SOURCES += colors.cpp
+SOURCES += trimesh/drawable_trimesh.cpp
+SOURCES += trimesh/load_save_trimesh.cpp
+SOURCES += trimesh/pca.cpp
+SOURCES += skel/drawable_skel.cpp
+SOURCES += skel/load_save_skel.cpp
+SOURCES += skel/update_radius.cpp
+SOURCES += GUI/mainwindow.cpp
+SOURCES += GUI/glcanvas.cpp
+SOURCES += GUI/trimesh_manager.cpp
+SOURCES += GUI/skel_manager.cpp
+SOURCES += GUI/window_manager.cpp
+
+HEADERS  += vec3.h
+HEADERS  += colors.h
+HEADERS  += bbox.h
+HEADERS  += cylinder.h
+HEADERS  += sphere.h
+HEADERS  += drawable_object.h
+HEADERS  += trimesh/drawable_trimesh.h
+HEADERS  += trimesh/load_save_trimesh.h
+HEADERS  += trimesh/trimesh.h
+HEADERS  += trimesh/pca.h
+HEADERS  += skel/drawable_skel.h
+HEADERS  += skel/skel.h
+HEADERS  += skel/load_save_skel.h
+HEADERS  += skel/update_radius.h
+HEADERS  += GUI/mainwindow.h
+HEADERS  += GUI/glcanvas.h
+HEADERS  += GUI/trimesh_manager.h
+HEADERS  += GUI/skel_manager.h
+HEADERS  += GUI/window_manager.h
+
+FORMS += GUI/mainwindow.ui
+FORMS += GUI/trimesh_manager.ui
+FORMS += GUI/skel_manager.ui
+FORMS += GUI/window_manager.ui

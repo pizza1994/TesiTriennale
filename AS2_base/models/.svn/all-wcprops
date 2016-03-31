@@ -1,0 +1,39 @@
+K 26
+svn:wc:ra_dav:activity-url
+V 22
+/svn/cinolib/!svn/act/
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/cinolib/!svn/ver/18/CinoLib/models
+END
+octopus_quad.obj
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/cinolib/!svn/ver/13/CinoLib/models/octopus_quad.obj
+END
+cactus.skel
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/cinolib/!svn/ver/15/CinoLib/models/cactus.skel
+END
+fertility_tri.obj
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/cinolib/!svn/ver/13/CinoLib/models/fertility_tri.obj
+END
+cube.obj
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/cinolib/!svn/ver/13/CinoLib/models/cube.obj
+END
+cactus.off
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/cinolib/!svn/ver/15/CinoLib/models/cactus.off
+END

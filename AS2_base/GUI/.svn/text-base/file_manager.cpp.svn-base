@@ -1,0 +1,62 @@
+#include "file_manager_widget.h"
+#include "ui_file_manager_widget.h"
+
+#include <QFileDialog>
+
+File_manager_widget::File_manager_widget(QWidget *parent) : QDockWidget(parent), ui(new Ui::File_manager_widget)
+{
+    ui->setupUi(this);
+}
+
+File_manager_widget::~File_manager_widget()
+{
+    delete ui;
+}
+
+void File_manager_widget::on_checkBox_stateChanged(int state)
+{
+    emit set_full_screen(state == Qt::Checked);
+}
+
+void File_manager_widget::on_butOpenTriMesh_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(NULL,
+                       "Open Trimesh",
+                       ".",
+                       "3D Meshes (*.off *.ply *.obj);; OBJ(*.obj);; OFF(*.off);; PLY(*.ply)");
+
+    std::cout << "load: " << filename.toStdString() << std::endl;
+
+    if (!filename.isEmpty())
+    {
+        bool c = ui->cbCenterTrimesh->isChecked();
+        bool a = ui->cbAlignToPCA->isChecked();
+
+        emit open_trimesh(filename.toStdString().c_str(), c, a);
+    }
+}
+
+void File_manager_widget::on_butOpenSkeleton_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(NULL,
+                       "Open Skeleton",
+                       ".",
+                       "Skeletons (*.skel *.cs *.ds06);; Livesu2012(*.skel);; Tagliasacchi2012(*.cs);; DeySun2006(*.ds06)");
+
+    std::cout << "load: " << filename.toStdString() << std::endl;
+
+    if (!filename.isEmpty()) emit open_skeleton(filename.toStdString().c_str());
+}
+
+void File_manager_widget::on_cbAlignToPCA_stateChanged(int state)
+{
+    if (state == Qt::Checked) ui->cbCenterTrimesh->setChecked(true);
+}
+
+void File_manager_widget::on_cbCenterTrimesh_stateChanged(int state)
+{
+    if (state == Qt::Unchecked  && ui->cbAlignToPCA->isChecked())
+    {
+        ui->cbAlignToPCA->setChecked(false);
+    }
+}

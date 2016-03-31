@@ -1,0 +1,13 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#ifndef COLORS_H
+#define COLORS_H
+
+void HSV2RGB(float * rgb, const float * hsv);
+
+void scattered_color(int n_colors, int pos, float * rgb);
+
+#endif // COLORS_H

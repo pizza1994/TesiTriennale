@@ -1,0 +1,95 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#include "skel_manager.h"
+#include "ui_skel_manager.h"
+
+#include <QFileDialog>
+#include <QColorDialog>
+#include <iostream>
+
+Skel_manager::Skel_manager(QWidget *parent) : QDockWidget(parent), ui(new Ui::Skel_manager)
+{
+    ui->setupUi(this);
+}
+
+Skel_manager::~Skel_manager()
+{
+    delete ui;
+}
+
+void Skel_manager::on_butLoadSkel_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(NULL,
+                       "Open Skeleton",
+                       ".",
+                       "Skeletons (*.skel *.cg *.cskel);; Livesu2012(*.skel);; Tagliasacchi2012(*.cg);; DeySun2006(*.cskel)");
+
+    std::cout << "load: " << filename.toStdString() << std::endl;
+
+    if (!filename.isEmpty()) emit load_skel(filename.toStdString().c_str());
+}
+
+void Skel_manager::on_cbDrawSkel_stateChanged(int state)
+{
+    emit set_draw_skel(state == Qt::Checked);
+}
+
+void Skel_manager::on_cbShowBones_stateChanged(int state)
+{
+    emit set_draw_bones(state == Qt::Checked);
+}
+
+void Skel_manager::on_cbShowFeaturePoints_stateChanged(int state)
+{
+    emit set_draw_feature_points(state == Qt::Checked);
+}
+
+
+void Skel_manager::on_cbShowBonePoints_stateChanged(int state)
+{
+    emit set_draw_bone_points(state == Qt::Checked);
+}
+
+void Skel_manager::on_cbShowMaxSpheres_stateChanged(int state)
+{
+    emit set_draw_max_spheres(state == Qt::Checked);
+}
+
+void Skel_manager::on_butBoneColor_clicked()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this);
+
+    emit set_bone_color(color);
+}
+
+void Skel_manager::on_butLeafColor_clicked()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this);
+
+    emit set_leaf_color(color);
+}
+
+void Skel_manager::on_butJointColor_clicked()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this);
+
+    emit set_joint_color(color);
+}
+
+void Skel_manager::on_rbStandardColor_toggled(bool checked)
+{
+    if (checked) emit set_skel_standard_color();
+}
+
+void Skel_manager::on_rbBoneColor_toggled(bool checked)
+{
+    if (checked) emit set_skel_bone_color();
+}
+
+void Skel_manager::on_butUpdateRadii_clicked()
+{
+    emit skel_update_max_spheres();
+}

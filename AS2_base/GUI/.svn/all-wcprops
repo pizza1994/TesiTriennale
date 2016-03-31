@@ -1,0 +1,93 @@
+K 26
+svn:wc:ra_dav:activity-url
+V 22
+/svn/cinolib/!svn/act/
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/cinolib/!svn/ver/46/CinoLib/GUI
+END
+glcanvas.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/cinolib/!svn/ver/58/CinoLib/GUI/glcanvas.cpp
+END
+trimesh_manager.ui
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/cinolib/!svn/ver/40/CinoLib/GUI/trimesh_manager.ui
+END
+mainwindow.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/cinolib/!svn/ver/60/CinoLib/GUI/mainwindow.h
+END
+window_manager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/cinolib/!svn/ver/58/CinoLib/GUI/window_manager.cpp
+END
+glcanvas.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/cinolib/!svn/ver/58/CinoLib/GUI/glcanvas.h
+END
+skel_manager.ui
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/cinolib/!svn/ver/60/CinoLib/GUI/skel_manager.ui
+END
+trimesh_manager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/cinolib/!svn/ver/58/CinoLib/GUI/trimesh_manager.cpp
+END
+window_manager.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/cinolib/!svn/ver/58/CinoLib/GUI/window_manager.h
+END
+mainwindow.ui
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/cinolib/!svn/ver/59/CinoLib/GUI/mainwindow.ui
+END
+skel_manager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/cinolib/!svn/ver/60/CinoLib/GUI/skel_manager.cpp
+END
+trimesh_manager.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/cinolib/!svn/ver/58/CinoLib/GUI/trimesh_manager.h
+END
+mainwindow.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/cinolib/!svn/ver/60/CinoLib/GUI/mainwindow.cpp
+END
+window_manager.ui
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/cinolib/!svn/ver/40/CinoLib/GUI/window_manager.ui
+END
+skel_manager.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/cinolib/!svn/ver/60/CinoLib/GUI/skel_manager.h
+END

@@ -1,0 +1,62 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#ifndef SKEL_MANAGER_H
+#define SKEL_MANAGER_H
+
+#include <QDockWidget>
+#include <QColor>
+
+namespace Ui
+{
+    class Skel_manager;
+}
+
+class Skel_manager : public QDockWidget
+{
+    Q_OBJECT
+
+    public:
+
+        explicit Skel_manager(QWidget *parent = 0);
+        ~Skel_manager();
+
+    signals:
+
+        void load_skel(const char *);
+        void set_draw_skel(bool);
+        void set_draw_bones(bool);
+        void set_draw_feature_points(bool);
+        void set_draw_bone_points(bool);
+        void set_draw_max_spheres(bool);
+        void set_leaf_color(const QColor &);
+        void set_bone_color(const QColor &);
+        void set_joint_color(const QColor &);
+        void set_skel_standard_color();
+        void set_skel_bone_color();
+        void skel_update_max_spheres();
+
+    private
+    slots:
+
+        void on_butLoadSkel_clicked();
+        void on_cbDrawSkel_stateChanged(int state);
+        void on_cbShowBones_stateChanged(int state);
+        void on_cbShowFeaturePoints_stateChanged(int state);
+        void on_cbShowBonePoints_stateChanged(int state);
+        void on_cbShowMaxSpheres_stateChanged(int state);
+        void on_butBoneColor_clicked();
+        void on_butLeafColor_clicked();
+        void on_butJointColor_clicked();
+        void on_rbStandardColor_toggled(bool checked);
+        void on_rbBoneColor_toggled(bool checked);
+        void on_butUpdateRadii_clicked();
+
+    private:
+
+        Ui::Skel_manager *ui;
+};
+
+#endif // SKEL_MANAGER_H
