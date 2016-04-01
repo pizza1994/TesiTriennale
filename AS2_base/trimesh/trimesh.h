@@ -264,6 +264,7 @@ template<typename real> class Trimesh
             cout << tris.size() / 3   << " triangles read" << endl;
             cout << coords.size() / 3 << " vertices  read" << endl;
 
+
             build_adjacency();
             update_normals();
             update_bbox();

@@ -289,3 +289,7 @@ void DrawableTrimesh::set_t_color(float r, float g, float b)
         t_colors[i + 2] = b;
     }
 }
+
+/*void DrawableTrimesh::createBoundingBox(){
+
+}*/

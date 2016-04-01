@@ -74,6 +74,9 @@ void MainWindow::link_gui_to_core()
 
     connect(trimesh_manager,    SIGNAL(set_wireframe_width(int)),
             this,               SLOT  (set_wireframe_width(int)));
+
+    /*connect(trimesh_manager,    SIGNAL(createBoundingBox()),
+            this,               SLOT  (createBoundingBox()));*/
 }
 
 /*

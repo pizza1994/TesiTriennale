@@ -95,3 +95,7 @@ void Trimesh_manager::on_cbDrawTrimesh_stateChanged(int state)
 {
     emit set_draw_mesh(state == Qt::Checked);
 }
+
+void Trimesh_manager::on_butShowBBox_clicked(){
+    std::cout <<"button clicked";
+}
