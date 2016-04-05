@@ -33,6 +33,7 @@ void loadObj(const char     * filename,
 
         std::string token;
         iss >> token;
+
         if (token.size() > 1) continue; // vn,fn  .... I don't care
 
         if (token[0] == 'v')

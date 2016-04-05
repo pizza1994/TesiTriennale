@@ -262,7 +262,17 @@ void DrawableTrimesh::setEnableTriangleColor()
     drawMode &= ~DRAW_VERTEXCOLOR;
 }
 
+<<<<<<< HEAD:Visualizzatore/lib/trimesh/drawable_trimesh.cpp
 void DrawableTrimesh::setWireframeColor(float r, float g, float b)
+=======
+
+void DrawableTrimesh::set_enable_grid()
+{
+    std::cout<<"Ciao"<< std::endl;;
+}
+
+void DrawableTrimesh::set_enable_triangle_color()
+>>>>>>> origin/master:AS2_base/trimesh/drawable_trimesh.cpp
 {
     wireframeColor[0] = r;
     wireframeColor[1] = g;

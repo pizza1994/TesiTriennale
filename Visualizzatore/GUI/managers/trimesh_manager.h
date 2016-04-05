@@ -21,8 +21,30 @@ class TrimeshManager : public QDockWidget
 
     public:
 
+<<<<<<< HEAD:Visualizzatore/GUI/managers/trimesh_manager.h
         explicit TrimeshManager(QWidget *parent = 0);
         ~TrimeshManager();
+=======
+        explicit Trimesh_manager(QWidget *parent = 0);
+        ~Trimesh_manager();
+
+    signals:
+
+        void load_trimesh(const char *);
+        void set_wireframe(bool);
+        void set_draw_mesh(bool);
+        void set_flat_shading();
+        void set_smooth_shading();
+        void set_points_shading();
+        void set_enable_vertex_color();
+        void set_enable_grid();
+        void set_enable_triangle_color();
+        void set_wireframe_width(int width);
+        void set_vertex_color(const QColor &);
+        void set_triangle_color(const QColor &);
+        void set_wireframe_color(const QColor &);
+
+>>>>>>> origin/master:AS2_base/GUI/trimesh_manager.h
 
 
     private
@@ -36,6 +58,7 @@ class TrimeshManager : public QDockWidget
         void on_rbVertexColor_toggled(bool checked);
         void on_rbTriangleColor_toggled(bool checked);
         void on_butSetVColor_clicked();
+        void on_addGridButton_clicked();
         void on_butSetTcolor_clicked();
         void on_butSetWireframeColor_clicked();
         void on_hsWireframeWidth_valueChanged(int width);
