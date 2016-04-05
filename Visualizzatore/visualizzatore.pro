@@ -40,7 +40,7 @@ FORMS += \
 
 
 macx {
-    _BOOST_PATH = /usr/local/Cellar/boost/1.55.0_2
+    _BOOST_PATH = /usr/local/Cellar/boost/1.60.0_1
     INCLUDEPATH += "$${_BOOST_PATH}/include/"
     LIBS += -L$${_BOOST_PATH}/lib
     ## Use only one of these:
@@ -192,7 +192,7 @@ unix {
 }
 
 macx|darwin-g++ {
-  ICON = $${INCLUDEPATH}/QGLViewer/qglviewer.icns
+  #ICON = $${INCLUDEPATH}/QGLViewer/qglviewer.icns
 }
 
 win32 {
