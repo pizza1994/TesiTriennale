@@ -52,6 +52,7 @@ class DrawableTrimesh : public Trimesh<double> ,
         void set_wireframe_color(float r, float g, float b);
         void set_wireframe_width(float width);
         void set_enable_vertex_color();
+        void set_enable_grid();
         void set_enable_triangle_color();
         void set_v_color(float r, float g, float b);
         void set_t_color(float r, float g, float b);

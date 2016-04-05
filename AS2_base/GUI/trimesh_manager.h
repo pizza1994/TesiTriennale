@@ -32,6 +32,7 @@ class Trimesh_manager : public QDockWidget
         void set_smooth_shading();
         void set_points_shading();
         void set_enable_vertex_color();
+        void set_enable_grid();
         void set_enable_triangle_color();
         void set_wireframe_width(int width);
         void set_vertex_color(const QColor &);
@@ -51,6 +52,7 @@ class Trimesh_manager : public QDockWidget
         void on_rbVertexColor_toggled(bool checked);
         void on_rbTriangleColor_toggled(bool checked);
         void on_butSetVColor_clicked();
+        void on_addGridButton_clicked();
         void on_butSetTcolor_clicked();
         void on_butSetWireframeColor_clicked();
         void on_hsWireframeWidth_valueChanged(int width);

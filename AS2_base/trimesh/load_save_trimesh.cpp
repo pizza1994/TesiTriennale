@@ -33,6 +33,7 @@ void load_OBJ(const char     * filename,
 
         string token;
         iss >> token;
+
         if (token.size() > 1) continue; // vn,fn  .... I don't care
 
         if (token[0] == 'v')

@@ -250,6 +250,12 @@ void DrawableTrimesh::set_enable_vertex_color()
     draw_mode &= ~DRAW_FACECOLOR;
 }
 
+
+void DrawableTrimesh::set_enable_grid()
+{
+    std::cout<<"Ciao"<< std::endl;;
+}
+
 void DrawableTrimesh::set_enable_triangle_color()
 {
     draw_mode |=  DRAW_FACECOLOR;

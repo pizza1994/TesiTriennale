@@ -62,6 +62,11 @@ void Trimesh_manager::on_butSetVColor_clicked()
     emit set_vertex_color(color);
 }
 
+void Trimesh_manager::on_addGridButton_clicked()
+{
+    emit set_enable_grid();
+}
+
 void Trimesh_manager::on_butSetTcolor_clicked()
 {
     QColor color = QColorDialog::getColor(Qt::white, this);

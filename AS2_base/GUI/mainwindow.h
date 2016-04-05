@@ -54,6 +54,7 @@ class MainWindow : public QMainWindow
         void set_vertex_color(const QColor &);
         void set_triangle_color(const QColor &);
         void set_wireframe_color(const QColor &);
+        void set_enable_grid();
 
     private:
 

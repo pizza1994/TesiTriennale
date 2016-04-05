@@ -60,6 +60,9 @@ void MainWindow::link_gui_to_core()
     connect(trimesh_manager,    SIGNAL(set_enable_vertex_color()),
             this,               SLOT  (set_enable_vertex_color()));
 
+    connect(trimesh_manager,    SIGNAL(set_enable_grid()),
+            this,               SLOT  (set_enable_grid()));
+
     connect(trimesh_manager,    SIGNAL(set_enable_triangle_color()),
             this,               SLOT  (set_enable_triangle_color()));
 
@@ -147,6 +150,13 @@ void MainWindow::set_wireframe_color(const QColor & color)
 void MainWindow::set_enable_vertex_color()
 {
     m.set_enable_vertex_color();
+    ui->glCanvas->updateGL();
+}
+
+
+void MainWindow::set_enable_grid()
+{
+    m.set_enable_grid();
     ui->glCanvas->updateGL();
 }
 
