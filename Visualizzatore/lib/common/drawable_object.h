@@ -26,6 +26,9 @@ class DrawableObject
         virtual float sceneRadius()   const = 0; /**< @brief Restituisce il raggio della bounding sphere dell'oggetto */
         virtual bool isVisible()      const = 0; /**< @brief Restituisce true se l'oggetto è visibile, false altrimenti */
         virtual void setVisible(bool)       = 0; /**< @brief Setta la visibilità dell'oggetto */
+
+    private:
+        bool visible;
 };
 
 #endif // DRAWABLE_OBJECT_H
