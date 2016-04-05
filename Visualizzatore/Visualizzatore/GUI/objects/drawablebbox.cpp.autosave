@@ -1,0 +1,6 @@
+#include "drawable_bbox.h"
+
+DrawableBBox::DrawableBBox()
+{
+
+}

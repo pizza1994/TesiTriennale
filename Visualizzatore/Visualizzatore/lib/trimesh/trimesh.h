@@ -296,6 +296,11 @@ template<typename real> class Trimesh
                 bbox.setMax(bbox.getMax().max(Pointd(v.x(), v.y(), v.z())));
             }
         }
+
+        BoundingBox getBbox(){
+            return bbox;
+        }
+
 };
 
 #endif // TRIMESH_H

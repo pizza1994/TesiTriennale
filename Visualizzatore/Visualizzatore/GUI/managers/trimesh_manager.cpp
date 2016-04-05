@@ -15,6 +15,7 @@ TrimeshManager::TrimeshManager(QWidget *parent) : QDockWidget(parent), ui(new Ui
 {
     ui->setupUi(this);
     mw = parent;
+    visibleBoundingBox = NULL;
 }
 
 TrimeshManager::~TrimeshManager()
@@ -48,6 +49,7 @@ void TrimeshManager::on_butLoadTrimesh_clicked()
         ui->rbSmooth->setEnabled(true);
         ui->rbTriangleColor->setEnabled(true);
         ui->rbVertexColor->setEnabled(true);
+
     }
 }
 
@@ -114,6 +116,39 @@ void TrimeshManager::on_butSetWireframeColor_clicked()
 
     t->setWireframeColor(color.redF(), color.greenF(), color.blueF());
     ((MainWindow*)mw)->updateGlCanvas();
+}
+
+void TrimeshManager::on_cbShowBBox_stateChanged(int state){
+
+    if (state == Qt::Checked) {
+        if (((MainWindow*)mw)->getNumberVisibleObjects() != 0) {
+            if (visibleBoundingBox == NULL) {
+                visibleBoundingBox = new DrawableBBox( t->getBbox() );
+                visibleBoundingBox->setVisible(true);
+                ((MainWindow*)mw)->push_obj(visibleBoundingBox);
+            }
+            else {
+                visibleBoundingBox->setBoundingBox(t->getBbox());
+                visibleBoundingBox->setVisible(true);
+            }
+        }
+        else {
+            if (visibleBoundingBox == NULL) {
+                visibleBoundingBox = new DrawableBBox(BoundingBox(Pointd(-5,-5,-5), Pointd(5,5,5)));
+                visibleBoundingBox->setVisible(true);
+                ((MainWindow*)mw)->push_obj(visibleBoundingBox);
+            }
+            else {
+                visibleBoundingBox->setBoundingBox(BoundingBox(Pointd(-5,-5,-5), Pointd(5,5,5)));
+                visibleBoundingBox->setVisible(true);
+            }
+        }
+    }
+    else {
+        visibleBoundingBox->setVisible(false);
+    }
+    ((MainWindow*)mw)->updateGlCanvas();
+
 }
 
 void TrimeshManager::on_hsWireframeWidth_valueChanged(int width)

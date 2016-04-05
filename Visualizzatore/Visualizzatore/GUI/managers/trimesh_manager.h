@@ -9,6 +9,7 @@
 #include <QDockWidget>
 #include <QColor>
 #include "lib/trimesh/drawable_trimesh.h"
+#include "GUI/objects/drawable_bbox.h"
 
 namespace Ui
 {
@@ -37,15 +38,18 @@ class TrimeshManager : public QDockWidget
         void on_rbTriangleColor_toggled(bool checked);
         void on_butSetVColor_clicked();
         void on_butSetTcolor_clicked();
+        void on_cbShowBBox_stateChanged(int state);
         void on_butSetWireframeColor_clicked();
         void on_hsWireframeWidth_valueChanged(int width);
         void on_cbDrawTrimesh_stateChanged(int state);
+
 
     private:
 
         Ui::Trimesh_manager *ui;
         QWidget* mw;
         DrawableTrimesh * t;
+        DrawableBBox * visibleBoundingBox;
 };
 
 #endif // Trimesh_manager_H

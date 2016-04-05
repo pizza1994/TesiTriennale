@@ -16,7 +16,8 @@ HEADERS += \
     GUI/managers/window_manager.h \
     GUI/objects/cylinder.h \
     GUI/objects/drawable_axis.h \
-    GUI/objects/sphere.h
+    GUI/objects/sphere.h \
+    GUI/objects/drawable_bbox.h
 
 
 SOURCES += \
@@ -28,7 +29,8 @@ SOURCES += \
     lib/trimesh/load_save_trimesh.cpp \
     GUI/managers/trimesh_manager.cpp \
     GUI/managers/window_manager.cpp \
-    GUI/objects/drawable_axis.cpp
+    GUI/objects/drawable_axis.cpp \
+    GUI/objects/drawable_bbox.cpp
 
 
 QMAKE_CXXFLAGS += -std=c++11
