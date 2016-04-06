@@ -123,23 +123,25 @@ void TrimeshManager::on_cbShowBBox_stateChanged(int state){
     if (state == Qt::Checked) {
         if (((MainWindow*)mw)->getNumberVisibleObjects() != 0) {
             if (visibleBoundingBox == NULL) {
-                visibleBoundingBox = new DrawableBBox( t->getBbox() );
+                visibleBoundingBox = new DrawableBBox( t->getBbox() , (((MainWindow*)mw)->getFullBoundingBox().diag()/5) );
                 visibleBoundingBox->setVisible(true);
                 ((MainWindow*)mw)->push_obj(visibleBoundingBox);
             }
             else {
                 visibleBoundingBox->setBoundingBox(t->getBbox());
+                visibleBoundingBox->setScaleFactor((((MainWindow*)mw)->getFullBoundingBox().diag()/5));
                 visibleBoundingBox->setVisible(true);
             }
         }
         else {
             if (visibleBoundingBox == NULL) {
-                visibleBoundingBox = new DrawableBBox(BoundingBox(Pointd(-5,-5,-5), Pointd(5,5,5)));
+                visibleBoundingBox = new DrawableBBox(BoundingBox(Pointd(-5,-5,-5), Pointd(5,5,5)) , (((MainWindow*)mw)->getFullBoundingBox().diag()/5));
                 visibleBoundingBox->setVisible(true);
                 ((MainWindow*)mw)->push_obj(visibleBoundingBox);
             }
             else {
                 visibleBoundingBox->setBoundingBox(BoundingBox(Pointd(-5,-5,-5), Pointd(5,5,5)));
+                visibleBoundingBox->setScaleFactor((((MainWindow*)mw)->getFullBoundingBox().diag()/5));
                 visibleBoundingBox->setVisible(true);
             }
         }

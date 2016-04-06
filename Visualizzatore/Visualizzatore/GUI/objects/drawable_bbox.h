@@ -11,7 +11,7 @@ class DrawableBBox : public DrawableObject
 
     public:
         DrawableBBox();
-        DrawableBBox(const BoundingBox &b);
+        DrawableBBox(const BoundingBox &b , const double &scale);
 
         // Implementation of the
         // DrawableObject interface
@@ -21,7 +21,11 @@ class DrawableBBox : public DrawableObject
         float sceneRadius() const;
         bool isVisible() const;
         void setVisible(bool b);
+
+        //BBox Settings and Viewing Methods
+        //
         void setBoundingBox(BoundingBox bb);
+        void setScaleFactor(double scale);
 
     private:
         double scaleFactor;

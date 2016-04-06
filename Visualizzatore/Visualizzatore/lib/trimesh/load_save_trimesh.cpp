@@ -39,9 +39,9 @@ void loadObj(const char     * filename,
         {
             double x, y, z;
             iss >> x >> y >> z;
-            xyz.push_back(x);
-            xyz.push_back(y);
-            xyz.push_back(z);
+            xyz.push_back(x*100);
+            xyz.push_back(y*100);
+            xyz.push_back(z*100);
             //cout << "v " << x << " " << y << " " << z << endl;
         }
         else if (token[0] == 'f')
