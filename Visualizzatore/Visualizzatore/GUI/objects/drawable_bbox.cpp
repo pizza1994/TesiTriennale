@@ -17,7 +17,6 @@ DrawableBBox::DrawableBBox(const BoundingBox& b)
 void DrawableBBox::draw() const
 {
     if (visible) {
-        std::cout << "Ciao!" <<std::endl;
 
         GLfloat red[3] = {1,0,0};
 
