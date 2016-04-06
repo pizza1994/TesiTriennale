@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
-<!-- Written by QtCreator 3.6.1, 2016-04-06T18:50:26. -->
-=======
-<!-- Written by QtCreator 3.6.1, 2016-04-06T18:56:14. -->
->>>>>>> origin/master
+<!-- Written by QtCreator 3.6.1, 2016-04-06T19:27:52. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -312,7 +308,7 @@
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">visualizzatore.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory">/Users/bardOZ/Desktop/mesh_giammi/Modelli_tesi</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
