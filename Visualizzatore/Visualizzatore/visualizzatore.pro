@@ -18,7 +18,11 @@ HEADERS += \
     GUI/objects/drawable_axis.h \
     GUI/objects/sphere.h \
     GUI/objects/drawable_bbox.h \
+<<<<<<< HEAD
+    lib/common/check_intersection.h
+=======
     GUI/objects/grid.h
+>>>>>>> origin/master
 
 
 SOURCES += \
@@ -32,7 +36,11 @@ SOURCES += \
     GUI/managers/window_manager.cpp \
     GUI/objects/drawable_axis.cpp \
     GUI/objects/drawable_bbox.cpp \
+<<<<<<< HEAD
+    lib/common/check_intersection.cpp
+=======
     GUI/objects/grid.cpp
+>>>>>>> origin/master
 
 
 QMAKE_CXXFLAGS += -std=c++11
