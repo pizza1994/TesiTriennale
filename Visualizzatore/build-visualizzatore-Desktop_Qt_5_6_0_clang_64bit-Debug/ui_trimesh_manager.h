@@ -47,6 +47,7 @@ public:
     QCheckBox *cbWireframe;
     QSlider *hsWireframeWidth;
     QPushButton *butSetWireframeColor;
+    QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_2;
     QFrame *frame_2;
     QGridLayout *gridLayout_2;
@@ -55,13 +56,14 @@ public:
     QRadioButton *rbVertexColor;
     QPushButton *butSetVColor;
     QPushButton *butSetTcolor;
+    QCheckBox *cbShowBBox;
 
     void setupUi(QDockWidget *Trimesh_manager)
     {
         if (Trimesh_manager->objectName().isEmpty())
             Trimesh_manager->setObjectName(QStringLiteral("Trimesh_manager"));
-        Trimesh_manager->resize(326, 286);
-        Trimesh_manager->setMinimumSize(QSize(326, 286));
+        Trimesh_manager->resize(410, 286);
+        Trimesh_manager->setMinimumSize(QSize(410, 286));
         Trimesh_manager->setMaximumSize(QSize(524287, 286));
         QFont font;
         font.setPointSize(10);
@@ -72,7 +74,7 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_2, 0, 5, 3, 1);
+        gridLayout->addItem(horizontalSpacer_2, 0, 5, 4, 1);
 
         verticalFrame = new QFrame(dockWidgetContents);
         verticalFrame->setObjectName(QStringLiteral("verticalFrame"));
@@ -151,6 +153,10 @@ public:
 
         verticalLayout_3->addWidget(butSetWireframeColor);
 
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_3->addItem(verticalSpacer);
+
         verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_3->addItem(verticalSpacer_2);
@@ -198,6 +204,11 @@ public:
 
         gridLayout->addWidget(frame_2, 1, 4, 1, 1);
 
+        cbShowBBox = new QCheckBox(dockWidgetContents);
+        cbShowBBox->setObjectName(QStringLiteral("cbShowBBox"));
+
+        gridLayout->addWidget(cbShowBBox, 2, 3, 1, 1);
+
         Trimesh_manager->setWidget(dockWidgetContents);
 
         retranslateUi(Trimesh_manager);
@@ -219,6 +230,7 @@ public:
         rbVertexColor->setText(QApplication::translate("Trimesh_manager", "V color", 0));
         butSetVColor->setText(QApplication::translate("Trimesh_manager", "Set", 0));
         butSetTcolor->setText(QApplication::translate("Trimesh_manager", "Set", 0));
+        cbShowBBox->setText(QApplication::translate("Trimesh_manager", "Show Bbox", 0));
     } // retranslateUi
 
 };
