@@ -13,6 +13,7 @@
 #include <vector>
 #include "lib/common/point.h"
 #include "lib/common/bounding_box.h"
+#include "GUI/objects/grid_cell.h"
 
 
 /**
@@ -35,9 +36,9 @@ class Grid
 
     private:
         double length;
-        int n_cubes;
+        int granularityFactor;
         void setLength();
         void createGrid();
         BoundingBox internal_bbox;
-        std::vector<std::vector<std::vector<GridCell>>> grid;
+        std::vector< std::vector<std::vector<GridCell> > > grid;
 };
