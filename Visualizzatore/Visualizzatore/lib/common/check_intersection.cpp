@@ -1,23 +1,30 @@
 #include "check_intersection.h"
 
 
+    bool CheckIntersection::isInside(Pointd &pointToCheck, std::vector<Pointd> &triangle){
+
+        float t = 5;
+        return rayTriangleIntersect(pointToCheck, Pointd(1,0,0), triangle[0], triangle[1], triangle[2], t);
+
+
+    }
+
+
     bool CheckIntersection::rayTriangleIntersect(
-        const Vec3 &orig, const Vec3 &dir,
-        const Vec3 &v0, const Vec3 &v1, const Vec3 &v2,
+        const Pointd &orig, const Pointd &dir,
+        const Pointd &v0, const Pointd &v1, const Pointd &v2,
         float &t)
     {
-        // compute plane's normal
-        Vec3 v0v1 = v1 - v0;
-        Vec3 v0v2 = v2 - v0;
-        // no need to normalize
-        Vec3 N = v0v1.cross(v0v2); // N
+        //Calculate Triangle Normal
+        Pointd v0v1 = v1 - v0;
+        Pointd v0v2 = v2 - v0;
+        Pointd N = v0v1.cross(v0v2); // Normal
 
-        // Step 1: finding P
+        // Step 1: finding the interseption point
 
-        // check if ray and plane are parallel ?
         float NdotRayDirection = N.dot(dir);
-        if (fabs(NdotRayDirection) < kEpsilon) // almost 0
-            return false; // they are parallel so they don't intersect !
+        if (fabs(NdotRayDirection) < kEpsilon)
+            return false; //if they are parallels there is not intersection
 
         // compute d parameter using equation 2
         float d = N.dot(v0);
@@ -28,26 +35,26 @@
         if (t < 0) return false; // the triangle is behind
 
         // compute the intersection point using equation 1
-        Vec3 P = orig +  dir.operator *(t);
+        Pointd P = orig +  dir.operator *(t);
 
         // Step 2: inside-outside test
-        Vec3 C; // vector perpendicular to triangle's plane
+        Pointd C; // vector perpendicular to triangle's plane
 
         // edge 0
-        Vec3 edge0 = v1 - v0;
-        Vec3 vp0 = P - v0;
+        Pointd edge0 = v1 - v0;
+        Pointd vp0 = P - v0;
         C = edge0.cross(vp0);
         if (N.dot(C) < 0) return false; // P is on the right side
 
         // edge 1
-        Vec3 edge1 = v2 - v1;
-        Vec3 vp1 = P - v1;
+        Pointd edge1 = v2 - v1;
+        Pointd vp1 = P - v1;
         C = edge1.cross(vp1);
         if (N.dot(C) < 0)  return false; // P is on the right side
 
         // edge 2
-        Vec3 edge2 = v0 - v2;
-        Vec3 vp2 = P - v2;
+        Pointd edge2 = v0 - v2;
+        Pointd vp2 = P - v2;
         C = edge2.cross(vp2);
         if (N.dot(C) < 0) return false; // P is on the right side;
 

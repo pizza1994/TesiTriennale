@@ -181,7 +181,12 @@ void TrimeshManager::on_cbShowGrid_stateChanged(int state){
             }
         }
         else { //TO complete
-             }
+
         }
 
+    }
+    else{
+        visibleGrid->setVisible(false);
+    }
+    ((MainWindow*)mw)->updateGlCanvas();
 }

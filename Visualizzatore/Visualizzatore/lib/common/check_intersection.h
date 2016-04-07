@@ -12,15 +12,10 @@ class CheckIntersection
         CheckIntersection();
 
         //DA COMPLETARE E DA TESTARE
-        static bool isInside(Vec3 &pointToCheck, Vec3 &triangle){
-
-            float t = 1.1;
-            return rayTriangleIntersect(pointToCheck, NULL, NULL, NULL, NULL, t);
-
-        }
+        static bool isInside(Pointd &pointToCheck, std::vector<Pointd> &triangle);
 
     private:
-        static bool rayTriangleIntersect(const Vec3 &orig, const Vec3 &dir, const Vec3 &v0, const Vec3 &v1, const Vec3 &v2, float &t);
+        static bool rayTriangleIntersect(const Pointd &orig, const Pointd &dir, const Pointd &v0, const Pointd &v1, const Pointd &v2, float &t);
 };
 
 #endif // CHECK_INTERSECTION_H
