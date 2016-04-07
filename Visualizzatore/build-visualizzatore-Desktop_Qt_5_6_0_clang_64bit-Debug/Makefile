@@ -60,7 +60,8 @@ SOURCES       = ../Visualizzatore/common.cpp \
 		../Visualizzatore/GUI/objects/drawable_bbox.cpp \
 		../Visualizzatore/lib/common/check_intersection.cpp \
 		../Visualizzatore/GUI/objects/grid.cpp \
-		../Visualizzatore/GUI/objects/grid_cell.cpp .moc/moc_mainwindow.cpp \
+		../Visualizzatore/GUI/objects/grid_cell.cpp \
+		../Visualizzatore/GUI/objects/drawable_grid.cpp .moc/moc_mainwindow.cpp \
 		.moc/moc_trimesh_manager.cpp \
 		.moc/moc_window_manager.cpp
 OBJECTS       = .obj/common.o \
@@ -76,6 +77,7 @@ OBJECTS       = .obj/common.o \
 		.obj/check_intersection.o \
 		.obj/grid.o \
 		.obj/grid_cell.o \
+		.obj/drawable_grid.o \
 		.obj/moc_mainwindow.o \
 		.obj/moc_trimesh_manager.o \
 		.obj/moc_window_manager.o
@@ -238,8 +240,9 @@ DIST          = ../../../Qt/5.6/clang_64/mkspecs/features/spec_pre.prf \
 		../Visualizzatore/GUI/objects/sphere.h \
 		../Visualizzatore/GUI/objects/drawable_bbox.h \
 		../Visualizzatore/lib/common/check_intersection.h \
+		../Visualizzatore/GUI/objects/grid_cell.h \
 		../Visualizzatore/GUI/objects/grid.h \
-		../Visualizzatore/GUI/objects/grid_cell.h ../Visualizzatore/common.cpp \
+		../Visualizzatore/GUI/objects/drawable_grid.h ../Visualizzatore/common.cpp \
 		../Visualizzatore/main.cpp \
 		../Visualizzatore/GUI/glcanvas.cpp \
 		../Visualizzatore/GUI/mainwindow.cpp \
@@ -251,7 +254,8 @@ DIST          = ../../../Qt/5.6/clang_64/mkspecs/features/spec_pre.prf \
 		../Visualizzatore/GUI/objects/drawable_bbox.cpp \
 		../Visualizzatore/lib/common/check_intersection.cpp \
 		../Visualizzatore/GUI/objects/grid.cpp \
-		../Visualizzatore/GUI/objects/grid_cell.cpp
+		../Visualizzatore/GUI/objects/grid_cell.cpp \
+		../Visualizzatore/GUI/objects/drawable_grid.cpp
 QMAKE_TARGET  = visualizzatore
 DESTDIR       = 
 TARGET        = visualizzatore.app/Contents/MacOS/visualizzatore
@@ -590,8 +594,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../Visualizzatore/lib/common/point.h ../Visualizzatore/lib/timer.h ../Visualizzatore/common.h ../Visualizzatore/GUI/glcanvas.h ../Visualizzatore/GUI/mainwindow.h ../Visualizzatore/lib/trimesh/drawable_trimesh.h ../Visualizzatore/lib/trimesh/load_save_trimesh.h ../Visualizzatore/lib/trimesh/trimesh.h ../Visualizzatore/lib/common/drawable_object.h ../Visualizzatore/GUI/managers/trimesh_manager.h ../Visualizzatore/lib/common/bounding_box.h ../Visualizzatore/lib/common/comparators.h ../Visualizzatore/GUI/managers/window_manager.h ../Visualizzatore/GUI/objects/cylinder.h ../Visualizzatore/GUI/objects/drawable_axis.h ../Visualizzatore/GUI/objects/sphere.h ../Visualizzatore/GUI/objects/drawable_bbox.h ../Visualizzatore/lib/common/check_intersection.h ../Visualizzatore/GUI/objects/grid.h ../Visualizzatore/GUI/objects/grid_cell.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Visualizzatore/common.cpp ../Visualizzatore/main.cpp ../Visualizzatore/GUI/glcanvas.cpp ../Visualizzatore/GUI/mainwindow.cpp ../Visualizzatore/lib/trimesh/drawable_trimesh.cpp ../Visualizzatore/lib/trimesh/load_save_trimesh.cpp ../Visualizzatore/GUI/managers/trimesh_manager.cpp ../Visualizzatore/GUI/managers/window_manager.cpp ../Visualizzatore/GUI/objects/drawable_axis.cpp ../Visualizzatore/GUI/objects/drawable_bbox.cpp ../Visualizzatore/lib/common/check_intersection.cpp ../Visualizzatore/GUI/objects/grid.cpp ../Visualizzatore/GUI/objects/grid_cell.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Visualizzatore/lib/common/point.h ../Visualizzatore/lib/timer.h ../Visualizzatore/common.h ../Visualizzatore/GUI/glcanvas.h ../Visualizzatore/GUI/mainwindow.h ../Visualizzatore/lib/trimesh/drawable_trimesh.h ../Visualizzatore/lib/trimesh/load_save_trimesh.h ../Visualizzatore/lib/trimesh/trimesh.h ../Visualizzatore/lib/common/drawable_object.h ../Visualizzatore/GUI/managers/trimesh_manager.h ../Visualizzatore/lib/common/bounding_box.h ../Visualizzatore/lib/common/comparators.h ../Visualizzatore/GUI/managers/window_manager.h ../Visualizzatore/GUI/objects/cylinder.h ../Visualizzatore/GUI/objects/drawable_axis.h ../Visualizzatore/GUI/objects/sphere.h ../Visualizzatore/GUI/objects/drawable_bbox.h ../Visualizzatore/lib/common/check_intersection.h ../Visualizzatore/GUI/objects/grid_cell.h ../Visualizzatore/GUI/objects/grid.h ../Visualizzatore/GUI/objects/drawable_grid.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Visualizzatore/common.cpp ../Visualizzatore/main.cpp ../Visualizzatore/GUI/glcanvas.cpp ../Visualizzatore/GUI/mainwindow.cpp ../Visualizzatore/lib/trimesh/drawable_trimesh.cpp ../Visualizzatore/lib/trimesh/load_save_trimesh.cpp ../Visualizzatore/GUI/managers/trimesh_manager.cpp ../Visualizzatore/GUI/managers/window_manager.cpp ../Visualizzatore/GUI/objects/drawable_axis.cpp ../Visualizzatore/GUI/objects/drawable_bbox.cpp ../Visualizzatore/lib/common/check_intersection.cpp ../Visualizzatore/GUI/objects/grid.cpp ../Visualizzatore/GUI/objects/grid_cell.cpp ../Visualizzatore/GUI/objects/drawable_grid.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Visualizzatore/GUI/mainwindow.ui ../Visualizzatore/GUI/managers/trimesh_manager.ui ../Visualizzatore/GUI/managers/window_manager.ui $(DISTDIR)/
 
 
@@ -644,6 +648,11 @@ compiler_moc_header_clean:
 		../Visualizzatore/lib/common/bounding_box.h \
 		../Visualizzatore/lib/trimesh/load_save_trimesh.h \
 		../Visualizzatore/GUI/objects/drawable_bbox.h \
+		../Visualizzatore/GUI/objects/drawable_grid.h \
+		../Visualizzatore/GUI/objects/grid.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
+		../Visualizzatore/GUI/objects/grid_cell.h \
 		../Visualizzatore/GUI/managers/trimesh_manager.h
 	/Users/bardOZ/Qt/5.6/clang_64/bin/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -I/Users/bardOZ/Qt/5.6/clang_64/mkspecs/macx-clang -I/Users/bardOZ/TesiTriennale/Visualizzatore/Visualizzatore -I/usr/local/Cellar/boost/1.60.0_1/include -I/Users/bardOZ/Library/Frameworks/QGLViewer.framework/Headers -I/Users/bardOZ/Qt/5.6/clang_64/lib/QtOpenGL.framework/Headers -I/Users/bardOZ/Qt/5.6/clang_64/lib/QtWidgets.framework/Headers -I/Users/bardOZ/Qt/5.6/clang_64/lib/QtGui.framework/Headers -I/Users/bardOZ/Qt/5.6/clang_64/lib/QtXml.framework/Headers -I/Users/bardOZ/Qt/5.6/clang_64/lib/QtCore.framework/Headers -I. -F/Users/bardOZ/Qt/5.6/clang_64/lib ../Visualizzatore/GUI/managers/trimesh_manager.h -o .moc/moc_trimesh_manager.cpp
 
@@ -745,6 +754,11 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 		../Visualizzatore/lib/trimesh/trimesh.h \
 		../Visualizzatore/lib/trimesh/load_save_trimesh.h \
 		../Visualizzatore/GUI/objects/drawable_bbox.h \
+		../Visualizzatore/GUI/objects/drawable_grid.h \
+		../Visualizzatore/GUI/objects/grid.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
+		../Visualizzatore/GUI/objects/grid_cell.h \
 		../Visualizzatore/GUI/managers/window_manager.h \
 		../Visualizzatore/GUI/objects/drawable_axis.h \
 		../Visualizzatore/common.h \
@@ -862,6 +876,11 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 		../Visualizzatore/lib/common/bounding_box.h \
 		../Visualizzatore/lib/trimesh/load_save_trimesh.h \
 		../Visualizzatore/GUI/objects/drawable_bbox.h \
+		../Visualizzatore/GUI/objects/drawable_grid.h \
+		../Visualizzatore/GUI/objects/grid.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
+		../Visualizzatore/GUI/objects/grid_cell.h \
 		ui_trimesh_manager.h \
 		../Visualizzatore/GUI/mainwindow.h \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
@@ -930,6 +949,7 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 .obj/grid.o: ../Visualizzatore/GUI/objects/grid.cpp ../Visualizzatore/GUI/objects/grid.h \
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
+		../Visualizzatore/GUI/objects/grid_cell.h \
 		../Visualizzatore/lib/common/point.h \
 		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/qdebug.h \
@@ -939,9 +959,23 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 .obj/grid_cell.o: ../Visualizzatore/GUI/objects/grid_cell.cpp ../Visualizzatore/GUI/objects/grid_cell.h \
 		../Visualizzatore/lib/common/point.h \
 		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/qdebug.h \
-		../Visualizzatore/lib/common/bounding_box.h
+		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o .obj/grid_cell.o ../Visualizzatore/GUI/objects/grid_cell.cpp
+
+.obj/drawable_grid.o: ../Visualizzatore/GUI/objects/drawable_grid.cpp ../Visualizzatore/GUI/objects/drawable_grid.h \
+		../Visualizzatore/lib/common/drawable_object.h \
+		../Visualizzatore/lib/common/point.h \
+		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		../Visualizzatore/GUI/objects/grid.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
+		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
+		../Visualizzatore/GUI/objects/grid_cell.h \
+		../Visualizzatore/lib/common/bounding_box.h \
+		../Visualizzatore/GUI/objects/sphere.h \
+		../../../Qt/5.6/clang_64/lib/QtGui.framework/Headers/QColor \
+		../../../Qt/5.6/clang_64/lib/QtGui.framework/Headers/qcolor.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o .obj/drawable_grid.o ../Visualizzatore/GUI/objects/drawable_grid.cpp
 
 .obj/moc_mainwindow.o: .moc/moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o .obj/moc_mainwindow.o .moc/moc_mainwindow.cpp

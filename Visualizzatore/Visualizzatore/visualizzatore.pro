@@ -19,9 +19,9 @@ HEADERS += \
     GUI/objects/sphere.h \
     GUI/objects/drawable_bbox.h \
     lib/common/check_intersection.h \
+    GUI/objects/grid_cell.h \
     GUI/objects/grid.h \
-    GUI/objects/grid_cell.h
-
+    GUI/objects/drawable_grid.h
 
 SOURCES += \
     common.cpp \
@@ -36,7 +36,8 @@ SOURCES += \
     GUI/objects/drawable_bbox.cpp \
     lib/common/check_intersection.cpp \
     GUI/objects/grid.cpp \
-    GUI/objects/grid_cell.cpp
+    GUI/objects/grid_cell.cpp \
+    GUI/objects/drawable_grid.cpp
 
 
 QMAKE_CXXFLAGS += -std=c++11

@@ -1,9 +1,6 @@
 #include "grid_cell.h"
 
 
-
-
-
 GridCell::GridCell()
 {
 
@@ -15,7 +12,7 @@ GridCell::GridCell(std::vector<Pointd> vertices)
 }
 
 
-void GridCell::setAdjCells(std::vector<&GridCell> adjCells)
+void GridCell::setAdjCells(std::vector<GridCell*> adjCells)
 {
 
     this->adjCells = adjCells;
@@ -24,15 +21,20 @@ void GridCell::setAdjCells(std::vector<&GridCell> adjCells)
 
 
 
-std::vector<&GridCell> GridCell::getAdjCells()
+std::vector<GridCell*> GridCell::getAdjCells() const
 {
     return adjCells;
 }
 
 
-std::vector<Pointd> GridCell::getVertices()
+std::vector<Pointd> GridCell::getVertices() const
 {
     return xyz;
+}
+
+Pointd GridCell::getVertex(const int &i) const
+{
+    return xyz[i];
 }
 
 

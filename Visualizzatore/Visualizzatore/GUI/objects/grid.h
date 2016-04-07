@@ -1,7 +1,5 @@
-#ifndef GRID_CELL_H
-#define GRID_CELL_H
-
-#endif // GRID_CELL_H
+#ifndef GRID_H
+#define GRID_H
 #ifdef __APPLE__
 #include <gl.h>
 #include <glu.h>
@@ -10,10 +8,11 @@
 #include <GL/glu.h>
 #endif
 #include <cmath>
+#include "grid_cell.h"
 #include <vector>
 #include "lib/common/point.h"
 #include "lib/common/bounding_box.h"
-#include "GUI/objects/grid_cell.h"
+
 
 
 /**
@@ -32,13 +31,19 @@
 class Grid
 {
     public:
-        Grid(BoundingBox & bbox, int granularityFactor);
+        Grid();
+        Grid(BoundingBox bbox, int granularityFactor);
+        std::vector<Pointd> getVertices() const;
 
     private:
         double length;
-        int granularityFactor;
         void setLength();
         void createGrid();
-        BoundingBox internal_bbox;
+    protected:
         std::vector< std::vector<std::vector<GridCell> > > grid;
+        int granularityFactor;
+        BoundingBox internal_bbox;
+
 };
+
+#endif

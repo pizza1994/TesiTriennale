@@ -57,6 +57,7 @@ public:
     QPushButton *butSetVColor;
     QPushButton *butSetTcolor;
     QCheckBox *cbShowBBox;
+    QCheckBox *cbShowGrid;
 
     void setupUi(QDockWidget *Trimesh_manager)
     {
@@ -209,6 +210,11 @@ public:
 
         gridLayout->addWidget(cbShowBBox, 2, 3, 1, 1);
 
+        cbShowGrid = new QCheckBox(dockWidgetContents);
+        cbShowGrid->setObjectName(QStringLiteral("cbShowGrid"));
+
+        gridLayout->addWidget(cbShowGrid, 2, 4, 1, 1);
+
         Trimesh_manager->setWidget(dockWidgetContents);
 
         retranslateUi(Trimesh_manager);
@@ -231,6 +237,7 @@ public:
         butSetVColor->setText(QApplication::translate("Trimesh_manager", "Set", 0));
         butSetTcolor->setText(QApplication::translate("Trimesh_manager", "Set", 0));
         cbShowBBox->setText(QApplication::translate("Trimesh_manager", "Show Bbox", 0));
+        cbShowGrid->setText(QApplication::translate("Trimesh_manager", "Show Grid", 0));
     } // retranslateUi
 
 };

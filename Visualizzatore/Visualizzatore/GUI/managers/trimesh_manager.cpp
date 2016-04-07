@@ -16,6 +16,7 @@ TrimeshManager::TrimeshManager(QWidget *parent) : QDockWidget(parent), ui(new Ui
     ui->setupUi(this);
     mw = parent;
     visibleBoundingBox = NULL;
+    visibleGrid = NULL;
 }
 
 TrimeshManager::~TrimeshManager()
@@ -163,4 +164,24 @@ void TrimeshManager::on_cbDrawTrimesh_stateChanged(int state)
 {
     t->setVisible(state == Qt::Checked);
     ((MainWindow*)mw)->updateGlCanvas();
+}
+
+void TrimeshManager::on_cbShowGrid_stateChanged(int state){
+
+    if (state == Qt::Checked)
+    {
+        if (((MainWindow*)mw)->getNumberVisibleObjects() != 0) {
+            if (visibleGrid == NULL) {
+                visibleGrid = new DrawableGrid( t->getBbox() , 20);
+                visibleGrid->setVisible(true);
+                ((MainWindow*)mw)->push_obj(visibleGrid);
+            }
+            else {
+                visibleGrid->setVisible(true);
+            }
+        }
+        else { //TO complete
+             }
+        }
+
 }

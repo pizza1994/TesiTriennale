@@ -4,21 +4,24 @@
 #include <cmath>
 #include <vector>
 #include "lib/common/point.h"
-#include "lib/common/bounding_box.h"
 
 
 class GridCell
 {
 
     public:
+
         GridCell();
         GridCell(std::vector<Pointd> vertices);
-        std::vector<&GridCell> getAdjCells();
-        std::vector<Pointd> getVertices();
+        void setAdjCells(std::vector<GridCell*> adjCells);
+        std::vector<GridCell*> getAdjCells() const;
+        std::vector<Pointd> getVertices() const;
+        Pointd getVertex(const int &i) const;
 
     private:
+
         std::vector<Pointd> xyz;
-        std::vector<&GridCell> adjCells;
+        std::vector<GridCell*> adjCells;
 
 
 };

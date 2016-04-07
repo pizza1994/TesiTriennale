@@ -3,7 +3,11 @@
 
 
 
-Grid::Grid(BoundingBox & bbox, int granularityFactor){
+Grid::Grid()
+{
+}
+
+Grid::Grid(BoundingBox bbox, int granularityFactor){
 
     internal_bbox = bbox;
     this->granularityFactor = granularityFactor;
@@ -14,15 +18,37 @@ Grid::Grid(BoundingBox & bbox, int granularityFactor){
 
 void Grid::setLength()
 {
-    if ( internal_bbox.getMin().dist(new Pointd(internal_bbox.getMaxX(), internal_bbox.getMinY(), internal_bbox.getMinZ()) ) >
-         internal_bbox.getMin().dist(new Pointd(internal_bbox.getMinX(), internal_bbox.getMaxY(), internal_bbox.getMinZ()) ) )
-        if (internal_bbox.getMin().dist(new Pointd(internal_bbox.getMaxX(), internal_bbox.getMinY(), internal_bbox.getMinZ()) ) >
-            internal_bbox.getMin().dist(new Pointd(internal_bbox.getMinX(), internal_bbox.getMinY(), internal_bbox.getMaxZ()) ))
-            length = internal_bbox.getMin().dist(new Pointd(internal_bbox.getMaxX(), internal_bbox.getMinY(), internal_bbox.getMinZ()) ) / granularityFactor;
+
+
+    if ( internal_bbox.getMin().dist( Pointd(internal_bbox.getMaxX(), internal_bbox.getMinY(), internal_bbox.getMinZ()) ) >
+         internal_bbox.getMin().dist( Pointd(internal_bbox.getMinX(), internal_bbox.getMaxY(), internal_bbox.getMinZ()) ) )
+        if (internal_bbox.getMin().dist( Pointd(internal_bbox.getMaxX(), internal_bbox.getMinY(), internal_bbox.getMinZ()) ) >
+            internal_bbox.getMin().dist( Pointd(internal_bbox.getMinX(), internal_bbox.getMinY(), internal_bbox.getMaxZ()) ))
+            length = internal_bbox.getMin().dist( Pointd(internal_bbox.getMaxX(), internal_bbox.getMinY(), internal_bbox.getMinZ()) ) / granularityFactor;
         else
-            length = internal_bbox.getMin().dist(new Pointd(internal_bbox.getMinX(), internal_bbox.getMinY(), internal_bbox.getMaxZ()) ) / granularityFactor;
+            length = internal_bbox.getMin().dist( Pointd(internal_bbox.getMinX(), internal_bbox.getMinY(), internal_bbox.getMaxZ()) ) / granularityFactor;
     else
-        length = internal_bbox.getMin().dist(new Pointd(internal_bbox.getMinX(), internal_bbox.getMaxY(), internal_bbox.getMinZ()) ) / granularityFactor;
+        length = internal_bbox.getMin().dist( Pointd(internal_bbox.getMinX(), internal_bbox.getMaxY(), internal_bbox.getMinZ()) ) / granularityFactor;
+}
+
+std::vector<Pointd> Grid::getVertices() const
+{
+   std::vector<Pointd> verticesToReturn;
+
+   for(int i=0; i<granularityFactor; i++)
+    {
+        for(int j=0; j<granularityFactor; j++)
+        {
+            for (int k=0; k<granularityFactor; k++)
+            {
+                for (int z=0; z<8; z++)
+                    verticesToReturn.push_back(grid[k][j][i].getVertices()[z]);
+            }
+
+        }
+    }
+
+   return verticesToReturn;
 }
 
 void Grid::createGrid()
@@ -45,7 +71,9 @@ void Grid::createGrid()
 
     Pointd startVertex = internal_bbox.getMin();
     std::vector<Pointd> verticesToAssign;
+    verticesToAssign.resize(8);
 
+    int counter = 0;
 
     for(int i=0; i<granularityFactor; i++) //for della intera grid
     {
@@ -53,23 +81,22 @@ void Grid::createGrid()
         {
             for (int k=0; k<granularityFactor; k++) //for di una linea di cubi
             {
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*k), (startVertex.y() + length*j),  (startVertex.z() + length*i)));
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*j),  (startVertex.z() + length*i)));
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*k), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*i)));
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*i)));
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*k), (startVertex.y() + length*j),  (startVertex.z() + length*(i+1))));
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*j),  (startVertex.z() + length*(i+1))));
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*k), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(i+1))));
-                verticesToAssign.push_back(new Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(i+1))));
-
-
-                grid[k][j][i] = new GridCell(verticesToAssign);
+                verticesToAssign[0]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*j),  (startVertex.z() + length*i)));
+                verticesToAssign[1]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*j),  (startVertex.z() + length*i)));
+                verticesToAssign[2]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*i)));
+                verticesToAssign[3]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*i)));
+                verticesToAssign[4]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*j),  (startVertex.z() + length*(i+1))));
+                verticesToAssign[5]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*j),  (startVertex.z() + length*(i+1))));
+                verticesToAssign[6]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(i+1))));
+                verticesToAssign[7]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(i+1))));
+                qDebug() << verticesToAssign[0].x() << verticesToAssign[0].y() << verticesToAssign[0].z();
+                grid[k][j][i] = GridCell(verticesToAssign);
+                counter++;
             }
         }
     }
 
-
-    std::vector<&GridCell> adjToAssign;
+    std::vector<GridCell*> adjToAssign;
     adjToAssign.resize(6);
 
     for(int i=0; i<granularityFactor; i++) //for della intera grid
