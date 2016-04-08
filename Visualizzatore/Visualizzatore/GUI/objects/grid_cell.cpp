@@ -14,12 +14,12 @@ GridCell::GridCell(std::vector<Pointd> vertices)
 
 void GridCell::setAdjCells(std::vector<GridCell*> adjCells)
 {
-
     this->adjCells = adjCells;
-
 }
 
-
+void GridCell::setAdjCell(GridCell *adjCell, int index){
+    adjCells[index] = adjCell;
+}
 
 std::vector<GridCell*> GridCell::getAdjCells() const
 {

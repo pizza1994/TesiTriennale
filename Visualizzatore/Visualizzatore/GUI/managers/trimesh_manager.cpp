@@ -172,7 +172,7 @@ void TrimeshManager::on_cbShowGrid_stateChanged(int state){
     {
         if (((MainWindow*)mw)->getNumberVisibleObjects() != 0) {
             if (visibleGrid == NULL) {
-                visibleGrid = new DrawableGrid( t->getBbox() , 20);
+                visibleGrid = new DrawableGrid( t->getBbox() , 10, *t);
                 visibleGrid->setVisible(true);
                 ((MainWindow*)mw)->push_obj(visibleGrid);
             }

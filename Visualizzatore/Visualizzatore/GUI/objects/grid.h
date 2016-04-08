@@ -12,7 +12,9 @@
 #include <vector>
 #include "lib/common/point.h"
 #include "lib/common/bounding_box.h"
-
+#include "lib/trimesh/drawable_trimesh.h"
+#include <math.h>
+#include "lib/common/check_intersection.h"
 
 
 /**
@@ -39,11 +41,13 @@ class Grid
         double length;
         void setLength();
         void createGrid();
+        void eraseGridCell(int i, int j, int k);
+
     protected:
         std::vector< std::vector<std::vector<GridCell> > > grid;
         int granularityFactor;
         BoundingBox internal_bbox;
-
+        void cleanGrid(DrawableTrimesh &t);
 };
 
 #endif

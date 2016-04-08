@@ -11,7 +11,7 @@ class DrawableGrid : public Grid ,
 {
     public:
          DrawableGrid();
-         DrawableGrid(const BoundingBox&  b, const int granularityFactor);
+         DrawableGrid(const BoundingBox&  b, const int granularityFactor, DrawableTrimesh &t);
 
          // Implementation of the
          // DrawableObject interface

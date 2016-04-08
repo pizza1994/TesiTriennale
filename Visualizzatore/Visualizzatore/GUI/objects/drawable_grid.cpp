@@ -8,8 +8,9 @@ DrawableGrid::DrawableGrid()
     visible = false;
 }
 
-DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor):Grid(b, granularityFactor)
+DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, DrawableTrimesh &t):Grid(b, granularityFactor)
 {
+    Grid::cleanGrid(t);
 }
 
 
@@ -21,14 +22,14 @@ void DrawableGrid::draw() const
 
         QColor blue = QColor(0,0,255);
 
-        for (int i=0; i < granularityFactor; i++)
+        for (int i=0; i < grid.size(); i++)
         {
-            for(int j=0; j < granularityFactor; j++)
+            for(int j=0; j < grid[i].size(); j++)
             {
-                for(int k=0; k < granularityFactor; k++)
+                for(int k=0; k < grid[i][j].size(); k++)
                 {
                     for(int z=0; z<8; z++)
-                        sphere(grid[k][j][i].getVertex(z), 1, blue);
+                        sphere(grid[i][j][k].getVertex(z), 1, blue);
                 }
             }
         }

@@ -2,7 +2,6 @@
 #include <QDebug>
 
 
-
 Grid::Grid()
 {
 }
@@ -81,16 +80,16 @@ void Grid::createGrid()
         {
             for (int k=0; k<granularityFactor; k++) //for di una linea di cubi
             {
-                verticesToAssign[0]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*j),  (startVertex.z() + length*i)));
-                verticesToAssign[1]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*j),  (startVertex.z() + length*i)));
-                verticesToAssign[2]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*i)));
-                verticesToAssign[3]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*i)));
-                verticesToAssign[4]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*j),  (startVertex.z() + length*(i+1))));
-                verticesToAssign[5]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*j),  (startVertex.z() + length*(i+1))));
-                verticesToAssign[6]= ( Pointd( (startVertex.x() + length*k), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(i+1))));
-                verticesToAssign[7]= ( Pointd( (startVertex.x() + length*(k+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(i+1))));
+                verticesToAssign[0]= ( Pointd( (startVertex.x() + length*i), (startVertex.y() + length*j),  (startVertex.z() + length*k)));
+                verticesToAssign[1]= ( Pointd( (startVertex.x() + length*(i+1)), (startVertex.y() + length*j),  (startVertex.z() + length*k)));
+                verticesToAssign[2]= ( Pointd( (startVertex.x() + length*i), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*k)));
+                verticesToAssign[3]= ( Pointd( (startVertex.x() + length*(i+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*k)));
+                verticesToAssign[4]= ( Pointd( (startVertex.x() + length*i), (startVertex.y() + length*j),  (startVertex.z() + length*(k+1))));
+                verticesToAssign[5]= ( Pointd( (startVertex.x() + length*(i+1)), (startVertex.y() + length*j),  (startVertex.z() + length*(k+1))));
+                verticesToAssign[6]= ( Pointd( (startVertex.x() + length*i), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(k+1))));
+                verticesToAssign[7]= ( Pointd( (startVertex.x() + length*(i+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(k+1))));
                 qDebug() << verticesToAssign[0].x() << verticesToAssign[0].y() << verticesToAssign[0].z();
-                grid[k][j][i] = GridCell(verticesToAssign);
+                grid[i][j][k] = GridCell(verticesToAssign);
                 counter++;
             }
         }
@@ -99,6 +98,7 @@ void Grid::createGrid()
     std::vector<GridCell*> adjToAssign;
     adjToAssign.resize(6);
 
+    /*
     for(int i=0; i<granularityFactor; i++) //for della intera grid
     {
         for(int j=0; j<granularityFactor; j++) //for di un livello di cubi
@@ -122,11 +122,80 @@ void Grid::createGrid()
 
                 grid[k][j][i].setAdjCells(adjToAssign);
            }
+
+        }
+    }*/
+}
+
+void Grid::cleanGrid(DrawableTrimesh &t){
+
+    int timesIntersected = 0;
+    int p = 0;
+
+    for(int i=0; i<grid.size(); i++) //for della intera grid
+    {
+        for(int j=0; j<grid[i].size(); j++) //for di un livello di cubi
+        {
+            for (int k=0; k<grid[i][j].size(); k++) //for di una linea di cubi
+            {
+                for (int z=0; z<8; z++)
+                {
+                    //qDebug() << i << " " << j << " " << k;
+
+                    for (int x=0; x<t.numTriangles(); x++)
+                    {
+                        if(CheckIntersection::rayTriangleIntersect(grid[i][j][k].getVertex(z),
+                                            Pointd(9000,0,0),
+                                            t.vertex(t.vectorTriangles()[p++]),
+                                            t.vertex(t.vectorTriangles()[p++]),
+                                            t.vertex(t.vectorTriangles()[p++])))
+                        {
+                            timesIntersected++;
+                        }
+                      //  qDebug() << i <<" "<<j<<" "<<k;
+
+                    }
+
+                    if (timesIntersected > 0) qDebug() << timesIntersected;
+                    if (timesIntersected % 2 == 0) //Se il vertice è fuori dalla mesh
+                    {
+                        Grid::eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
+                        z = 8;
+                        //qDebug() << "CANCELLATA-> " << " " << i << " " << j << " " << k;
+                    }
+
+                    timesIntersected = 0;
+                    p = 0;
+                }
+
+            }
+        }
+   }
+
+    //qDebug() << "Pina Colada";
+
+}
+
+void Grid::eraseGridCell(int i, int j, int k)
+{
+/*
+    for (int z=0; z<6; z++)
+    {
+        if (grid[k][j][i].getAdjCells()[z] != NULL)
+        {
+            if (z % 2 == 0)
+            {
+                qDebug() << "Attemping to set adjacency of z = " << z << "to z+1";
+                grid[k][j][i].getAdjCells()[z]->setAdjCell(NULL, z+1);
+            }
+            else
+            {
+                qDebug() << "Attemping to set adjacency of z = " << z << "to z-1";
+
+                grid[k][j][i].getAdjCells()[z]->setAdjCell(NULL, z-1);
+            }
         }
     }
-
-
-
-
-
+*/
+    grid[i][j].erase(grid[i][j].begin() + (k - (granularityFactor - grid[i][j].size())));
 }

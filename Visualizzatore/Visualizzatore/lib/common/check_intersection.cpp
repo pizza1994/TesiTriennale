@@ -1,24 +1,15 @@
 #include "check_intersection.h"
 
 
-    bool CheckIntersection::isInside(Pointd &pointToCheck, std::vector<Pointd> &triangle){
-
-        float t = 5;
-        return rayTriangleIntersect(pointToCheck, Pointd(1,0,0), triangle[0], triangle[1], triangle[2], t);
-
-
-    }
-
-
     bool CheckIntersection::rayTriangleIntersect(
         const Pointd &orig, const Pointd &dir,
-        const Pointd &v0, const Pointd &v1, const Pointd &v2,
-        float &t)
+        const Pointd &v0, const Pointd &v1, const Pointd &v2)
     {
         //Calculate Triangle Normal
         Pointd v0v1 = v1 - v0;
         Pointd v0v2 = v2 - v0;
         Pointd N = v0v1.cross(v0v2); // Normal
+        float t;
 
         // Step 1: finding the interseption point
 
