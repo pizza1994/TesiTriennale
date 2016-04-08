@@ -13,7 +13,7 @@ class CheckIntersection
         CheckIntersection();
 
         //DA COMPLETARE E DA TESTARE
-        static bool isInside(std::vector<GridCell> &pointToCheck, std::vector<Pointd> &triangle);
+        static bool isInside(std::vector<GridCell> &pointsToCheck, std::vector<std::vector<Pointd>> &triangles);
 
     private:
         static bool rayTriangleIntersect(const Pointd &orig, const Pointd &dir, const Pointd &v0, const Pointd &v1, const Pointd &v2, float &t);
