@@ -172,7 +172,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
 
 }
 
-void Grid::eraseGridCell(int &i, int &j, int &k)
+void Grid::eraseGridCell(int i, int j, int &k)
 {
 /*
     for (int z=0; z<6; z++)
