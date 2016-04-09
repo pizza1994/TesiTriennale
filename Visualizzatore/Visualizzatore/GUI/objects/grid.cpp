@@ -98,33 +98,33 @@ void Grid::createGrid()
     std::vector<GridCell*> adjToAssign;
     adjToAssign.resize(6);
 
-    /*
+
     for(int i=0; i<granularityFactor; i++) //for della intera grid
     {
         for(int j=0; j<granularityFactor; j++) //for di un livello di cubi
         {
             for (int k=0; k<granularityFactor; k++) //for di una linea di cubi
             {
-                if (k==0) adjToAssign[0] = NULL;
-                else adjToAssign[0] = (&(grid[k-1][j][i]));
-                if (k==(granularityFactor-1)) adjToAssign[1] = NULL;
-                else adjToAssign[1] = (&(grid[k+1][j][i]));
+                if (i==0) adjToAssign[0] = NULL;
+                else adjToAssign[0] = (&(grid[i-1][j][k]));
+                if (i==(granularityFactor-1)) adjToAssign[1] = NULL;
+                else adjToAssign[1] = (&(grid[i+1][j][k]));
 
                 if (j==0) adjToAssign[2] = NULL;
                 else adjToAssign[2] = (&(grid[k][j-1][i]));
                 if (j==(granularityFactor-1)) adjToAssign[3] = NULL;
                 else adjToAssign[3] = (&(grid[k][j+1][i]));
 
-                if (i==0) adjToAssign[4] = NULL;
-                else adjToAssign[4] = (&(grid[k][j][i-1]));
-                if (i==(granularityFactor-1)) adjToAssign[5] = NULL;
-                else adjToAssign[5] = (&(grid[k][j][i+1]));
+                if (k==0) adjToAssign[4] = NULL;
+                else adjToAssign[4] = (&(grid[i][j][k-1]));
+                if (k==(granularityFactor-1)) adjToAssign[5] = NULL;
+                else adjToAssign[5] = (&(grid[i][j][k+1]));
 
                 grid[k][j][i].setAdjCells(adjToAssign);
            }
 
         }
-    }*/
+    }
 }
 
 void Grid::cleanGrid(DrawableTrimesh &t){
@@ -132,36 +132,33 @@ void Grid::cleanGrid(DrawableTrimesh &t){
     int timesIntersected = 0;
     int p = 0;
 
-    for(int i=0; i<grid.size(); i++) //for della intera grid
+    for(int i=0; i<(int)grid.size(); i++) //for della intera grid
     {
-        for(int j=0; j<grid[i].size(); j++) //for di un livello di cubi
+        for(int j=0; j<(int)grid[i].size(); j++) //for di un livello di cubi
         {
-            for (int k=0; k<grid[i][j].size(); k++) //for di una linea di cubi
+            for (int k=0; k<(int)grid[i][j].size(); k++) //for di una linea di cubi
             {
                 for (int z=0; z<8; z++)
                 {
-                    //qDebug() << i << " " << j << " " << k;
 
                     for (int x=0; x<t.numTriangles(); x++)
                     {
                         if(CheckIntersection::rayTriangleIntersect(grid[i][j][k].getVertex(z),
-                                            Pointd(9000,0,0),
-                                            t.vertex(t.vectorTriangles()[p++]),
-                                            t.vertex(t.vectorTriangles()[p++]),
-                                            t.vertex(t.vectorTriangles()[p++])))
+                                            Pointd(1,0,0),
+                                            t.vertex(t.vectorTriangles()[p]),
+                                            t.vertex(t.vectorTriangles()[p+1]),
+                                            t.vertex(t.vectorTriangles()[p+2])))
                         {
                             timesIntersected++;
                         }
-                      //  qDebug() << i <<" "<<j<<" "<<k;
+                        p+=3;
 
                     }
 
-                    if (timesIntersected > 0) qDebug() << timesIntersected;
                     if (timesIntersected % 2 == 0) //Se il vertice è fuori dalla mesh
                     {
                         Grid::eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
-                        z = 8;
-                        //qDebug() << "CANCELLATA-> " << " " << i << " " << j << " " << k;
+                        z=8;
                     }
 
                     timesIntersected = 0;
@@ -172,7 +169,6 @@ void Grid::cleanGrid(DrawableTrimesh &t){
         }
    }
 
-    //qDebug() << "Pina Colada";
 
 }
 
@@ -197,5 +193,8 @@ void Grid::eraseGridCell(int i, int j, int k)
         }
     }
 */
-    grid[i][j].erase(grid[i][j].begin() + (k - (granularityFactor - grid[i][j].size())));
+    //grid[i][j].erase(grid[i][j].begin() + (k - (granularityFactor - grid[i][j].size())));
+    std::vector<Pointd> vertici = {Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0)};
+    grid[i][j][k] = GridCell(vertici);
+    //free(&grid[i][j][k]);
 }

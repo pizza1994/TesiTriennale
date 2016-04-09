@@ -28,8 +28,10 @@ void DrawableGrid::draw() const
             {
                 for(int k=0; k < grid[i][j].size(); k++)
                 {
+
                     for(int z=0; z<8; z++)
-                        sphere(grid[i][j][k].getVertex(z), 1, blue);
+                         sphere(grid[i][j][k].getVertex(z), 1, blue);
+
                 }
             }
         }

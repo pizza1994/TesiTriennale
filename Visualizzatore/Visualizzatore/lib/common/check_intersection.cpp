@@ -21,7 +21,7 @@
         float d = N.dot(v0);
 
         // compute t (equation 3)
-        t = (N.dot(orig) + d) / NdotRayDirection;
+        t = -(N.dot(orig) - d) / NdotRayDirection;
         // check if the triangle is in behind the ray
         if (t < 0) return false; // the triangle is behind
 
