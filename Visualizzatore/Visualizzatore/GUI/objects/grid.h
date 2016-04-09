@@ -41,7 +41,7 @@ class Grid
         double length;
         void setLength();
         void createGrid();
-        void eraseGridCell(int i, int j, int k);
+        void eraseGridCell(int &i, int &j, int &k);
 
     protected:
         std::vector< std::vector<std::vector<GridCell> > > grid;

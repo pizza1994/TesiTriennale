@@ -88,7 +88,7 @@ void Grid::createGrid()
                 verticesToAssign[5]= ( Pointd( (startVertex.x() + length*(i+1)), (startVertex.y() + length*j),  (startVertex.z() + length*(k+1))));
                 verticesToAssign[6]= ( Pointd( (startVertex.x() + length*i), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(k+1))));
                 verticesToAssign[7]= ( Pointd( (startVertex.x() + length*(i+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(k+1))));
-                qDebug() << verticesToAssign[0].x() << verticesToAssign[0].y() << verticesToAssign[0].z();
+                //qDebug() << verticesToAssign[0].x() << verticesToAssign[0].y() << verticesToAssign[0].z();
                 grid[i][j][k] = GridCell(verticesToAssign);
                 counter++;
             }
@@ -172,7 +172,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
 
 }
 
-void Grid::eraseGridCell(int i, int j, int k)
+void Grid::eraseGridCell(int &i, int &j, int &k)
 {
 /*
     for (int z=0; z<6; z++)
@@ -193,8 +193,9 @@ void Grid::eraseGridCell(int i, int j, int k)
         }
     }
 */
-    //grid[i][j].erase(grid[i][j].begin() + (k - (granularityFactor - grid[i][j].size())));
-    std::vector<Pointd> vertici = {Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0),Pointd(0,0,0)};
-    grid[i][j][k] = GridCell(vertici);
-    //free(&grid[i][j][k]);
+    std::vector<GridCell> support;
+
+    grid[i][j].erase(grid[i][j].begin()+ k);
+    k--;
+
 }
