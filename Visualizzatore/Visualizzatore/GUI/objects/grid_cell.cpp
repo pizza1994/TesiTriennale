@@ -3,12 +3,12 @@
 
 GridCell::GridCell()
 {
-
 }
 
 GridCell::GridCell(std::vector<Pointd> vertices)
 {
     xyz = vertices;
+    adjCells.resize(6);
 }
 
 
@@ -19,9 +19,14 @@ void GridCell::setAdjCells(std::vector<GridCell*> adjCells)
 
 void GridCell::setAdjCell(GridCell *adjCell, int index){
     adjCells[index] = adjCell;
+
 }
 
-std::vector<GridCell*> GridCell::getAdjCells() const
+GridCell* GridCell::getAdjCell(int index){
+    return adjCells[index];
+}
+
+std::vector<GridCell *> GridCell::getAdjCells()
 {
     return adjCells;
 }

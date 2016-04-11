@@ -41,7 +41,7 @@ std::vector<Pointd> Grid::getVertices() const
             for (int k=0; k<granularityFactor; k++)
             {
                 for (int z=0; z<8; z++)
-                    verticesToReturn.push_back(grid[k][j][i].getVertices()[z]);
+                    verticesToReturn.push_back(grid[k][j][i]->getVertices()[z]);
             }
 
         }
@@ -58,11 +58,6 @@ void Grid::createGrid()
     for(int j=0; j<granularityFactor; j++)
     {
         grid[j].resize(granularityFactor);
-
-        for (int k=0; k<granularityFactor; k++)
-        {
-            grid[j][k].resize(granularityFactor);
-        }
 
     }
 
@@ -89,7 +84,7 @@ void Grid::createGrid()
                 verticesToAssign[6]= ( Pointd( (startVertex.x() + length*i), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(k+1))));
                 verticesToAssign[7]= ( Pointd( (startVertex.x() + length*(i+1)), (startVertex.y() + length*(j+1)),  (startVertex.z() + length*(k+1))));
                 //qDebug() << verticesToAssign[0].x() << verticesToAssign[0].y() << verticesToAssign[0].z();
-                grid[i][j][k] = GridCell(verticesToAssign);
+                grid[i][j].push_back(new GridCell(verticesToAssign));
                 counter++;
             }
         }
@@ -99,28 +94,28 @@ void Grid::createGrid()
     adjToAssign.resize(6);
 
 
-    for(int i=0; i<granularityFactor; i++) //for della intera grid
+    for(int i=0; i<grid.size(); i++) //for della intera grid
     {
-        for(int j=0; j<granularityFactor; j++) //for di un livello di cubi
+        for(int j=0; j<grid[i].size(); j++) //for di un livello di cubi
         {
-            for (int k=0; k<granularityFactor; k++) //for di una linea di cubi
+            for (int k=0; k<grid[i][j].size(); k++) //for di una linea di cubi
             {
-                if (i==0) adjToAssign[0] = NULL;
-                else adjToAssign[0] = (&(grid[i-1][j][k]));
-                if (i==(granularityFactor-1)) adjToAssign[1] = NULL;
-                else adjToAssign[1] = (&(grid[i+1][j][k]));
 
-                if (j==0) adjToAssign[2] = NULL;
-                else adjToAssign[2] = (&(grid[k][j-1][i]));
-                if (j==(granularityFactor-1)) adjToAssign[3] = NULL;
-                else adjToAssign[3] = (&(grid[k][j+1][i]));
+                if (i==0) grid[i][j][k]->setAdjCell(NULL, 0);
+                else grid[i][j][k]->setAdjCell((grid[i-1][j][k]), 0);
+                if (i==(granularityFactor-1)) grid[i][j][k]->setAdjCell(NULL, 1);
+                else grid[i][j][k]->setAdjCell(grid[i+1][j][k], 1);
 
-                if (k==0) adjToAssign[4] = NULL;
-                else adjToAssign[4] = (&(grid[i][j][k-1]));
-                if (k==(granularityFactor-1)) adjToAssign[5] = NULL;
-                else adjToAssign[5] = (&(grid[i][j][k+1]));
+                if (j==0) grid[i][j][k]->setAdjCell(NULL, 2);
+                else grid[i][j][k]->setAdjCell(grid[i][j-1][k], 2);
+                if (j==(granularityFactor-1)) grid[i][j][k]->setAdjCell(NULL, 3);
+                else grid[i][j][k]->setAdjCell(grid[i][j+1][k], 3);
 
-                grid[k][j][i].setAdjCells(adjToAssign);
+                if (k==0) grid[i][j][k]->setAdjCell(NULL, 4);
+                else grid[i][j][k]->setAdjCell(grid[i][j][k-1], 4);
+                if (k==(granularityFactor-1)) grid[i][j][k]->setAdjCell(NULL, 5);
+                else grid[i][j][k]->setAdjCell(grid[i][j][k+1], 5);
+
            }
 
         }
@@ -136,14 +131,16 @@ void Grid::cleanGrid(DrawableTrimesh &t){
     {
         for(int j=0; j<(int)grid[i].size(); j++) //for di un livello di cubi
         {
+
             for (int k=0; k<(int)grid[i][j].size(); k++) //for di una linea di cubi
             {
+                qDebug () << i << " " << j << " " << k;
                 for (int z=0; z<8; z++)
                 {
 
                     for (int x=0; x<t.numTriangles(); x++)
                     {
-                        if(CheckIntersection::rayTriangleIntersect(grid[i][j][k].getVertex(z),
+                        if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                             Pointd(1,0,0),
                                             t.vertex(t.vectorTriangles()[p]),
                                             t.vertex(t.vectorTriangles()[p+1]),
@@ -159,42 +156,70 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                     {
                         Grid::eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
                         z=8;
+                        qDebug() << "cancellata in " << " " << i << " " << j;
                     }
+                    else
+                        qDebug() << "Salvata una.";
 
                     timesIntersected = 0;
                     p = 0;
                 }
 
             }
+
+            if (grid[i][j].size() == 0)
+            {
+                qDebug() << "Ciao!!";
+                grid[i].erase(grid[i].begin() + j);
+                j--;
+            }
         }
+
+        if (grid[i].size() == 0)
+        {
+            qDebug() <<"Oiac!!";
+            grid.erase(grid.begin() + i);
+            i--;
+        }
+
    }
+
+
+    qDebug() << "Dimensione in X" << " " << grid.size();
 
 
 }
 
 void Grid::eraseGridCell(int i, int j, int &k)
 {
-/*
+    qDebug() << "Cella posizione:" << i << " " << j << " " << k;
+
     for (int z=0; z<6; z++)
     {
-        if (grid[k][j][i].getAdjCells()[z] != NULL)
+        if ( grid[i][j][k]->getAdjCell(z) != NULL)
         {
             if (z % 2 == 0)
             {
-                qDebug() << "Attemping to set adjacency of z = " << z << "to z+1";
-                grid[k][j][i].getAdjCells()[z]->setAdjCell(NULL, z+1);
+               // qDebug() << "Attemping to set adjacency of z = " << z << "to z+1";
+               // qDebug () << i << " " <<  j << " " << k;
+                qDebug() << "Adiacenza Nonnulla in" << " " << z;
+                (grid[i][j][k]->getAdjCell(z))->setAdjCell(NULL, z+1);
+                qDebug() << "Q";
             }
             else
             {
-                qDebug() << "Attemping to set adjacency of z = " << z << "to z-1";
-
-                grid[k][j][i].getAdjCells()[z]->setAdjCell(NULL, z-1);
+              //  qDebug() << "Attemping to set adjacency of z = " << z << "to z-1";
+               // qDebug () << i << " " <<  j << " " << k;
+                qDebug() << "Adiacenza Nonnulla positiva in" << " " << z;
+                (grid[i][j][k]->getAdjCell(z))->setAdjCell(NULL, z-1);
+                qDebug() << "Q";
             }
-        }
-    }
-*/
-    std::vector<GridCell> support;
 
+        }
+        else qDebug() << "Adiacenza Nulla in" << " " << z;
+    }
+
+    delete (grid[i][j][k]);
     grid[i][j].erase(grid[i][j].begin()+ k);
     k--;
 

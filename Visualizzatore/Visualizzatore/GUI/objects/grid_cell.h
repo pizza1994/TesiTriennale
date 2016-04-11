@@ -15,7 +15,8 @@ class GridCell
         GridCell(std::vector<Pointd> vertices);
         void setAdjCells(std::vector<GridCell*> adjCells);
         void setAdjCell(GridCell *adjCell, int index);
-        std::vector<GridCell*> getAdjCells() const;
+        std::vector<GridCell*> getAdjCells();
+        GridCell* getAdjCell(int index);
         std::vector<Pointd> getVertices() const;
         Pointd getVertex(const int &i) const;
 
