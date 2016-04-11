@@ -134,7 +134,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
 
             for (int k=0; k<(int)grid[i][j].size(); k++) //for di una linea di cubi
             {
-                qDebug () << i << " " << j << " " << k;
+                //qDebug () << i << " " << j << " " << k;
                 for (int z=0; z<8; z++)
                 {
 
@@ -275,7 +275,7 @@ void Grid::calculateBox(GridCell* startingCell, int &volume, std::vector<Pointd>
         localY=0;
     }
 
-    qDebug() <<minY;
+    //qDebug() <<minY;
 
     for (int x = 0; x < vectorX.size(); x++)
     {
@@ -295,18 +295,15 @@ void Grid::calculateBox(GridCell* startingCell, int &volume, std::vector<Pointd>
             if (x==0 && y==0)   minZ = localZ;
             else if (localZ < minZ)     minZ = localZ;
             cell = cell->getAdjCell(Y_PLUS);
-            if (cell == NULL) qDebug ()<<"Cane";
 
             localZ = 0;
         }
 
     }
 
-    qDebug () << "Alla fine del calcolo viene " << " " << vectorX.size()*(minY+1)*(minZ+1);
-
-    if (vectorX.size()*(minY+1)*(minZ+1) > volume)
+    if (vectorX.size()*(minY+1)*(minZ+1)*pow(length,3 ) > volume)
     {
-        volume = vectorX.size()*(minY+1)*(minZ+1);
+        volume = vectorX.size()*(minY+1)*(minZ+1)*pow(length,3 );
 
         Pointd v0 = startingCell->getVertex(0);
 
