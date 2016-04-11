@@ -156,10 +156,8 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                     {
                         Grid::eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
                         z=8;
-                        qDebug() << "cancellata in " << " " << i << " " << j;
                     }
                     else
-                        qDebug() << "Salvata una.";
 
                     timesIntersected = 0;
                     p = 0;
@@ -169,7 +167,6 @@ void Grid::cleanGrid(DrawableTrimesh &t){
 
             if (grid[i][j].size() == 0)
             {
-                qDebug() << "Ciao!!";
                 grid[i].erase(grid[i].begin() + j);
                 j--;
             }
@@ -177,7 +174,6 @@ void Grid::cleanGrid(DrawableTrimesh &t){
 
         if (grid[i].size() == 0)
         {
-            qDebug() <<"Oiac!!";
             grid.erase(grid.begin() + i);
             i--;
         }
@@ -185,14 +181,10 @@ void Grid::cleanGrid(DrawableTrimesh &t){
    }
 
 
-    qDebug() << "Dimensione in X" << " " << grid.size();
-
-
 }
 
 void Grid::eraseGridCell(int i, int j, int &k)
 {
-    qDebug() << "Cella posizione:" << i << " " << j << " " << k;
 
     for (int z=0; z<6; z++)
     {
@@ -200,23 +192,16 @@ void Grid::eraseGridCell(int i, int j, int &k)
         {
             if (z % 2 == 0)
             {
-               // qDebug() << "Attemping to set adjacency of z = " << z << "to z+1";
-               // qDebug () << i << " " <<  j << " " << k;
-                qDebug() << "Adiacenza Nonnulla in" << " " << z;
+
                 (grid[i][j][k]->getAdjCell(z))->setAdjCell(NULL, z+1);
-                qDebug() << "Q";
             }
             else
             {
-              //  qDebug() << "Attemping to set adjacency of z = " << z << "to z-1";
-               // qDebug () << i << " " <<  j << " " << k;
-                qDebug() << "Adiacenza Nonnulla positiva in" << " " << z;
                 (grid[i][j][k]->getAdjCell(z))->setAdjCell(NULL, z-1);
-                qDebug() << "Q";
+
             }
 
         }
-        else qDebug() << "Adiacenza Nulla in" << " " << z;
     }
 
     delete (grid[i][j][k]);
@@ -224,3 +209,121 @@ void Grid::eraseGridCell(int i, int j, int &k)
     k--;
 
 }
+
+void Grid::createBox(){
+
+    int volume=0;
+    std::vector<Pointd> boxCoords;
+    boxCoords.resize(8);
+
+    GridCell * finalCell = grid[0][0][0];
+
+    for(int x = 0; x < grid.size(); x++)
+    {
+        for (int y = 0; y < grid[x].size(); y++)
+        {
+            for (int z = 0; z < grid[x][y].size(); z++)
+            {
+                calculateBox(grid[x][y][z], volume, boxCoords);
+            }
+        }
+    }
+    finalBox = boxCoords;
+    qDebug() << "volume: " <<volume;
+
+}
+
+void Grid::calculateBox(GridCell* startingCell, int &volume, std::vector<Pointd> &boxCoords){
+
+    std::vector<GridCell*> vectorX;
+    GridCell* cell = startingCell;
+    int minY=0;
+    int localY = 0;
+    int minZ=0;
+    int localZ=0;
+
+
+    vectorX.push_back(cell);
+    if (!cell->getAdjCell(X_PLUS) == NULL)
+    {
+        cell = cell->getAdjCell((X_PLUS));
+        while (cell->getAdjCell(X_PLUS)){
+            vectorX.push_back(cell);
+            cell = cell->getAdjCell(X_PLUS);
+        }
+    }
+
+    for (int x=0; x < vectorX.size(); x++)
+    {
+        cell = vectorX[x];
+        if (cell->getAdjCell(Y_PLUS) == NULL)
+        {
+            minY = 0;
+            x = vectorX.size();
+        }
+        else
+        {
+            while ( cell->getAdjCell(Y_PLUS) )
+                {
+                    localY++;
+                    cell = cell->getAdjCell(Y_PLUS);
+                }
+
+            if (x == 0) minY = localY;
+            else if (localY < minY) minY = localY;
+        }
+        localY=0;
+    }
+
+    qDebug() <<minY;
+
+    for (int x = 0; x < vectorX.size(); x++)
+    {
+        cell = vectorX[x];
+        for (int y = 0; y <= minY; y++)
+        {
+            if (cell->getAdjCell(Z_PLUS) != NULL)
+            {
+                GridCell * tempCell = cell;
+
+                while (tempCell->getAdjCell(Z_PLUS) )
+                {
+                    localZ++;
+                    tempCell = tempCell->getAdjCell(Z_PLUS);
+                }
+            }
+            if (x==0 && y==0)   minZ = localZ;
+            else if (localZ < minZ)     minZ = localZ;
+            cell = cell->getAdjCell(Y_PLUS);
+            if (cell == NULL) qDebug ()<<"Cane";
+
+            localZ = 0;
+        }
+
+    }
+
+    qDebug () << "Alla fine del calcolo viene " << " " << vectorX.size()*(minY+1)*(minZ+1);
+
+    if (vectorX.size()*(minY+1)*(minZ+1) > volume)
+    {
+        volume = vectorX.size()*(minY+1)*(minZ+1);
+
+        Pointd v0 = startingCell->getVertex(0);
+
+        boxCoords[0] = v0;
+        boxCoords[1] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() );
+        boxCoords[2] = Pointd(v0.x(), v0.y() +length*(minY+1), v0.z() );
+        boxCoords[3] = Pointd(v0.x() +length*vectorX.size(), v0.y() + length*(minY+1), v0.z() );
+        boxCoords[4] = Pointd(v0.x(), v0.y(), v0.z() +length*(minZ+1) );
+        boxCoords[5] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() + length*(minZ+1) );
+        boxCoords[6] = Pointd(v0.x(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
+        boxCoords[7] = Pointd(v0.x() + length*vectorX.size(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
+    }
+
+}
+
+
+
+
+
+

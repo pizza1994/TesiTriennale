@@ -4,6 +4,8 @@
 #include "grid.h"
 #include <QColor>
 #include <QDebug>
+#include "GUI/objects/sphere.h"
+#include "GUI/objects/cylinder.h"
 
 
 class DrawableGrid : public Grid ,

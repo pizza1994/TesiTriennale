@@ -15,6 +15,12 @@
 #include "lib/trimesh/drawable_trimesh.h"
 #include <math.h>
 #include "lib/common/check_intersection.h"
+#define X_MINUS 0
+#define X_PLUS 1
+#define Y_MINUS 2
+#define Y_PLUS 3
+#define Z_MINUS 4
+#define Z_PLUS 5
 
 
 /**
@@ -47,7 +53,11 @@ class Grid
         std::vector< std::vector<std::vector<GridCell*> > > grid;
         int granularityFactor;
         BoundingBox internal_bbox;
+        std::vector<Pointd> finalBox;
         void cleanGrid(DrawableTrimesh &t);
+        void createBox();
+
+        void calculateBox(GridCell *startingCell, int &volume, std::vector<Pointd> &boxCoords);
 };
 
 #endif

@@ -5,7 +5,6 @@
 #include <vector>
 #include "lib/common/point.h"
 
-
 class GridCell
 {
 

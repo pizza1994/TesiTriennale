@@ -1,6 +1,5 @@
 #include "drawable_grid.h"
 #include <math.h>
-#include "GUI/objects/sphere.h"
 
 
 DrawableGrid::DrawableGrid()
@@ -11,6 +10,7 @@ DrawableGrid::DrawableGrid()
 DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, DrawableTrimesh &t):Grid(b, granularityFactor)
 {
     Grid::cleanGrid(t);
+    Grid::createBox();
 }
 
 
@@ -35,6 +35,23 @@ void DrawableGrid::draw() const
                 }
             }
         }
+
+        GLfloat red[3] = {1,0,0};
+
+        cylinder(finalBox[0], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[0], finalBox[2], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[0], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[3], finalBox[2], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[3], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[3], finalBox[7], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[5], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[5], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[5], finalBox[7], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[6], finalBox[7], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[6], finalBox[2], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+        cylinder(finalBox[6], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+
+
     }
 }
 
