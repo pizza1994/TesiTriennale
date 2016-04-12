@@ -242,7 +242,8 @@ DIST          = ../../../Qt/5.6/clang_64/mkspecs/features/spec_pre.prf \
 		../Visualizzatore/lib/common/check_intersection.h \
 		../Visualizzatore/GUI/objects/grid_cell.h \
 		../Visualizzatore/GUI/objects/grid.h \
-		../Visualizzatore/GUI/objects/drawable_grid.h ../Visualizzatore/common.cpp \
+		../Visualizzatore/GUI/objects/drawable_grid.h \
+		../Visualizzatore/lib/common/octree.h ../Visualizzatore/common.cpp \
 		../Visualizzatore/main.cpp \
 		../Visualizzatore/GUI/glcanvas.cpp \
 		../Visualizzatore/GUI/mainwindow.cpp \
@@ -594,7 +595,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../Visualizzatore/lib/common/point.h ../Visualizzatore/lib/timer.h ../Visualizzatore/common.h ../Visualizzatore/GUI/glcanvas.h ../Visualizzatore/GUI/mainwindow.h ../Visualizzatore/lib/trimesh/drawable_trimesh.h ../Visualizzatore/lib/trimesh/load_save_trimesh.h ../Visualizzatore/lib/trimesh/trimesh.h ../Visualizzatore/lib/common/drawable_object.h ../Visualizzatore/GUI/managers/trimesh_manager.h ../Visualizzatore/lib/common/bounding_box.h ../Visualizzatore/lib/common/comparators.h ../Visualizzatore/GUI/managers/window_manager.h ../Visualizzatore/GUI/objects/cylinder.h ../Visualizzatore/GUI/objects/drawable_axis.h ../Visualizzatore/GUI/objects/sphere.h ../Visualizzatore/GUI/objects/drawable_bbox.h ../Visualizzatore/lib/common/check_intersection.h ../Visualizzatore/GUI/objects/grid_cell.h ../Visualizzatore/GUI/objects/grid.h ../Visualizzatore/GUI/objects/drawable_grid.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Visualizzatore/lib/common/point.h ../Visualizzatore/lib/timer.h ../Visualizzatore/common.h ../Visualizzatore/GUI/glcanvas.h ../Visualizzatore/GUI/mainwindow.h ../Visualizzatore/lib/trimesh/drawable_trimesh.h ../Visualizzatore/lib/trimesh/load_save_trimesh.h ../Visualizzatore/lib/trimesh/trimesh.h ../Visualizzatore/lib/common/drawable_object.h ../Visualizzatore/GUI/managers/trimesh_manager.h ../Visualizzatore/lib/common/bounding_box.h ../Visualizzatore/lib/common/comparators.h ../Visualizzatore/GUI/managers/window_manager.h ../Visualizzatore/GUI/objects/cylinder.h ../Visualizzatore/GUI/objects/drawable_axis.h ../Visualizzatore/GUI/objects/sphere.h ../Visualizzatore/GUI/objects/drawable_bbox.h ../Visualizzatore/lib/common/check_intersection.h ../Visualizzatore/GUI/objects/grid_cell.h ../Visualizzatore/GUI/objects/grid.h ../Visualizzatore/GUI/objects/drawable_grid.h ../Visualizzatore/lib/common/octree.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../Visualizzatore/common.cpp ../Visualizzatore/main.cpp ../Visualizzatore/GUI/glcanvas.cpp ../Visualizzatore/GUI/mainwindow.cpp ../Visualizzatore/lib/trimesh/drawable_trimesh.cpp ../Visualizzatore/lib/trimesh/load_save_trimesh.cpp ../Visualizzatore/GUI/managers/trimesh_manager.cpp ../Visualizzatore/GUI/managers/window_manager.cpp ../Visualizzatore/GUI/objects/drawable_axis.cpp ../Visualizzatore/GUI/objects/drawable_bbox.cpp ../Visualizzatore/lib/common/check_intersection.cpp ../Visualizzatore/GUI/objects/grid.cpp ../Visualizzatore/GUI/objects/grid_cell.cpp ../Visualizzatore/GUI/objects/drawable_grid.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Visualizzatore/GUI/mainwindow.ui ../Visualizzatore/GUI/managers/trimesh_manager.ui ../Visualizzatore/GUI/managers/window_manager.ui $(DISTDIR)/
 
@@ -653,7 +654,9 @@ compiler_moc_header_clean:
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
 		../Visualizzatore/GUI/objects/grid_cell.h \
+		../Visualizzatore/common.h \
 		../Visualizzatore/lib/common/check_intersection.h \
+		../Visualizzatore/lib/common/octree.h \
 		../Visualizzatore/GUI/objects/sphere.h \
 		../Visualizzatore/GUI/objects/cylinder.h \
 		../Visualizzatore/GUI/managers/trimesh_manager.h
@@ -762,12 +765,13 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
 		../Visualizzatore/GUI/objects/grid_cell.h \
+		../Visualizzatore/common.h \
 		../Visualizzatore/lib/common/check_intersection.h \
+		../Visualizzatore/lib/common/octree.h \
 		../Visualizzatore/GUI/objects/sphere.h \
 		../Visualizzatore/GUI/objects/cylinder.h \
 		../Visualizzatore/GUI/managers/window_manager.h \
 		../Visualizzatore/GUI/objects/drawable_axis.h \
-		../Visualizzatore/common.h \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/QApplication \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o .obj/main.o ../Visualizzatore/main.cpp
@@ -887,7 +891,9 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
 		../Visualizzatore/GUI/objects/grid_cell.h \
+		../Visualizzatore/common.h \
 		../Visualizzatore/lib/common/check_intersection.h \
+		../Visualizzatore/lib/common/octree.h \
 		../Visualizzatore/GUI/objects/sphere.h \
 		../Visualizzatore/GUI/objects/cylinder.h \
 		ui_trimesh_manager.h \
@@ -963,12 +969,14 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 		../Visualizzatore/lib/common/point.h \
 		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/5.6/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		../Visualizzatore/common.h \
 		../Visualizzatore/lib/common/bounding_box.h \
 		../Visualizzatore/lib/trimesh/drawable_trimesh.h \
 		../Visualizzatore/lib/common/drawable_object.h \
 		../Visualizzatore/lib/trimesh/trimesh.h \
 		../Visualizzatore/lib/trimesh/load_save_trimesh.h \
-		../Visualizzatore/lib/common/check_intersection.h
+		../Visualizzatore/lib/common/check_intersection.h \
+		../Visualizzatore/lib/common/octree.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o .obj/grid.o ../Visualizzatore/GUI/objects/grid.cpp
 
 .obj/grid_cell.o: ../Visualizzatore/GUI/objects/grid_cell.cpp ../Visualizzatore/GUI/objects/grid_cell.h \
@@ -986,11 +994,13 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
 		/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glu.h \
 		../Visualizzatore/GUI/objects/grid_cell.h \
+		../Visualizzatore/common.h \
 		../Visualizzatore/lib/common/bounding_box.h \
 		../Visualizzatore/lib/trimesh/drawable_trimesh.h \
 		../Visualizzatore/lib/trimesh/trimesh.h \
 		../Visualizzatore/lib/trimesh/load_save_trimesh.h \
 		../Visualizzatore/lib/common/check_intersection.h \
+		../Visualizzatore/lib/common/octree.h \
 		../../../Qt/5.6/clang_64/lib/QtGui.framework/Headers/QColor \
 		../../../Qt/5.6/clang_64/lib/QtGui.framework/Headers/qcolor.h \
 		../Visualizzatore/GUI/objects/sphere.h \

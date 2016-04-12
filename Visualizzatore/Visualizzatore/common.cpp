@@ -25,3 +25,49 @@ bool epsilonEqual(const Vec3 &x, const Vec3 &v)
     else return false;
 
 }
+
+Pointd max3Point(Pointd a, Pointd b, Pointd c)
+{
+    return Pointd( max3Double(a.x(), b.x(), c.x()), max3Double(a.y(), b.y(), c.y()), max3Double(a.z(), b.z(), c.z()) );
+}
+
+double max3Double(double a, double b, double c){
+
+    if ( a > b )
+    {
+        if (a > c)
+            return a;
+        else
+            return c;
+    }
+    else
+    {
+        if ( b > c )
+            return b;
+        else
+            return c;
+    }
+}
+
+Pointd min3Point(Pointd a, Pointd b, Pointd c)
+{
+    return Pointd( min3Double(a.x(), b.x(), c.x()), min3Double(a.y(), b.y(), c.y()), min3Double(a.z(), b.z(), c.z()) );
+}
+
+double min3Double(double a, double b, double c){
+
+    if ( a < b )
+    {
+        if (a < c)
+            return a;
+        else
+            return c;
+    }
+    else
+    {
+        if ( b < c )
+            return b;
+        else
+            return c;
+    }
+}

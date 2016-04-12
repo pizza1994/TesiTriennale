@@ -36,22 +36,22 @@ template<typename item_type> class Octree
             Pointd bb_avg = (bb_min + bb_max)/2.0;
 
             children.resize(8);
-            children[0].set_extents(Pointd(bb_min[0], bb_min[1], bb_min[2]),
-                                    Pointd(bb_avg[0], bb_avg[1], bb_avg[2]));
-            children[1].set_extents(Pointd(bb_avg[0], bb_min[1], bb_min[2]),
-                                    Pointd(bb_max[0], bb_avg[1], bb_avg[2]));
-            children[2].set_extents(Pointd(bb_avg[0], bb_avg[1], bb_min[2]),
-                                    Pointd(bb_max[0], bb_max[1], bb_avg[2]));
-            children[3].set_extents(Pointd(bb_min[0], bb_avg[1], bb_min[2]),
-                                    Pointd(bb_avg[0], bb_max[1], bb_avg[2]));
-            children[4].set_extents(Pointd(bb_min[0], bb_min[1], bb_avg[2]),
-                                    Pointd(bb_avg[0], bb_avg[1], bb_max[2]));
-            children[5].set_extents(Pointd(bb_avg[0], bb_min[1], bb_avg[2]),
-                                    Pointd(bb_max[0], bb_avg[1], bb_max[2]));
-            children[6].set_extents(Pointd(bb_avg[0], bb_avg[1], bb_avg[2]),
-                                    Pointd(bb_max[0], bb_max[1], bb_max[2]));
-            children[7].set_extents(Pointd(bb_min[0], bb_avg[1], bb_avg[2]),
-                                    Pointd(bb_avg[0], bb_max[1], bb_max[2]));
+            children[0].set_extents(Pointd(bb_min.x(), bb_min.y(), bb_min.z()),
+                                    Pointd(bb_avg.x(), bb_avg.y(), bb_avg.z()));
+            children[1].set_extents(Pointd(bb_avg.x(), bb_min.y(), bb_min.z()),
+                                    Pointd(bb_max.x(), bb_avg.y(), bb_avg.z()));
+            children[2].set_extents(Pointd(bb_avg.x(), bb_avg.y(), bb_min.z()),
+                                    Pointd(bb_max.x(), bb_max.y(), bb_avg.z()));
+            children[3].set_extents(Pointd(bb_min.x(), bb_avg.y(), bb_min.z()),
+                                    Pointd(bb_avg.x(), bb_max.y(), bb_avg.z()));
+            children[4].set_extents(Pointd(bb_min.x(), bb_min.y(), bb_avg.z()),
+                                    Pointd(bb_avg.x(), bb_avg.y(), bb_max.z()));
+            children[5].set_extents(Pointd(bb_avg.x(), bb_min.y(), bb_avg.z()),
+                                    Pointd(bb_max.x(), bb_avg.y(), bb_max.z()));
+            children[6].set_extents(Pointd(bb_avg.x(), bb_avg.y(), bb_avg.z()),
+                                    Pointd(bb_max.x(), bb_max.y(), bb_max.z()));
+            children[7].set_extents(Pointd(bb_min.x(), bb_avg.y(), bb_avg.z()),
+                                    Pointd(bb_avg.x(), bb_max.y(), bb_max.z()));
         }
 
         void subdivide_n_levels(const int n)
@@ -70,8 +70,8 @@ template<typename item_type> class Octree
         {
             double eps = 1e-3;
 
-            if (query[0] >= bb_min[0] - eps && query[1] >= bb_min[1] - eps && query[2] >= bb_min[2] - eps &&
-                query[0] <= bb_max[0] + eps && query[1] <= bb_max[1] + eps && query[2] <= bb_max[2] + eps)
+            if (query.x() >= bb_min.x() - eps && query.y() >= bb_min.y() - eps && query.z() >= bb_min.z() - eps &&
+                query.x() <= bb_max.x() + eps && query.y() <= bb_max.y() + eps && query.z() <= bb_max.z() + eps)
             {
                 if (children.empty())
                 {
@@ -87,8 +87,8 @@ template<typename item_type> class Octree
 
         void add_item(const item_type & item, const Pointd & minim, const Pointd & maxim)
         {
-            if (minim[0] <= bb_max[0] && minim[1] <= bb_max[1] && minim[2] <= bb_max[2] &&
-                maxim[0] >= bb_min[0] && maxim[1] >= bb_min[1] && maxim[2] >= bb_min[2] )
+            if (minim.x() <= bb_max.x() && minim.y() <= bb_max.y() && minim.z() <= bb_max.z() &&
+                maxim.x() >= bb_min.x() && maxim.y() >= bb_min.y() && maxim.z() >= bb_min.z() )
             {
                 item_list.push_back(item);
 

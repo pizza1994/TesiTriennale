@@ -41,6 +41,12 @@ int searchInsertIndex(const T &n, const std::vector<T> &v){
     return first;
 }
 
+double min3Double(double a, double b, double c);
+Pointd min3Point(Pointd  a, Pointd b, Pointd c);
+
+double max3Double(double a, double b, double c);
+Pointd max3Point(Pointd  a, Pointd b, Pointd c);
+
 float absolute(float x);
 
 bool epsilonEqual(float x, float v);

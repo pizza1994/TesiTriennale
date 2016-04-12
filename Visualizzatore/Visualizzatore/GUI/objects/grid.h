@@ -11,10 +11,12 @@
 #include "grid_cell.h"
 #include <vector>
 #include "lib/common/point.h"
+#include "common.h"
 #include "lib/common/bounding_box.h"
 #include "lib/trimesh/drawable_trimesh.h"
 #include <math.h>
 #include "lib/common/check_intersection.h"
+#include "lib/common/octree.h"
 #define X_MINUS 0
 #define X_PLUS 1
 #define Y_MINUS 2
