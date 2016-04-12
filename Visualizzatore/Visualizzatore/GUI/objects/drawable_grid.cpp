@@ -30,7 +30,7 @@ void DrawableGrid::draw() const
                 {
 
                     for(int z=0; z<8; z++){
-                         sphere(grid[i][j][k]->getVertex(z), 1, blue);
+                         sphere(grid[i][j][k]->getVertex(z), 0.005*internal_bbox.diag()/5, blue);
                         }
                 }
             }

@@ -258,20 +258,23 @@ void Grid::calculateBox(GridCell* startingCell, int &volume, std::vector<Pointd>
         cell = vectorX[x];
         if (cell->getAdjCell(Y_PLUS) == NULL)
         {
-            minY = 0;
             x = vectorX.size();
         }
         else
         {
-            while ( cell->getAdjCell(Y_PLUS) )
+            cell = cell->getAdjCell((Y_PLUS));
+            localY++;
+            while (cell->getAdjCell(Y_PLUS) )
                 {
                     localY++;
                     cell = cell->getAdjCell(Y_PLUS);
                 }
 
-            if (x == 0) minY = localY;
-            else if (localY < minY) minY = localY;
         }
+
+        if (x == 0) minY = localY;
+        else if (localY < minY) minY = localY;
+
         localY=0;
     }
 
