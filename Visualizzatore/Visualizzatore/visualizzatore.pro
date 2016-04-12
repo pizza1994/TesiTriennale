@@ -21,7 +21,8 @@ HEADERS += \
     lib/common/check_intersection.h \
     GUI/objects/grid_cell.h \
     GUI/objects/grid.h \
-    GUI/objects/drawable_grid.h
+    GUI/objects/drawable_grid.h \
+    lib/common/octree.h
 
 SOURCES += \
     common.cpp \
