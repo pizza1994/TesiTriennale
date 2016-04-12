@@ -129,6 +129,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
 
     int timesIntersected = 0;
     int p = 0;
+    std::vector<Pointd> alreadyCheckVertices;
 
     for(int i=0; i<(int)grid.size(); i++) //for della intera grid
     {
@@ -150,32 +151,35 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                         eraseGridCell(i, j, k);
                         z=8;
                     }
-                    else
+                    else if ( std::find(alreadyCheckVertices.begin(), alreadyCheckVertices.end(), grid[i][j][k]->getVertex(z)) == alreadyCheckVertices.end() )
                     {
-                            for (int x=0; x<t.numTriangles(); x++)
+                        alreadyCheckVertices.push_back(grid[i][j][k]->getVertex(z));
+
+                        for (int x=0; x<t.numTriangles(); x++)
+                        {
+
+                            if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
+                                                Pointd(1,0,0),
+                                                t.vertex(t.vectorTriangles()[p]),
+                                                t.vertex(t.vectorTriangles()[p+1]),
+                                                t.vertex(t.vectorTriangles()[p+2])))
                             {
-
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                    Pointd(1,0,0),
-                                                    t.vertex(t.vectorTriangles()[p]),
-                                                    t.vertex(t.vectorTriangles()[p+1]),
-                                                    t.vertex(t.vectorTriangles()[p+2])))
-                                {
-                                    timesIntersected++;
-                                }
-                                p+=3;
-
+                                timesIntersected++;
                             }
+                            p+=3;
 
-                            if (timesIntersected % 2 == 0) //Se il vertice è fuori dalla mesh
-                            {
-                                eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
-                                z=8;
-                            }
-                            timesIntersected = 0;
-                            p = 0;
+                        }
+
+                        if (timesIntersected % 2 == 0) //Se il vertice è fuori dalla mesh
+                        {
+                            eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
+                            z=8;
+                        }
+                        timesIntersected = 0;
+                        p = 0;
 
                     }
+
                 }
 
             }

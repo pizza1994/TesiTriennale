@@ -15,6 +15,7 @@
 #include "lib/common/bounding_box.h"
 #include "lib/trimesh/drawable_trimesh.h"
 #include <math.h>
+#include <algorithm>
 #include "lib/common/check_intersection.h"
 #include "lib/common/octree.h"
 #define X_MINUS 0
