@@ -90,6 +90,9 @@ void Grid::createGrid()
         }
     }
 
+
+
+
     std::vector<GridCell*> adjToAssign;
     adjToAssign.resize(6);
 
@@ -137,30 +140,42 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                 //qDebug () << i << " " << j << " " << k;
                 for (int z=0; z<8; z++)
                 {
-
-                    for (int x=0; x<t.numTriangles(); x++)
+                    if (grid[i][j][k]->getVertex(z).x() < internal_bbox.getMinX() ||
+                            grid[i][j][k]->getVertex(z).y() < internal_bbox.getMinY() ||
+                            grid[i][j][k]->getVertex(z).z() < internal_bbox.getMinZ() ||
+                            grid[i][j][k]->getVertex(z).x() > internal_bbox.getMaxX() ||
+                            grid[i][j][k]->getVertex(z).y() > internal_bbox.getMaxY() ||
+                            grid[i][j][k]->getVertex(z).z() > internal_bbox.getMaxZ())
                     {
-                        if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                            Pointd(1,0,0),
-                                            t.vertex(t.vectorTriangles()[p]),
-                                            t.vertex(t.vectorTriangles()[p+1]),
-                                            t.vertex(t.vectorTriangles()[p+2])))
-                        {
-                            timesIntersected++;
-                        }
-                        p+=3;
-
-                    }
-
-                    if (timesIntersected % 2 == 0) //Se il vertice è fuori dalla mesh
-                    {
-                        Grid::eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
+                        eraseGridCell(i, j, k);
                         z=8;
                     }
                     else
+                    {
+                            for (int x=0; x<t.numTriangles(); x++)
+                            {
 
-                    timesIntersected = 0;
-                    p = 0;
+                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
+                                                    Pointd(1,0,0),
+                                                    t.vertex(t.vectorTriangles()[p]),
+                                                    t.vertex(t.vectorTriangles()[p+1]),
+                                                    t.vertex(t.vectorTriangles()[p+2])))
+                                {
+                                    timesIntersected++;
+                                }
+                                p+=3;
+
+                            }
+
+                            if (timesIntersected % 2 == 0) //Se il vertice è fuori dalla mesh
+                            {
+                                eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
+                                z=8;
+                            }
+                            timesIntersected = 0;
+                            p = 0;
+
+                    }
                 }
 
             }
@@ -212,7 +227,7 @@ void Grid::eraseGridCell(int i, int j, int &k)
 
 void Grid::createBox(){
 
-    int volume=0;
+    double volume=0;
     std::vector<Pointd> boxCoords;
     boxCoords.resize(8);
 
@@ -233,7 +248,7 @@ void Grid::createBox(){
 
 }
 
-void Grid::calculateBox(GridCell* startingCell, int &volume, std::vector<Pointd> &boxCoords){
+void Grid::calculateBox(GridCell* startingCell, double &volume, std::vector<Pointd> &boxCoords){
 
     std::vector<GridCell*> vectorX;
     GridCell* cell = startingCell;

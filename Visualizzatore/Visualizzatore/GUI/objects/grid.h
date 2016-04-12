@@ -59,7 +59,7 @@ class Grid
         void cleanGrid(DrawableTrimesh &t);
         void createBox();
 
-        void calculateBox(GridCell *startingCell, int &volume, std::vector<Pointd> &boxCoords);
+        void calculateBox(GridCell *startingCell, double &volume, std::vector<Pointd> &boxCoords);
 };
 
 #endif
