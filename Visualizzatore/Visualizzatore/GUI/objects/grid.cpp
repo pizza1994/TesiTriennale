@@ -208,7 +208,6 @@ void Grid::cleanGrid(DrawableTrimesh &t){
     {
         for(int j=0; j<(int)grid[i].size(); j++) //for di un livello di cubi
         {
-
             for (int k=0; k<(int)grid[i][j].size(); k++) //for di una linea di cubi
             {
                 //qDebug () << i << " " << j << " " << k;
@@ -425,8 +424,6 @@ void Grid::cleanGrid(DrawableTrimesh &t){
         }
 
     }
-
-
 }
 
 void Grid::eraseGridCell(int i, int j, int &k)
@@ -461,8 +458,13 @@ void Grid::createBox(){
     double volume=0;
     std::vector<Pointd> boxCoords;
     boxCoords.resize(8);
+    int xSize, ySize, zSize;
+    std::vector<GridCell*> vectorX;
+    GridCell * tempCell = NULL;
+    GridCell * finalCell = NULL;
 
-    GridCell * finalCell = grid[0][0][0];
+    if (grid.size()==0) return;
+    //if (finalBoxes.size() == 7) return;
 
     for(int x = 0; x < grid.size(); x++)
     {
@@ -470,16 +472,80 @@ void Grid::createBox(){
         {
             for (int z = 0; z < grid[x][y].size(); z++)
             {
-                calculateBox(grid[x][y][z], volume, boxCoords);
+                calculateBox(grid[x][y][z], finalCell, volume, xSize, ySize, zSize, boxCoords);
             }
         }
     }
-    finalBox = boxCoords;
+
+
+    vectorX.push_back(finalCell);
+    tempCell = finalCell;
+    for (int x=0; x<xSize; x++)
+    {
+        vectorX.push_back(tempCell->getAdjCell(X_PLUS));
+        tempCell = tempCell->getAdjCell(X_PLUS);
+    }
+
+
+    int counter = 0;
+
+    GridCell* tempCellY;
+
+    for (int x = 0; x < xSize; x++)
+    {
+        finalCell = vectorX[x];
+        tempCell = finalCell;
+        for (int y = 0; y < ySize ; y++)
+        {
+                if (y==0) tempCellY = finalCell;
+
+                for (int z = 0; z < zSize; z++)
+                {
+                    tempCell->setToDelete();
+                    tempCell = tempCell->getAdjCell(Z_PLUS);
+                }
+
+                tempCellY = tempCellY->getAdjCell(Y_PLUS);
+                tempCell = tempCellY;
+        }
+    }
+
+
+    for(int x = 0; x < grid.size(); x++)
+    {
+        for (int y = 0; y < grid[x].size(); y++)
+        {
+            for (int z = 0; z < grid[x][y].size(); z++)
+            {
+                if (grid[x][y][z]->getToDelete())
+                {
+                    eraseGridCell(x, y, z);
+                }
+            }
+            if (grid[x][y].size() == 0)
+            {
+                grid[x].erase(grid[x].begin() + y);
+                y--;
+            }
+        }
+
+        if (grid[x].size() == 0)
+        {
+            grid.erase(grid.begin() + x);
+            x--;
+        }
+    }
+
+
+    std::vector<Pointd> finalBox = boxCoords;
+    finalBoxes.push_back(finalBox);
+    createBox();
+
     qDebug() << "volume: " <<volume;
 
 }
 
-void Grid::calculateBox(GridCell* startingCell, double &volume, std::vector<Pointd> &boxCoords){
+void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &volume, int & xSize, int & ySize, int & zSize, std::vector<Pointd> &boxCoords){
 
     std::vector<GridCell*> vectorX;
     GridCell* cell = startingCell;
@@ -555,6 +621,10 @@ void Grid::calculateBox(GridCell* startingCell, double &volume, std::vector<Poin
         volume = vectorX.size()*(minY+1)*(minZ+1)*pow(length,3 );
 
         Pointd v0 = startingCell->getVertex(0);
+        finalCell = startingCell;
+        xSize = vectorX.size();
+        ySize = minY+1;
+        zSize = minZ+1;
 
         boxCoords[0] = v0;
         boxCoords[1] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() );

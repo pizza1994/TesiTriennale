@@ -36,12 +36,10 @@ public:
     QFrame *verticalFrame;
     QVBoxLayout *verticalLayout_2;
     QPushButton *butLoadTrimesh;
-    QFrame *frame;
-    QVBoxLayout *verticalLayout;
-    QCheckBox *cbDrawTrimesh;
-    QRadioButton *rbPoints;
-    QRadioButton *rbFlat;
-    QRadioButton *rbSmooth;
+    QCheckBox *cbShowBBox;
+    QCheckBox *cbShowMaxBox;
+    QCheckBox *cbShowGrid;
+    QPushButton *butCalculateBox;
     QFrame *frame_3;
     QVBoxLayout *verticalLayout_3;
     QCheckBox *cbWireframe;
@@ -56,15 +54,19 @@ public:
     QRadioButton *rbVertexColor;
     QPushButton *butSetVColor;
     QPushButton *butSetTcolor;
-    QCheckBox *cbShowBBox;
-    QCheckBox *cbShowGrid;
+    QFrame *frame;
+    QVBoxLayout *verticalLayout;
+    QCheckBox *cbDrawTrimesh;
+    QRadioButton *rbPoints;
+    QRadioButton *rbFlat;
+    QRadioButton *rbSmooth;
 
     void setupUi(QDockWidget *Trimesh_manager)
     {
         if (Trimesh_manager->objectName().isEmpty())
             Trimesh_manager->setObjectName(QStringLiteral("Trimesh_manager"));
-        Trimesh_manager->resize(410, 286);
-        Trimesh_manager->setMinimumSize(QSize(410, 286));
+        Trimesh_manager->resize(440, 286);
+        Trimesh_manager->setMinimumSize(QSize(440, 286));
         Trimesh_manager->setMaximumSize(QSize(524287, 286));
         QFont font;
         font.setPointSize(10);
@@ -75,7 +77,7 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_2, 0, 5, 4, 1);
+        gridLayout->addItem(horizontalSpacer_2, 0, 6, 5, 1);
 
         verticalFrame = new QFrame(dockWidgetContents);
         verticalFrame->setObjectName(QStringLiteral("verticalFrame"));
@@ -90,38 +92,25 @@ public:
 
         gridLayout->addWidget(verticalFrame, 0, 3, 1, 1);
 
-        frame = new QFrame(dockWidgetContents);
-        frame->setObjectName(QStringLiteral("frame"));
-        verticalLayout = new QVBoxLayout(frame);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        cbDrawTrimesh = new QCheckBox(frame);
-        cbDrawTrimesh->setObjectName(QStringLiteral("cbDrawTrimesh"));
-        cbDrawTrimesh->setEnabled(false);
-        cbDrawTrimesh->setChecked(true);
+        cbShowBBox = new QCheckBox(dockWidgetContents);
+        cbShowBBox->setObjectName(QStringLiteral("cbShowBBox"));
 
-        verticalLayout->addWidget(cbDrawTrimesh);
+        gridLayout->addWidget(cbShowBBox, 3, 3, 1, 1);
 
-        rbPoints = new QRadioButton(frame);
-        rbPoints->setObjectName(QStringLiteral("rbPoints"));
-        rbPoints->setEnabled(false);
+        cbShowMaxBox = new QCheckBox(dockWidgetContents);
+        cbShowMaxBox->setObjectName(QStringLiteral("cbShowMaxBox"));
 
-        verticalLayout->addWidget(rbPoints);
+        gridLayout->addWidget(cbShowMaxBox, 3, 5, 1, 1);
 
-        rbFlat = new QRadioButton(frame);
-        rbFlat->setObjectName(QStringLiteral("rbFlat"));
-        rbFlat->setEnabled(false);
+        cbShowGrid = new QCheckBox(dockWidgetContents);
+        cbShowGrid->setObjectName(QStringLiteral("cbShowGrid"));
 
-        verticalLayout->addWidget(rbFlat);
+        gridLayout->addWidget(cbShowGrid, 4, 5, 1, 1);
 
-        rbSmooth = new QRadioButton(frame);
-        rbSmooth->setObjectName(QStringLiteral("rbSmooth"));
-        rbSmooth->setEnabled(false);
-        rbSmooth->setChecked(true);
+        butCalculateBox = new QPushButton(dockWidgetContents);
+        butCalculateBox->setObjectName(QStringLiteral("butCalculateBox"));
 
-        verticalLayout->addWidget(rbSmooth);
-
-
-        gridLayout->addWidget(frame, 0, 4, 1, 1);
+        gridLayout->addWidget(butCalculateBox, 2, 5, 1, 1);
 
         frame_3 = new QFrame(dockWidgetContents);
         frame_3->setObjectName(QStringLiteral("frame_3"));
@@ -163,7 +152,7 @@ public:
         verticalLayout_3->addItem(verticalSpacer_2);
 
 
-        gridLayout->addWidget(frame_3, 1, 3, 1, 1);
+        gridLayout->addWidget(frame_3, 1, 3, 2, 1);
 
         frame_2 = new QFrame(dockWidgetContents);
         frame_2->setObjectName(QStringLiteral("frame_2"));
@@ -203,17 +192,40 @@ public:
         gridLayout_2->addWidget(butSetTcolor, 2, 1, 1, 1);
 
 
-        gridLayout->addWidget(frame_2, 1, 4, 1, 1);
+        gridLayout->addWidget(frame_2, 2, 4, 1, 1);
 
-        cbShowBBox = new QCheckBox(dockWidgetContents);
-        cbShowBBox->setObjectName(QStringLiteral("cbShowBBox"));
+        frame = new QFrame(dockWidgetContents);
+        frame->setObjectName(QStringLiteral("frame"));
+        verticalLayout = new QVBoxLayout(frame);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        cbDrawTrimesh = new QCheckBox(frame);
+        cbDrawTrimesh->setObjectName(QStringLiteral("cbDrawTrimesh"));
+        cbDrawTrimesh->setEnabled(false);
+        cbDrawTrimesh->setChecked(true);
 
-        gridLayout->addWidget(cbShowBBox, 2, 3, 1, 1);
+        verticalLayout->addWidget(cbDrawTrimesh);
 
-        cbShowGrid = new QCheckBox(dockWidgetContents);
-        cbShowGrid->setObjectName(QStringLiteral("cbShowGrid"));
+        rbPoints = new QRadioButton(frame);
+        rbPoints->setObjectName(QStringLiteral("rbPoints"));
+        rbPoints->setEnabled(false);
 
-        gridLayout->addWidget(cbShowGrid, 2, 4, 1, 1);
+        verticalLayout->addWidget(rbPoints);
+
+        rbFlat = new QRadioButton(frame);
+        rbFlat->setObjectName(QStringLiteral("rbFlat"));
+        rbFlat->setEnabled(false);
+
+        verticalLayout->addWidget(rbFlat);
+
+        rbSmooth = new QRadioButton(frame);
+        rbSmooth->setObjectName(QStringLiteral("rbSmooth"));
+        rbSmooth->setEnabled(false);
+        rbSmooth->setChecked(true);
+
+        verticalLayout->addWidget(rbSmooth);
+
+
+        gridLayout->addWidget(frame, 0, 4, 2, 1);
 
         Trimesh_manager->setWidget(dockWidgetContents);
 
@@ -226,18 +238,20 @@ public:
     {
         Trimesh_manager->setWindowTitle(QApplication::translate("Trimesh_manager", "Triangle Mesh", 0));
         butLoadTrimesh->setText(QApplication::translate("Trimesh_manager", "Load TriMesh", 0));
-        cbDrawTrimesh->setText(QApplication::translate("Trimesh_manager", "Draw", 0));
-        rbPoints->setText(QApplication::translate("Trimesh_manager", "Points", 0));
-        rbFlat->setText(QApplication::translate("Trimesh_manager", "Flat", 0));
-        rbSmooth->setText(QApplication::translate("Trimesh_manager", "Smooth", 0));
+        cbShowBBox->setText(QApplication::translate("Trimesh_manager", "Show Bbox", 0));
+        cbShowMaxBox->setText(QApplication::translate("Trimesh_manager", "Show MaxBox", 0));
+        cbShowGrid->setText(QApplication::translate("Trimesh_manager", "Show Grid", 0));
+        butCalculateBox->setText(QApplication::translate("Trimesh_manager", "CalculateBox", 0));
         cbWireframe->setText(QApplication::translate("Trimesh_manager", "Wireframe", 0));
         butSetWireframeColor->setText(QApplication::translate("Trimesh_manager", "Set W color", 0));
         rbTriangleColor->setText(QApplication::translate("Trimesh_manager", "T color", 0));
         rbVertexColor->setText(QApplication::translate("Trimesh_manager", "V color", 0));
         butSetVColor->setText(QApplication::translate("Trimesh_manager", "Set", 0));
         butSetTcolor->setText(QApplication::translate("Trimesh_manager", "Set", 0));
-        cbShowBBox->setText(QApplication::translate("Trimesh_manager", "Show Bbox", 0));
-        cbShowGrid->setText(QApplication::translate("Trimesh_manager", "Show Grid", 0));
+        cbDrawTrimesh->setText(QApplication::translate("Trimesh_manager", "Draw", 0));
+        rbPoints->setText(QApplication::translate("Trimesh_manager", "Points", 0));
+        rbFlat->setText(QApplication::translate("Trimesh_manager", "Flat", 0));
+        rbSmooth->setText(QApplication::translate("Trimesh_manager", "Smooth", 0));
     } // retranslateUi
 
 };

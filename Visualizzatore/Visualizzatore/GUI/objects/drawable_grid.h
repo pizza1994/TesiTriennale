@@ -23,9 +23,12 @@ class DrawableGrid : public Grid ,
          float sceneRadius() const;
          bool isVisible() const;
          void setVisible(bool b);
+         void setVisibleGrid(bool b);
+         bool getVisibleGrid();
 
     private:
          bool visible;
+         bool visibleGrid;
 
 
 };

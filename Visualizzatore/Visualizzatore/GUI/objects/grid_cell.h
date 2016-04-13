@@ -18,9 +18,12 @@ class GridCell
         GridCell* getAdjCell(int index);
         std::vector<Pointd> getVertices() const;
         Pointd getVertex(const int &i) const;
+        void setToDelete();
+        bool getToDelete();
 
     private:
 
+        bool toDelete = false;
         std::vector<Pointd> xyz;
         std::vector<GridCell*> adjCells;
 

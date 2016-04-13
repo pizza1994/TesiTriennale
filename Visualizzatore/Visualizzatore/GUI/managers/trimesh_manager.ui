@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
+    <width>440</width>
     <height>286</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>410</width>
+    <width>440</width>
     <height>286</height>
    </size>
   </property>
@@ -32,7 +32,7 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="5" rowspan="4">
+    <item row="0" column="6" rowspan="5">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -63,59 +63,35 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="4">
-     <widget class="QFrame" name="frame">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QCheckBox" name="cbDrawTrimesh">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Draw</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="rbPoints">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Points</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="rbFlat">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Flat</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="rbSmooth">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Smooth</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
+    <item row="3" column="3">
+     <widget class="QCheckBox" name="cbShowBBox">
+      <property name="text">
+       <string>Show Bbox</string>
+      </property>
      </widget>
     </item>
-    <item row="1" column="3">
+    <item row="3" column="5">
+     <widget class="QCheckBox" name="cbShowMaxBox">
+      <property name="text">
+       <string>Show MaxBox</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="5">
+     <widget class="QCheckBox" name="cbShowGrid">
+      <property name="text">
+       <string>Show Grid</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QPushButton" name="butCalculateBox">
+      <property name="text">
+       <string>CalculateBox</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3" rowspan="2">
      <widget class="QFrame" name="frame_3">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -203,7 +179,7 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="4">
+    <item row="2" column="4">
      <widget class="QFrame" name="frame_2">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="4" column="0" colspan="2">
@@ -285,18 +261,56 @@
       </layout>
      </widget>
     </item>
-    <item row="2" column="3">
-     <widget class="QCheckBox" name="cbShowBBox">
-      <property name="text">
-       <string>Show Bbox</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="4">
-     <widget class="QCheckBox" name="cbShowGrid">
-      <property name="text">
-       <string>Show Grid</string>
-      </property>
+    <item row="0" column="4" rowspan="2">
+     <widget class="QFrame" name="frame">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="cbDrawTrimesh">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Draw</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbPoints">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Points</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbFlat">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Flat</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbSmooth">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Smooth</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>

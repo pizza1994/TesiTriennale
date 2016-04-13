@@ -44,6 +44,8 @@ class TrimeshManager : public QDockWidget
         void on_butSetWireframeColor_clicked();
         void on_hsWireframeWidth_valueChanged(int width);
         void on_cbDrawTrimesh_stateChanged(int state);
+        void on_cbShowMaxBox_stateChanged(int state);
+
 
 
 

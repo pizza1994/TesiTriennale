@@ -31,6 +31,17 @@ std::vector<GridCell *> GridCell::getAdjCells()
     return adjCells;
 }
 
+void GridCell::setToDelete()
+{
+    if (toDelete) qDebug() <<"You fucked up son";
+    toDelete = true;
+}
+
+bool GridCell::getToDelete()
+{
+    return toDelete;
+}
+
 
 std::vector<Pointd> GridCell::getVertices() const
 {

@@ -166,17 +166,40 @@ void TrimeshManager::on_cbDrawTrimesh_stateChanged(int state)
     ((MainWindow*)mw)->updateGlCanvas();
 }
 
-void TrimeshManager::on_cbShowGrid_stateChanged(int state){
+void TrimeshManager::on_cbShowGrid_stateChanged(int state)
+{
+    if (state == Qt::Checked)
+    {
+            visibleGrid->setVisibleGrid(true);
+            ((MainWindow*)mw)->push_obj(visibleGrid);
+
+    }
+    else
+    {
+        visibleGrid->setVisibleGrid(false);
+        ((MainWindow*)mw)->push_obj(visibleGrid);
+    }
+    ((MainWindow*)mw)->updateGlCanvas();
+
+}
+
+
+
+void TrimeshManager::on_cbShowMaxBox_stateChanged(int state){
 
     if (state == Qt::Checked)
     {
-        if (((MainWindow*)mw)->getNumberVisibleObjects() != 0) {
-            if (visibleGrid == NULL) {
-                visibleGrid = new DrawableGrid( t->getBbox() , 100, *t);
+        if (((MainWindow*)mw)->getNumberVisibleObjects() != 0)
+        {
+            if (visibleGrid == NULL)
+            {
+                visibleGrid = new DrawableGrid( t->getBbox() , 50, *t);
                 visibleGrid->setVisible(true);
+                visibleGrid->setVisibleGrid(false);
                 ((MainWindow*)mw)->push_obj(visibleGrid);
             }
-            else {
+            else
+            {
                 visibleGrid->setVisible(true);
             }
         }
