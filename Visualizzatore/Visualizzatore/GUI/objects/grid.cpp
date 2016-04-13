@@ -151,9 +151,8 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                         eraseGridCell(i, j, k);
                         z=8;
                     }
-                    else if ( std::find(alreadyCheckVertices.begin(), alreadyCheckVertices.end(), grid[i][j][k]->getVertex(z)) == alreadyCheckVertices.end() )
+                    else if (!checkPointInVector(grid[i][j][k]->getVertex(z), alreadyCheckVertices))
                     {
-                        alreadyCheckVertices.push_back(grid[i][j][k]->getVertex(z));
 
                         for (int x=0; x<t.numTriangles(); x++)
                         {
@@ -175,10 +174,15 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                             eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
                             z=8;
                         }
+                        else{
+                            alreadyCheckVertices.push_back(grid[i][j][k]->getVertex(z));
+
+                        }
                         timesIntersected = 0;
                         p = 0;
 
                     }
+
 
                 }
 

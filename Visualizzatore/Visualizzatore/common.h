@@ -46,6 +46,7 @@ Pointd min3Point(Pointd  a, Pointd b, Pointd c);
 
 double max3Double(double a, double b, double c);
 Pointd max3Point(Pointd  a, Pointd b, Pointd c);
+bool checkPointInVector(Pointd p, std::vector<Pointd> vct);
 
 float absolute(float x);
 
