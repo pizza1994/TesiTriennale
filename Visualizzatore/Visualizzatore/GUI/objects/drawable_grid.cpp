@@ -21,6 +21,8 @@ void DrawableGrid::draw() const
     {
 
         QColor blue = QColor(0,0,255);
+        GLfloat red[3] = {1,0,0};
+
 
         for (int i=0; i < grid.size(); i++)
         {
@@ -36,7 +38,6 @@ void DrawableGrid::draw() const
             }
         }
 
-        GLfloat red[3] = {1,0,0};
 
         cylinder(finalBox[0], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
         cylinder(finalBox[0], finalBox[2], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
