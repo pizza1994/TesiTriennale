@@ -193,7 +193,7 @@ void TrimeshManager::on_cbShowMaxBox_stateChanged(int state){
         {
             if (visibleGrid == NULL)
             {
-                visibleGrid = new DrawableGrid( t->getBbox() , 50, *t);
+                visibleGrid = new DrawableGrid( t->getBbox() , 25, *t);
                 visibleGrid->setVisible(true);
                 visibleGrid->setVisibleGrid(false);
                 ((MainWindow*)mw)->push_obj(visibleGrid);

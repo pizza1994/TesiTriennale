@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_TrimeshManager_t {
-    QByteArrayData data[19];
-    char stringdata0[397];
+    QByteArrayData data[20];
+    char stringdata0[426];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -47,7 +47,8 @@ QT_MOC_LITERAL(14, 269, 26), // "on_cbShowGrid_stateChanged"
 QT_MOC_LITERAL(15, 296, 31), // "on_butSetWireframeColor_clicked"
 QT_MOC_LITERAL(16, 328, 32), // "on_hsWireframeWidth_valueChanged"
 QT_MOC_LITERAL(17, 361, 5), // "width"
-QT_MOC_LITERAL(18, 367, 29) // "on_cbDrawTrimesh_stateChanged"
+QT_MOC_LITERAL(18, 367, 29), // "on_cbDrawTrimesh_stateChanged"
+QT_MOC_LITERAL(19, 397, 28) // "on_cbShowMaxBox_stateChanged"
 
     },
     "TrimeshManager\0on_butLoadTrimesh_clicked\0"
@@ -61,7 +62,8 @@ QT_MOC_LITERAL(18, 367, 29) // "on_cbDrawTrimesh_stateChanged"
     "on_cbShowGrid_stateChanged\0"
     "on_butSetWireframeColor_clicked\0"
     "on_hsWireframeWidth_valueChanged\0width\0"
-    "on_cbDrawTrimesh_stateChanged"
+    "on_cbDrawTrimesh_stateChanged\0"
+    "on_cbShowMaxBox_stateChanged"
 };
 #undef QT_MOC_LITERAL
 
@@ -71,7 +73,7 @@ static const uint qt_meta_data_TrimeshManager[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -79,20 +81,21 @@ static const uint qt_meta_data_TrimeshManager[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   84,    2, 0x08 /* Private */,
-       3,    1,   85,    2, 0x08 /* Private */,
-       5,    1,   88,    2, 0x08 /* Private */,
-       7,    1,   91,    2, 0x08 /* Private */,
-       8,    1,   94,    2, 0x08 /* Private */,
-       9,    1,   97,    2, 0x08 /* Private */,
-      10,    1,  100,    2, 0x08 /* Private */,
-      11,    0,  103,    2, 0x08 /* Private */,
-      12,    0,  104,    2, 0x08 /* Private */,
-      13,    1,  105,    2, 0x08 /* Private */,
-      14,    1,  108,    2, 0x08 /* Private */,
-      15,    0,  111,    2, 0x08 /* Private */,
-      16,    1,  112,    2, 0x08 /* Private */,
-      18,    1,  115,    2, 0x08 /* Private */,
+       1,    0,   89,    2, 0x08 /* Private */,
+       3,    1,   90,    2, 0x08 /* Private */,
+       5,    1,   93,    2, 0x08 /* Private */,
+       7,    1,   96,    2, 0x08 /* Private */,
+       8,    1,   99,    2, 0x08 /* Private */,
+       9,    1,  102,    2, 0x08 /* Private */,
+      10,    1,  105,    2, 0x08 /* Private */,
+      11,    0,  108,    2, 0x08 /* Private */,
+      12,    0,  109,    2, 0x08 /* Private */,
+      13,    1,  110,    2, 0x08 /* Private */,
+      14,    1,  113,    2, 0x08 /* Private */,
+      15,    0,  116,    2, 0x08 /* Private */,
+      16,    1,  117,    2, 0x08 /* Private */,
+      18,    1,  120,    2, 0x08 /* Private */,
+      19,    1,  123,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -108,6 +111,7 @@ static const uint qt_meta_data_TrimeshManager[] = {
     QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   17,
+    QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void, QMetaType::Int,    4,
 
        0        // eod
@@ -133,6 +137,7 @@ void TrimeshManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 11: _t->on_butSetWireframeColor_clicked(); break;
         case 12: _t->on_hsWireframeWidth_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 13: _t->on_cbDrawTrimesh_stateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 14: _t->on_cbShowMaxBox_stateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -163,13 +168,13 @@ int TrimeshManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 14;
+        _id -= 15;
     }
     return _id;
 }

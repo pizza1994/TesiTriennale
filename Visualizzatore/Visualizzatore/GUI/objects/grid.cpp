@@ -464,7 +464,7 @@ void Grid::createBox(){
     GridCell * finalCell = NULL;
 
     if (grid.size()==0) return;
-    //if (finalBoxes.size() == 7) return;
+    if (finalBoxes.size() == 7) return;
 
     for(int x = 0; x < grid.size(); x++)
     {
