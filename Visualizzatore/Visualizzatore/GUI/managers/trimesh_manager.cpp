@@ -35,6 +35,7 @@ void TrimeshManager::on_butLoadTrimesh_clicked()
 
     if (!filename.isEmpty())
     {
+        if(t != NULL){ t->clear(); visibleGrid = NULL; visibleBoundingBox = NULL;}
         t = new DrawableTrimesh(filename.toStdString().c_str());
         ((MainWindow*)mw)->push_obj(t);
         ((MainWindow*)mw)->updateGlCanvas();

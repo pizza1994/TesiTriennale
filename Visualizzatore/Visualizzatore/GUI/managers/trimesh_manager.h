@@ -53,7 +53,7 @@ class TrimeshManager : public QDockWidget
 
         Ui::Trimesh_manager *ui;
         QWidget* mw;
-        DrawableTrimesh * t;
+        DrawableTrimesh * t = NULL;
         DrawableBBox * visibleBoundingBox;
         DrawableGrid * visibleGrid;
 };
