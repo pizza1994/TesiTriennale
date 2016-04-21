@@ -97,11 +97,11 @@ void Grid::createGrid()
     adjToAssign.resize(6);
 
 
-    for(int i=0; i<grid.size(); i++) //for della intera grid
+    for(int i=0; i< (int) grid.size(); i++) //for della intera grid
     {
-        for(int j=0; j<grid[i].size(); j++) //for di un livello di cubi
+        for(int j=0; j< (int) grid[i].size(); j++) //for di un livello di cubi
         {
-            for (int k=0; k<grid[i][j].size(); k++) //for di una linea di cubi
+            for (int k=0; k< (int) grid[i][j].size(); k++) //for di una linea di cubi
             {
 
                 if (i==0) grid[i][j][k]->setAdjCell(NULL, 0);
@@ -230,7 +230,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                            grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
                            grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
                         {
-                            for (int x=0; x<eighthSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) eighthSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(1,1,1),
@@ -250,7 +250,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                                 grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
                                 grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
                         {
-                            for (int x=0; x<seventhSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) seventhSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(-1,1,1),
@@ -270,7 +270,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                                 grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
                                 grid[i][j][k]->getVertex(z).z() < internal_bbox.center().z())
                         {
-                            for (int x=0; x<sixthSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) sixthSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(1,1,-1),
@@ -291,7 +291,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                                 grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
                                 grid[i][j][k]->getVertex(z).z() < internal_bbox.center().z())
                         {
-                            for (int x=0; x<fifthSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) fifthSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(-1,1,-1),
@@ -312,7 +312,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                                 grid[i][j][k]->getVertex(z).y() < internal_bbox.center().y() &&
                                 grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
                         {
-                            for (int x=0; x<fourthSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) fourthSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(1,-1,1),
@@ -333,7 +333,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                                 grid[i][j][k]->getVertex(z).y() < internal_bbox.center().y() &&
                                 grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
                         {
-                            for (int x=0; x<thirdSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) thirdSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(-1,-1,1),
@@ -354,7 +354,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
                                 grid[i][j][k]->getVertex(z).y() < internal_bbox.center().y() &&
                                 grid[i][j][k]->getVertex(z).z() < internal_bbox.center().z())
                         {
-                            for (int x=0; x<secondSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) secondSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(1,-1,-1),
@@ -373,7 +373,7 @@ void Grid::cleanGrid(DrawableTrimesh &t){
 
                         else
                         {
-                            for (int x=0; x<firstSubdivision.size()/3; x++)
+                            for (int x=0; x< (int) firstSubdivision.size()/3; x++)
                             {
                                 if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
                                                                            Pointd(-1,-1,-1),
@@ -464,13 +464,13 @@ void Grid::createBox(){
     GridCell * finalCell = NULL;
 
     if (grid.size()==0) return;
-    if (finalBoxes.size() == 7) return;
+    if (finalBoxes.size() == 4) return;
 
-    for(int x = 0; x < grid.size(); x++)
+    for(int x = 0; x < (int) grid.size(); x++)
     {
-        for (int y = 0; y < grid[x].size(); y++)
+        for (int y = 0; y < (int)grid[x].size(); y++)
         {
-            for (int z = 0; z < grid[x][y].size(); z++)
+            for (int z = 0; z < (int)grid[x][y].size(); z++)
             {
                 calculateBox(grid[x][y][z], finalCell, volume, xSize, ySize, zSize, boxCoords);
             }
@@ -487,7 +487,7 @@ void Grid::createBox(){
     }
 
 
-    int counter = 0;
+    //int counter = 0;
 
     GridCell* tempCellY;
 
@@ -511,11 +511,11 @@ void Grid::createBox(){
     }
 
 
-    for(int x = 0; x < grid.size(); x++)
+    for(int x = 0; x < (int)grid.size(); x++)
     {
-        for (int y = 0; y < grid[x].size(); y++)
+        for (int y = 0; y < (int) grid[x].size(); y++)
         {
-            for (int z = 0; z < grid[x][y].size(); z++)
+            for (int z = 0; z < (int)grid[x][y].size(); z++)
             {
                 if (grid[x][y][z]->getToDelete())
                 {
@@ -556,7 +556,7 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
 
 
     vectorX.push_back(cell);
-    if (!cell->getAdjCell(X_PLUS) == NULL)
+    if (!(cell->getAdjCell(X_PLUS) == NULL))
     {
         cell = cell->getAdjCell((X_PLUS));
         while (cell->getAdjCell(X_PLUS)){
@@ -565,7 +565,7 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
         }
     }
 
-    for (int x=0; x < vectorX.size(); x++)
+    for (int x=0; x < (int) vectorX.size(); x++)
     {
         cell = vectorX[x];
         if (cell->getAdjCell(Y_PLUS) == NULL)
@@ -592,7 +592,7 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
 
     //qDebug() <<minY;
 
-    for (int x = 0; x < vectorX.size(); x++)
+    for (int x = 0; x < (int) vectorX.size(); x++)
     {
         cell = vectorX[x];
         for (int y = 0; y <= minY; y++)
