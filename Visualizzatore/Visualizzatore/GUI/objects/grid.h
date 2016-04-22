@@ -56,6 +56,7 @@ class Grid
         std::vector< std::vector<std::vector<GridCell*> > > grid;
         int granularityFactor;
         BoundingBox internal_bbox;
+        std::vector<GridCell*> nextCells;
         std::vector<std::vector<Pointd>> finalBoxes;
         void cleanGrid(DrawableTrimesh &t);
         void createBox();
