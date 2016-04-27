@@ -483,11 +483,16 @@ void Grid::createBox(){
     {
         vectorX.push_back(finalCell);
         tempCellj = finalCell;
+
+
+        qDebug () << xSize << " " << ySize << " " << zSize;
+
         for (int x=0; x<xSize; x++)
         {
             vectorX.push_back(tempCellj->getAdjCell(X_PLUS));
             tempCellj = tempCellj->getAdjCell(X_PLUS);
         }
+
 
 
         //int counter = 0;
@@ -556,102 +561,113 @@ void Grid::createBox(){
             }
         }
 
-        tempCelli = vectorX[0]->getAdjCell(Z_PLUS);
-
-        for (int z = 1; z < zSize; z++) // Faccia X-
+        if (zSize > 1)
         {
-            tempCellj = tempCelli;
+            tempCelli = vectorX[0]->getAdjCell(Z_PLUS);
 
-            for (int y = 0 ; y < ySize; y++)
+
+            for (int z = 1; z < zSize; z++) // Faccia X-
             {
+                tempCellj = tempCelli;
 
-                if (y == 0 && z == (zSize-1))
+                for (int y = 0 ; y < ySize; y++)
                 {
-                    if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
-                    if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
-                    if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
-                }
-                else
-                    if (y == (ySize-1) && z == (zSize-1) )
+
+                    if (y == 0 && z == (zSize-1))
                     {
                         if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
-                        if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
+                        if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
                         if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
                     }
                     else
-                        if (z == (zSize-1) && y>0)
+                        if (y == (ySize-1) && z == (zSize-1) )
                         {
                             if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
+                            if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
                             if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
-
                         }
                         else
-                            if (y == (ySize-1))
+                            if (z == (zSize-1) && y>0)
                             {
                                 if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
-                                if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
+                                if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
+
                             }
                             else
-                                if (y==0)
+                                if (y == (ySize-1))
                                 {
                                     if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
-                                    if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+                                    if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
                                 }
                                 else
-                                {
-                                    if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
-                                }
+                                    if (y==0)
+                                    {
+                                        if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
+                                        if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+                                    }
+                                    else
+                                    {
+                                        if (tempCellj->getAdjCell(X_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_MINUS));
+                                    }
 
-                tempCellj = tempCellj->getAdjCell(Y_PLUS);
+                    tempCellj = tempCellj->getAdjCell(Y_PLUS);
+                }
+
+                tempCelli = tempCelli->getAdjCell(Z_PLUS);
             }
-
-            tempCelli = tempCelli->getAdjCell(Z_PLUS);
         }
 
-        tempCelli = vectorX[0]->getAdjCell(Z_PLUS)->getAdjCell(X_PLUS);
-
-        for(int x = 1; x < xSize; x++) //FACCIA Y-
+        if (zSize > 1 && xSize > 1)
         {
-            tempCellj = tempCelli;
+            tempCelli = vectorX[0]->getAdjCell(Z_PLUS)->getAdjCell(X_PLUS);
+            qDebug () << "ksdakofaokeaoks";
 
-            for (int z = 1; z < zSize; z++ ){
+            for(int x = 1; x < xSize; x++) //FACCIA Y-
+            {
+                tempCellj = tempCelli;
 
-
-                if(x == (xSize-1) && z == (zSize-1))
+                for (int z = 1; z < zSize; z++ )
                 {
-                    if (tempCellj->getAdjCell(X_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_PLUS));
-                    if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
-                    if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
+                    qDebug () << "O";
 
-                }
-                else
-                    if(x == (xSize-1))
+                    if(x == (xSize-1) && z == (zSize-1))
                     {
                         if (tempCellj->getAdjCell(X_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_PLUS));
                         if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
-
+                        if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
                     }
-
                     else
-                        if(z == (zSize-1))
+                        if(x == (xSize-1))
                         {
+                            if (tempCellj->getAdjCell(X_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(X_PLUS));
                             if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
-                            if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
 
                         }
 
                         else
-                            if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+                            if(z == (zSize-1))
+                            {
+                                if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+                                if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
 
-                tempCellj = tempCellj->getAdjCell(Z_PLUS);
+                            }
 
+                            else
+                                if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+
+                    tempCellj = tempCellj->getAdjCell(Z_PLUS);
+
+                }
+                tempCelli = tempCelli->getAdjCell(X_PLUS);
             }
-            tempCelli = tempCelli->getAdjCell(X_PLUS);
         }
 
-        tempCelli = vectorX[xSize-1]->getAdjCell(Z_PLUS)->getAdjCell(Y_PLUS);
 
-        for(int y = 1; y<ySize; y++) //FACCIA X+
+        if (zSize > 1 && ySize > 1)
+        {
+            tempCelli = vectorX[xSize-1]->getAdjCell(Z_PLUS)->getAdjCell(Y_PLUS);
+
+            for(int y = 1; y<ySize; y++) //FACCIA X+
         {
             tempCellj = tempCelli;
 
@@ -688,55 +704,72 @@ void Grid::createBox(){
             }
             tempCelli = tempCelli->getAdjCell(Y_PLUS);
         }
-
-        tempCelli = vectorX[1];
-
-        for(int i = 0; i<ySize;i++){
-            tempCelli = tempCelli->getAdjCell(Y_PLUS);
         }
 
-        tempCelli = tempCelli->getAdjCell(Z_PLUS);
 
-        for(int x = 1; x < xSize-1; x++) //FACCIA Y+
+        if (xSize > 1 && zSize > 1 && ySize > 1)
         {
-            tempCellj = tempCelli;
+            tempCelli = vectorX[1];
 
-            for(int z = 1; z < zSize; z++)
+            for(int i = 0; i<ySize-1;i++)
             {
-                if(z== (zSize-1))
-                {
-                    if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
-                    if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
-
-                }
-                else
-                    if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
-
-                tempCellj = tempCellj->getAdjCell(Z_PLUS);
-
+                tempCelli = tempCelli->getAdjCell(Y_PLUS);
             }
-            tempCelli = tempCelli->getAdjCell(X_PLUS);
-        }
 
-        tempCelli = vectorX[1]->getAdjCell(Y_PLUS);
-
-        for(int i=0; i<zSize;i++)
-        {
             tempCelli = tempCelli->getAdjCell(Z_PLUS);
-        }
+            qDebug () << "HUDASDHFEKOAKSD";
 
-        for(int x=1; x < xSize-1;x++) //FACCIA Z+
-        {
-            tempCellj = tempCelli;
+            for(int x = 0; x < xSize-2; x++) //FACCIA Y+
+            {
+                tempCellj = tempCelli;
 
-            for(int y=1; y < ySize-1; y++){
-                if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+                for(int z = 1; z < zSize; z++)
+                {
+                    if(z == (zSize-1))
+                    {
+                        if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
+                        if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
+                    }
+                    else
+                    {
+                        if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
+                        tempCellj = tempCellj->getAdjCell(Z_PLUS);
+                    }
+                }
 
-                tempCellj = tempCellj->getAdjCell(Y_PLUS);
+                tempCelli = tempCelli->getAdjCell(X_PLUS);
             }
-            tempCelli = tempCelli->getAdjCell(X_PLUS);
         }
 
+
+        qDebug () << "DIOCANE";
+
+
+        if (xSize > 1 && ySize > 1 && zSize > 1)
+        {
+            tempCelli = vectorX[1]->getAdjCell(Y_PLUS);
+
+
+            for(int i=1; i<zSize;i++)
+            {
+                tempCelli = tempCelli->getAdjCell(Z_PLUS);
+            }
+
+
+            for(int x=1; x < xSize-1;x++) //FACCIA Z+
+            {
+                tempCellj = tempCelli;
+
+                for(int y=1; y < ySize-1; y++){
+                    if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+
+                    tempCellj = tempCellj->getAdjCell(Y_PLUS);
+                }
+                tempCelli = tempCelli->getAdjCell(X_PLUS);
+            }
+        }
+
+        qDebug () << "DIOPORCO";
 
 
         for (int x = 0; x < xSize; x++)
@@ -795,16 +828,19 @@ void Grid::createBox(){
         std::vector<Pointd> finalBox = boxCoords;
         finalBoxes.push_back(finalBox);
 
+        volume = 0;
+        vectorX.clear();
 
         if (nextCells.size() > 0)
         {
             for (GridCell *x : nextCells)
+            {
                 calculateBox(x, finalCell, volume, xSize, ySize, zSize, boxCoords);
+            }
         }
 
         qDebug() << "volume: " <<volume;
 
-        vectorX.clear();
     }
     while (nextCells.size() > 0);
 
@@ -830,6 +866,7 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
             cell = cell->getAdjCell(X_PLUS);
         }
     }
+
 
     for (int x=0; x < (int) vectorX.size(); x++)
     {
