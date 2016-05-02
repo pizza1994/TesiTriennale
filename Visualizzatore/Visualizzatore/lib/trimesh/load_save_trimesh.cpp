@@ -9,14 +9,15 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h>
-
+#include <common.h>
 
 //using namespace std;
 
 
 void loadObj(const char     * filename,
               std::vector<double> & xyz,
-              std::vector<int>    & tri)
+              std::vector<int>    & tri
+              )
 {
     std::ifstream file(filename);
 
@@ -39,9 +40,9 @@ void loadObj(const char     * filename,
         {
             double x, y, z;
             iss >> x >> y >> z;
-            xyz.push_back(x*100);
-            xyz.push_back(y*100);
-            xyz.push_back(z*100);
+            xyz.push_back(x*1000);
+            xyz.push_back(y*1000);
+            xyz.push_back(z*1000);
             //cout << "v " << x << " " << y << " " << z << endl;
         }
         else if (token[0] == 'f')
@@ -54,5 +55,6 @@ void loadObj(const char     * filename,
             //cout << "f " << v0 << " " << v1 << " " << v2 << endl;
         }
     }
+
     file.close();
 }

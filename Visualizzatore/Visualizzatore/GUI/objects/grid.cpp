@@ -1,7 +1,6 @@
 #include "grid.h"
 #include <QDebug>
 
-
 Grid::Grid()
 {
 }
@@ -125,8 +124,118 @@ void Grid::createGrid()
     }
 }
 
-void Grid::cleanGrid(DrawableTrimesh &t){
 
+void Grid::cleanGrid(DrawableTrimesh &t, Polyhedron &poly)
+{
+    std::list<Triangle> triangles;
+    int p = 0;
+
+    Tree tree(faces(poly).first, faces(poly).second, poly);
+
+    qDebug () <<poly.size_of_facets();
+    qDebug ()<< poly.size_of_halfedges();
+    qDebug ()<< poly.size_of_vertices();
+
+
+    qDebug() << tree.size();
+    tree.accelerate_distance_queries();
+
+    for(int i=0; i< (int) grid.size(); i++) //for della intera grid
+    {
+        for(int j=0; j< (int) grid[i].size(); j++) //for di un livello di cubi
+        {
+            for (int k=0; k< (int) grid[i][j].size(); k++) //for di una linea di cubi
+            {
+                if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(0)), point_to_point3(grid[i][j][k]->getVertex(1)))))
+                {
+                    qDebug () << i << j << k ;
+                    eraseGridCell(i, j, k);
+                }
+                else
+                    if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(0)), point_to_point3(grid[i][j][k]->getVertex(4)))))
+                    {
+                        eraseGridCell(i, j, k);
+                    }
+                    else
+                        if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(1)), point_to_point3(grid[i][j][k]->getVertex(5)))))
+                        {
+                            eraseGridCell(i, j, k);
+                        }
+                        else
+                            if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(4)), point_to_point3(grid[i][j][k]->getVertex(5)))))
+                            {
+                                eraseGridCell(i, j, k);
+                            }
+                            else
+                                if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(0)), point_to_point3(grid[i][j][k]->getVertex(2)))))
+                                {
+                                    eraseGridCell(i, j, k);
+                                }
+                                else
+                                    if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(1)), point_to_point3(grid[i][j][k]->getVertex(3)))))
+                                    {
+                                        eraseGridCell(i, j, k);
+                                    }
+                                    else
+                                        if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(5)), point_to_point3(grid[i][j][k]->getVertex(7)))))
+                                        {
+                                            eraseGridCell(i, j, k);
+                                        }
+                                        else
+                                            if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(4)), point_to_point3(grid[i][j][k]->getVertex(6)))))
+                                            {
+                                                eraseGridCell(i, j, k);
+                                            }
+                                            else
+                                                if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(2)), point_to_point3(grid[i][j][k]->getVertex(3)))))
+                                                {
+                                                    eraseGridCell(i, j, k);
+                                                }
+                                                else
+                                                    if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(2)), point_to_point3(grid[i][j][k]->getVertex(6)))))
+                                                    {
+                                                        eraseGridCell(i, j, k);
+                                                    }
+                                                    else
+                                                        if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(3)), point_to_point3(grid[i][j][k]->getVertex(7)))))
+                                                        {
+                                                            eraseGridCell(i, j, k);
+                                                        }
+                                                        else
+                                                            if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(6)), point_to_point3(grid[i][j][k]->getVertex(7)))))
+                                                            {
+                                                                eraseGridCell(i, j, k);
+                                                            }
+                                                        else
+                                                            {
+                                                                for (int n = 0; n < 8; n++)
+                                                                {
+                                                                    if (!pointInside(tree, point_to_point3(grid[i][j][k]->getVertex(n))))
+                                                                    {
+                                                                        eraseGridCell(i, j, k);
+                                                                        n = 8;
+
+                                                                    }
+                                                                }
+                                                            }
+
+            }
+
+            if (grid[i][j].size() == 0)
+            {
+                grid[i].erase(grid[i].begin() + j);
+                j--;
+            }
+        }
+
+        if (grid[i].size() == 0)
+        {
+            grid.erase(grid.begin() + i);
+            i--;
+        }
+    }
+
+/*
     int timesIntersected = 0;
     int p = 0;
     std::vector<Pointd> alreadyCheckVertices;
@@ -426,6 +535,9 @@ void Grid::cleanGrid(DrawableTrimesh &t){
     }
 }
 
+*/
+}
+
 void Grid::eraseGridCell(int i, int j, int &k)
 {
 
@@ -485,7 +597,6 @@ void Grid::createBox(){
         tempCellj = finalCell;
 
 
-        qDebug () << xSize << " " << ySize << " " << zSize;
 
         for (int x=0; x<xSize; x++)
         {
@@ -620,7 +731,6 @@ void Grid::createBox(){
         if (zSize > 1 && xSize > 1)
         {
             tempCelli = vectorX[0]->getAdjCell(Z_PLUS)->getAdjCell(X_PLUS);
-            qDebug () << "ksdakofaokeaoks";
 
             for(int x = 1; x < xSize; x++) //FACCIA Y-
             {
@@ -717,7 +827,6 @@ void Grid::createBox(){
             }
 
             tempCelli = tempCelli->getAdjCell(Z_PLUS);
-            qDebug () << "HUDASDHFEKOAKSD";
 
             for(int x = 0; x < xSize-2; x++) //FACCIA Y+
             {
@@ -741,8 +850,6 @@ void Grid::createBox(){
             }
         }
 
-
-        qDebug () << "DIOCANE";
 
 
         if (xSize > 1 && ySize > 1 && zSize > 1)
@@ -768,8 +875,6 @@ void Grid::createBox(){
                 tempCelli = tempCelli->getAdjCell(X_PLUS);
             }
         }
-
-        qDebug () << "DIOPORCO";
 
 
         for (int x = 0; x < xSize; x++)
@@ -843,7 +948,6 @@ void Grid::createBox(){
 
     }
     while (nextCells.size() > 0);
-
 }
 
 void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &volume, int & xSize, int & ySize, int & zSize, std::vector<Pointd> &boxCoords){

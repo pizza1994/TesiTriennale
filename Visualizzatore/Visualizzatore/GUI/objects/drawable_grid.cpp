@@ -7,9 +7,9 @@ DrawableGrid::DrawableGrid()
     visible = false;
 }
 
-DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, DrawableTrimesh &t):Grid(b, granularityFactor)
+DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, DrawableTrimesh &t, Polyhedron &p):Grid(b, granularityFactor)
 {
-    Grid::cleanGrid(t);
+    Grid::cleanGrid(t, p);
     Grid::createBox();
 }
 

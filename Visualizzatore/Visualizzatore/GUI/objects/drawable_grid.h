@@ -6,14 +6,14 @@
 #include <QDebug>
 #include "GUI/objects/sphere.h"
 #include "GUI/objects/cylinder.h"
-
+#include "common.h"
 
 class DrawableGrid : public Grid ,
                         public DrawableObject
 {
     public:
          DrawableGrid();
-         DrawableGrid(const BoundingBox&  b, const int granularityFactor, DrawableTrimesh &t);
+         DrawableGrid(const BoundingBox&  b, const int granularityFactor, DrawableTrimesh &t, Polyhedron &p);
 
          // Implementation of the
          // DrawableObject interface

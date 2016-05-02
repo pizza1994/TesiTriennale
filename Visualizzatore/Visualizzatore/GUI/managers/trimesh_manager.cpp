@@ -6,7 +6,7 @@
 #include "trimesh_manager.h"
 #include "ui_trimesh_manager.h"
 #include "GUI/mainwindow.h"
-
+#include "lib/common/importobj.h"
 #include <QFileDialog>
 #include <QColorDialog>
 #include <iostream>
@@ -37,6 +37,8 @@ void TrimeshManager::on_butLoadTrimesh_clicked()
     {
         if(t != NULL){ t->clear(); visibleGrid = NULL; visibleBoundingBox = NULL;}
         t = new DrawableTrimesh(filename.toStdString().c_str());
+        p = new Polyhedron();
+        SMeshLib::IO::importOBJ(filename.toStdString(), p);
         ((MainWindow*)mw)->push_obj(t);
         ((MainWindow*)mw)->updateGlCanvas();
 
@@ -194,7 +196,7 @@ void TrimeshManager::on_cbShowMaxBox_stateChanged(int state){
         {
             if (visibleGrid == NULL)
             {
-                visibleGrid = new DrawableGrid( t->getBbox() , 30, *t);
+                visibleGrid = new DrawableGrid( t->getBbox() , 50, *t, *p);
                 visibleGrid->setVisible(true);
                 visibleGrid->setVisibleGrid(false);
                 ((MainWindow*)mw)->push_obj(visibleGrid);

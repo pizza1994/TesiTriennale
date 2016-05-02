@@ -85,3 +85,17 @@ bool checkPointInVector(Pointd p, std::vector<Pointd> vct)
     }
     return false;
 }
+
+K::Point_3 point_to_point3(Pointd a)
+{
+    return K::Point_3 (a.x(), a.y(), a.z());
+}
+
+bool pointInside(Tree &tree, K::Point_3 query) {
+    // Construct AABB tree with a KdTree
+    // Initialize the point-in-polyhedron tester
+    Point_inside inside_tester(tree);
+
+    // Determine the side and return true if inside!
+    return inside_tester(query) == CGAL::ON_BOUNDED_SIDE;
+}

@@ -1,4 +1,12 @@
 QT += core gui opengl xml widgets
+LIBS += -L/Users/bardOZ/Desktop/CGAL/gmp-6.1.0/BUILD/lib -lgmp
+LIBS += -L/Users/bardOZ/Desktop/CGAL/mpfr-3.1.3/BUILD/lib -lmpfr
+LIBS += -L/Users/bardOZ/Desktop/CGAL/boost_1_59_0/BUILD/lib -lboost_system-mt-s
+LIBS += -L/Users/bardOZ/Desktop/CGAL/boost_1_59_0/BUILD/lib -lboost_thread-mt-s
+LIBS += -L/Users/bardOZ/Desktop/CGAL/CGAL-4.8/BUILD/lib -lCGAL
+INCLUDEPATH += /Users/bardOZ/Desktop/CGAL/boost_1_59_0/BUILD/include
+INCLUDEPATH += /Users/bardOZ/Desktop/CGAL/CGAL-4.8/BUILD/include
+#LIBS += -lCGAL
 
 HEADERS += \
     lib/common/point.h \
@@ -22,7 +30,8 @@ HEADERS += \
     GUI/objects/grid_cell.h \
     GUI/objects/grid.h \
     GUI/objects/drawable_grid.h \
-    lib/common/octree.h
+    lib/common/octree.h \
+    lib/common/importobj.h
 
 SOURCES += \
     common.cpp \
@@ -50,12 +59,11 @@ FORMS += \
 
 
 macx {
-    _BOOST_PATH = /usr/local/Cellar/boost/1.60.0_1
-    INCLUDEPATH += "$${_BOOST_PATH}/include/"
-    LIBS += -L$${_BOOST_PATH}/lib
+    ##_BOOST_PATH = /usr/local/Cellar/boost/1.60.0_1
+    ##INCLUDEPATH += "$${_BOOST_PATH}/include/"
+    ##LIBS += -L$${_BOOST_PATH}/lib
     ## Use only one of these:
-    LIBS += -lboost_chrono-mt -lboost_system # using dynamic lib (not sure if you need that "-mt" at the end or not)
-    #LIBS += $${_BOOST_PATH}/lib/libboost_chrono-mt.a # using static lib
+    ##LIBS += -lboost_chrono-mt -lboost_system # using dynamic lib (not sure if you need that "-mt" at the end or not)
 }
 
 ### PER INCLUDERE QGLVIEWEVER ###

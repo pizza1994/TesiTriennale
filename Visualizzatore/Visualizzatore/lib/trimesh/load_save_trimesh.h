@@ -7,6 +7,7 @@
 #define LOAD_SAVE_TRIMESH_H
 
 #include <vector>
+#include "common.h"
 
 // OBJ FILES
 //

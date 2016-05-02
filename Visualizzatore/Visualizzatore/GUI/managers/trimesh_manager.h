@@ -11,6 +11,7 @@
 #include "lib/trimesh/drawable_trimesh.h"
 #include "GUI/objects/drawable_bbox.h"
 #include "GUI/objects/drawable_grid.h"
+#include "common.h"
 
 namespace Ui
 {
@@ -54,6 +55,7 @@ class TrimeshManager : public QDockWidget
         Ui::Trimesh_manager *ui;
         QWidget* mw;
         DrawableTrimesh * t = NULL;
+        Polyhedron *p = NULL;
         DrawableBBox * visibleBoundingBox;
         DrawableGrid * visibleGrid;
 };

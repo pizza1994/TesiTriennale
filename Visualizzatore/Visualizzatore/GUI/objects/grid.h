@@ -12,9 +12,15 @@
 #include <vector>
 #include "lib/common/point.h"
 #include "common.h"
+#include <CGAL/compiler_config.h>
 #include "lib/common/bounding_box.h"
 #include "lib/trimesh/drawable_trimesh.h"
 #include <math.h>
+#include <CGAL/AABB_tree.h>
+#include <CGAL/AABB_traits.h>
+#include <CGAL/Simple_cartesian.h>
+#include <CGAL/AABB_triangle_primitive.h>
+
 #include <algorithm>
 #include "lib/common/check_intersection.h"
 #include "lib/common/octree.h"
@@ -24,7 +30,6 @@
 #define Y_PLUS 3
 #define Z_MINUS 4
 #define Z_PLUS 5
-
 
 /**
  * @class Grid
@@ -58,7 +63,7 @@ class Grid
         BoundingBox internal_bbox;
         std::vector<GridCell*> nextCells;
         std::vector<std::vector<Pointd>> finalBoxes;
-        void cleanGrid(DrawableTrimesh &t);
+        void cleanGrid(DrawableTrimesh &t, Polyhedron &poly);
         void createBox();
 
         void calculateBox(GridCell* startingCell, GridCell * &finalCell, double &volume, int & xSize, int & ySize, int & zSize, std::vector<Pointd> &boxCoords);
