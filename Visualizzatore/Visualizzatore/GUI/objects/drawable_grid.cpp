@@ -16,28 +16,28 @@ DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, Dr
 
 void DrawableGrid::draw() const
 {
+    QColor blue = QColor(0,0,255);
+    GLfloat red[3] = {1,0,0};
+
+    if(visibleGrid){
+        for (int i=0; i < grid.size(); i++)
+        {
+            for(int j=0; j < grid[i].size(); j++)
+            {
+                for(int k=0; k < grid[i][j].size(); k++)
+                {
+
+                    for(int z=0; z<8; z++){
+                         sphere(grid[i][j][k]->getVertex(z), 0.005*internal_bbox.diag()/5, blue);
+                        }
+                }
+            }
+        }
+    }
 
     if (visible)
     {
 
-        QColor blue = QColor(0,0,255);
-        GLfloat red[3] = {1,0,0};
-
-        if(visibleGrid){
-            for (int i=0; i < grid.size(); i++)
-            {
-                for(int j=0; j < grid[i].size(); j++)
-                {
-                    for(int k=0; k < grid[i][j].size(); k++)
-                    {
-
-                        for(int z=0; z<8; z++){
-                             sphere(grid[i][j][k]->getVertex(z), 0.005*internal_bbox.diag()/5, blue);
-                            }
-                    }
-                }
-            }
-        }
 
         for (std::vector<Pointd> finalBox : finalBoxes)
         {

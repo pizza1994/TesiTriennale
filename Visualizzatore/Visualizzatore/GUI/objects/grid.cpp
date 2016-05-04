@@ -132,12 +132,6 @@ void Grid::cleanGrid(DrawableTrimesh &t, Polyhedron &poly)
 
     Tree tree(faces(poly).first, faces(poly).second, poly);
 
-    qDebug () <<poly.size_of_facets();
-    qDebug ()<< poly.size_of_halfedges();
-    qDebug ()<< poly.size_of_vertices();
-
-
-    qDebug() << tree.size();
     tree.accelerate_distance_queries();
 
     for(int i=0; i< (int) grid.size(); i++) //for della intera grid
@@ -148,7 +142,6 @@ void Grid::cleanGrid(DrawableTrimesh &t, Polyhedron &poly)
             {
                 if (tree.do_intersect(K::Segment_3(point_to_point3(grid[i][j][k]->getVertex(0)), point_to_point3(grid[i][j][k]->getVertex(1)))))
                 {
-                    qDebug () << i << j << k ;
                     eraseGridCell(i, j, k);
                 }
                 else
@@ -590,7 +583,6 @@ void Grid::createBox(){
 
 
 
-
     do
     {
         vectorX.push_back(finalCell);
@@ -662,11 +654,10 @@ void Grid::createBox(){
                                             if (tempCellj->getAdjCell(Z_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_MINUS));
                                         }
                                         else
-                                            if (x>0 && y>0)
-                                            {
-                                                if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
-                                                if (tempCellj->getAdjCell(Z_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_MINUS));
-                                            }
+                                        {
+                                            //if (tempCellj->getAdjCell(Y_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_PLUS));
+                                            if (tempCellj->getAdjCell(Z_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_MINUS));
+                                         }
 
                     tempCellj = tempCellj->getAdjCell(Y_PLUS);
             }
@@ -738,7 +729,6 @@ void Grid::createBox(){
 
                 for (int z = 1; z < zSize; z++ )
                 {
-                    qDebug () << "O";
 
                     if(x == (xSize-1) && z == (zSize-1))
                     {
@@ -855,8 +845,6 @@ void Grid::createBox(){
         if (xSize > 1 && ySize > 1 && zSize > 1)
         {
             tempCelli = vectorX[1]->getAdjCell(Y_PLUS);
-
-
             for(int i=1; i<zSize;i++)
             {
                 tempCelli = tempCelli->getAdjCell(Z_PLUS);
@@ -868,7 +856,7 @@ void Grid::createBox(){
                 tempCellj = tempCelli;
 
                 for(int y=1; y < ySize-1; y++){
-                    if (tempCellj->getAdjCell(Y_MINUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Y_MINUS));
+                    if (tempCellj->getAdjCell(Z_PLUS) != NULL) nextCells.push_back( tempCellj->getAdjCell(Z_PLUS));
 
                     tempCellj = tempCellj->getAdjCell(Y_PLUS);
                 }
@@ -944,7 +932,7 @@ void Grid::createBox(){
             }
         }
 
-        qDebug() << "volume: " <<volume;
+        //qDebug() << "volume: " <<volume;
 
     }
     while (nextCells.size() > 0);
