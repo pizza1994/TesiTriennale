@@ -66,7 +66,7 @@ class Grid
         void cleanGrid(DrawableTrimesh &t, Polyhedron &poly);
         void createBox();
 
-        void calculateBox(GridCell* startingCell, GridCell * &finalCell, double &volume, int & xSize, int & ySize, int & zSize, std::vector<Pointd> &boxCoords);
+        void calculateBox(GridCell* startingCell, GridCell * & finalCell, double &volume, int & xSize, int & ySize, int & zSize, bool &flagYDown, bool &flagZNeg, bool &flagXNeg, std::vector<Pointd> &boxCoords);
 };
 
 #endif
