@@ -588,14 +588,11 @@ void Grid::createBox(){
         vectorX.push_back(finalCell);
         tempCellj = finalCell;
 
-
-
         for (int x=0; x<xSize; x++)
         {
             vectorX.push_back(tempCellj->getAdjCell(X_PLUS));
             tempCellj = tempCellj->getAdjCell(X_PLUS);
         }
-
 
 
         //int counter = 0;
@@ -662,6 +659,8 @@ void Grid::createBox(){
                     tempCellj = tempCellj->getAdjCell(Y_PLUS);
             }
         }
+
+
 
         if (zSize > 1)
         {
@@ -762,7 +761,6 @@ void Grid::createBox(){
             }
         }
 
-
         if (zSize > 1 && ySize > 1)
         {
             tempCelli = vectorX[xSize-1]->getAdjCell(Z_PLUS)->getAdjCell(Y_PLUS);
@@ -806,7 +804,6 @@ void Grid::createBox(){
         }
         }
 
-
         if (xSize > 1 && zSize > 1 && ySize > 1)
         {
             tempCelli = vectorX[1];
@@ -840,8 +837,6 @@ void Grid::createBox(){
             }
         }
 
-
-
         if (xSize > 1 && ySize > 1 && zSize > 1)
         {
             tempCelli = vectorX[1]->getAdjCell(Y_PLUS);
@@ -863,6 +858,7 @@ void Grid::createBox(){
                 tempCelli = tempCelli->getAdjCell(X_PLUS);
             }
         }
+
 
 
         for (int x = 0; x < xSize; x++)
@@ -924,11 +920,14 @@ void Grid::createBox(){
         volume = 0;
         vectorX.clear();
 
-        if (nextCells.size() > 0)
+        for(int x = 0; x < (int) grid.size(); x++)
         {
-            for (GridCell *x : nextCells)
+            for (int y = 0; y < (int)grid[x].size(); y++)
             {
-                calculateBox(x, finalCell, volume, xSize, ySize, zSize, boxCoords);
+                for (int z = 0; z < (int)grid[x][y].size(); z++)
+                {
+                    calculateBox(grid[x][y][z], finalCell, volume, xSize, ySize, zSize, boxCoords);
+                }
             }
         }
 
@@ -1013,24 +1012,68 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
 
     if (vectorX.size()*(minY+1)*(minZ+1)*pow(length,3 ) > volume)
     {
-        volume = vectorX.size()*(minY+1)*(minZ+1)*pow(length,3 );
+        GridCell * tempCellk = NULL;
+        GridCell * tempCelli = NULL;
+        GridCell * tempCellj = NULL;
+        bool flagFound = false;
 
-        Pointd v0 = startingCell->getVertex(0);
-        finalCell = startingCell;
-        xSize = vectorX.size();
-        ySize = minY+1;
-        zSize = minZ+1;
+        if (nextCells.size() != 0)
+        {
+            tempCellk = startingCell;
 
-        boxCoords[0] = v0;
-        boxCoords[1] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() );
-        boxCoords[2] = Pointd(v0.x(), v0.y() +length*(minY+1), v0.z() );
-        boxCoords[3] = Pointd(v0.x() +length*vectorX.size(), v0.y() + length*(minY+1), v0.z() );
-        boxCoords[4] = Pointd(v0.x(), v0.y(), v0.z() +length*(minZ+1) );
-        boxCoords[5] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() + length*(minZ+1) );
-        boxCoords[6] = Pointd(v0.x(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
-        boxCoords[7] = Pointd(v0.x() + length*vectorX.size(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
+
+            for (int x = 0; x < vectorX.size(); x++)
+            {
+                tempCelli = tempCellk;
+                for (int y = 0; y < minY+1 ; y++)
+                {
+                    if (y==0) tempCellj = tempCellk;
+
+                    for (int z = 0; z < minZ+1; z++)
+                    {
+
+                        for (GridCell * tempNextCell : nextCells)
+                        {
+
+                            if (tempCelli == tempNextCell)
+                            {
+
+                                flagFound = true;
+                                break;
+                            }
+                        }
+                        tempCelli = tempCelli->getAdjCell(Z_PLUS);
+                    }
+
+                    tempCellj = tempCellj->getAdjCell(Y_PLUS);
+                    tempCelli = tempCellj;
+                }
+                tempCellk = tempCellk->getAdjCell(X_PLUS);
+            }
+        }
+
+        if (nextCells.size() == 0 || flagFound)
+        {
+
+
+            volume = vectorX.size()*(minY+1)*(minZ+1)*pow(length,3 );
+
+            Pointd v0 = startingCell->getVertex(0);
+            finalCell = startingCell;
+            xSize = vectorX.size();
+            ySize = minY+1;
+            zSize = minZ+1;
+
+            boxCoords[0] = v0;
+            boxCoords[1] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() );
+            boxCoords[2] = Pointd(v0.x(), v0.y() +length*(minY+1), v0.z() );
+            boxCoords[3] = Pointd(v0.x() +length*vectorX.size(), v0.y() + length*(minY+1), v0.z() );
+            boxCoords[4] = Pointd(v0.x(), v0.y(), v0.z() +length*(minZ+1) );
+            boxCoords[5] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() + length*(minZ+1) );
+            boxCoords[6] = Pointd(v0.x(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
+            boxCoords[7] = Pointd(v0.x() + length*vectorX.size(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
+        }
     }
-
 }
 
 

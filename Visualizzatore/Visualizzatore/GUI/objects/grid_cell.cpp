@@ -33,7 +33,7 @@ std::vector<GridCell *> GridCell::getAdjCells()
 
 void GridCell::setToDelete()
 {
-    if (toDelete) qDebug() <<"You fucked up son";
+    //if (toDelete) qDebug() <<"You fucked up son";
     toDelete = true;
 }
 
