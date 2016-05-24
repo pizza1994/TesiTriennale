@@ -26,12 +26,12 @@ HEADERS += \
     GUI/objects/drawable_axis.h \
     GUI/objects/sphere.h \
     GUI/objects/drawable_bbox.h \
-    lib/common/check_intersection.h \
     GUI/objects/grid_cell.h \
     GUI/objects/grid.h \
     GUI/objects/drawable_grid.h \
-    lib/common/octree.h \
-    lib/common/importobj.h
+    lib/common/importobj.h \
+    lib/hexmesh/load_save.h \
+    lib/hexmesh/mesh.h
 
 SOURCES += \
     common.cpp \
@@ -44,10 +44,10 @@ SOURCES += \
     GUI/managers/window_manager.cpp \
     GUI/objects/drawable_axis.cpp \
     GUI/objects/drawable_bbox.cpp \
-    lib/common/check_intersection.cpp \
     GUI/objects/grid.cpp \
     GUI/objects/grid_cell.cpp \
-    GUI/objects/drawable_grid.cpp
+    GUI/objects/drawable_grid.cpp \
+    lib/hexmesh/load_save.cpp
 
 
 QMAKE_CXXFLAGS += -std=c++11

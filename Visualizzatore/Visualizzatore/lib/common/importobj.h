@@ -81,7 +81,7 @@ public:
                 {
                     double x, y, z;
                     _file >> x >> y >> z;
-                    B.add_vertex(Point(x*1000, y*1000, z*1000));
+                    B.add_vertex(Point(x*SCALE, y*SCALE, z*SCALE));
                 }
 
                 // There are 4 type of facets.

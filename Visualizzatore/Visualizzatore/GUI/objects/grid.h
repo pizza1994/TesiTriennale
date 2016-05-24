@@ -22,8 +22,6 @@
 #include <CGAL/AABB_triangle_primitive.h>
 
 #include <algorithm>
-#include "lib/common/check_intersection.h"
-#include "lib/common/octree.h"
 #define X_MINUS 0
 #define X_PLUS 1
 #define Y_MINUS 2
@@ -50,6 +48,7 @@ class Grid
         Grid();
         Grid(BoundingBox bbox, int granularityFactor);
         std::vector<Pointd> getVertices() const;
+        double getLength();
 
     private:
         double length;

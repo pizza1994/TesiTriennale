@@ -32,6 +32,19 @@ void Grid::setLength()
 
         else
             length = internal_bbox.getMin().dist( Pointd(internal_bbox.getMinX(), internal_bbox.getMinY(), internal_bbox.getMaxZ()) ) / granularityFactor;
+
+    int intLength = length;
+    qDebug()<<intLength;
+    qDebug()<<length;
+    if(length-intLength > 0){
+        length = intLength + 1;
+    }
+    qDebug()<<length;
+
+}
+
+double Grid::getLength(){
+    return length;
 }
 
 std::vector<Pointd> Grid::getVertices() const
@@ -233,307 +246,7 @@ void Grid::cleanGrid(DrawableTrimesh &t, Polyhedron &poly)
         }
     }
 
-/*
-    int timesIntersected = 0;
-    int p = 0;
-    std::vector<Pointd> alreadyCheckVertices;
-    std::vector<Pointd> firstSubdivision;
-    std::vector<Pointd> secondSubdivision;
-    std::vector<Pointd> thirdSubdivision;
-    std::vector<Pointd> fourthSubdivision;
-    std::vector<Pointd> fifthSubdivision;
-    std::vector<Pointd> sixthSubdivision;
-    std::vector<Pointd> seventhSubdivision;
-    std::vector<Pointd> eighthSubdivision;
 
-    for(int i = 0; i<t.numTriangles();i++){
-        if(t.vertex(t.vectorTriangles()[p]).x() > internal_bbox.center().x() &&
-           t.vertex(t.vectorTriangles()[p]).y() > internal_bbox.center().y() &&
-           t.vertex(t.vectorTriangles()[p]).z() > internal_bbox.center().z()){
-
-
-            eighthSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            eighthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            eighthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-
-        }
-        else if(t.vertex(t.vectorTriangles()[p]).x() < internal_bbox.center().x() &&
-                t.vertex(t.vectorTriangles()[p]).y() > internal_bbox.center().y() &&
-                t.vertex(t.vectorTriangles()[p]).z() > internal_bbox.center().z()){
-            seventhSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            seventhSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            seventhSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-        }
-        else if(t.vertex(t.vectorTriangles()[p]).x() > internal_bbox.center().x() &&
-                t.vertex(t.vectorTriangles()[p]).y() > internal_bbox.center().y() &&
-                t.vertex(t.vectorTriangles()[p]).z() < internal_bbox.center().z()){
-            sixthSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            sixthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            sixthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-        }
-        else if(t.vertex(t.vectorTriangles()[p]).x() < internal_bbox.center().x() &&
-                t.vertex(t.vectorTriangles()[p]).y() > internal_bbox.center().y() &&
-                t.vertex(t.vectorTriangles()[p]).z() < internal_bbox.center().z()){
-            fifthSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            fifthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            fifthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-        }
-        else if(t.vertex(t.vectorTriangles()[p]).x() > internal_bbox.center().x() &&
-                t.vertex(t.vectorTriangles()[p]).y() < internal_bbox.center().y() &&
-                t.vertex(t.vectorTriangles()[p]).z() > internal_bbox.center().z()){
-            fourthSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            fourthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            fourthSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-        }
-        else if(t.vertex(t.vectorTriangles()[p]).x() < internal_bbox.center().x() &&
-                t.vertex(t.vectorTriangles()[p]).y() < internal_bbox.center().y() &&
-                t.vertex(t.vectorTriangles()[p]).z() > internal_bbox.center().z()){
-            thirdSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            thirdSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            thirdSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-        }
-        else if(t.vertex(t.vectorTriangles()[p]).x() > internal_bbox.center().x() &&
-                t.vertex(t.vectorTriangles()[p]).y() < internal_bbox.center().y() &&
-                t.vertex(t.vectorTriangles()[p]).z() < internal_bbox.center().z()){
-            secondSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            secondSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            secondSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-        }
-        else
-        {
-            firstSubdivision.push_back(t.vertex(t.vectorTriangles()[p]));
-            firstSubdivision.push_back(t.vertex(t.vectorTriangles()[p+1]));
-            firstSubdivision.push_back(t.vertex(t.vectorTriangles()[p+2]));
-        }
-        p+=3;
-    }
-    p=0;
-
-
-
-    for(int i=0; i<(int)grid.size(); i++) //for della intera grid
-    {
-        for(int j=0; j<(int)grid[i].size(); j++) //for di un livello di cubi
-        {
-            for (int k=0; k<(int)grid[i][j].size(); k++) //for di una linea di cubi
-            {
-                //qDebug () << i << " " << j << " " << k;
-                for (int z=0; z<8; z++)
-                {
-                    if (grid[i][j][k]->getVertex(z).x() < internal_bbox.getMinX() ||
-                        grid[i][j][k]->getVertex(z).y() < internal_bbox.getMinY() ||
-                        grid[i][j][k]->getVertex(z).z() < internal_bbox.getMinZ() ||
-                        grid[i][j][k]->getVertex(z).x() > internal_bbox.getMaxX() ||
-                        grid[i][j][k]->getVertex(z).y() > internal_bbox.getMaxY() ||
-                        grid[i][j][k]->getVertex(z).z() > internal_bbox.getMaxZ())
-                    {
-                        eraseGridCell(i, j, k);
-                        z=8;
-                    }
-                    else if ( !checkPointInVector(grid[i][j][k]->getVertex(z), alreadyCheckVertices))
-                    {
-
-                        if(grid[i][j][k]->getVertex(z).x() > internal_bbox.center().x() &&
-                           grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
-                           grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
-                        {
-                            for (int x=0; x< (int) eighthSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(1,1,1),
-                                                                           eighthSubdivision[p],
-                                                                           eighthSubdivision[p+1],
-                                                                           eighthSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-                        else if(grid[i][j][k]->getVertex(z).x() < internal_bbox.center().x() &&
-                                grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
-                                grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
-                        {
-                            for (int x=0; x< (int) seventhSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(-1,1,1),
-                                                                           seventhSubdivision[p],
-                                                                           seventhSubdivision[p+1],
-                                                                           seventhSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-                        else if(grid[i][j][k]->getVertex(z).x() > internal_bbox.center().x() &&
-                                grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
-                                grid[i][j][k]->getVertex(z).z() < internal_bbox.center().z())
-                        {
-                            for (int x=0; x< (int) sixthSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(1,1,-1),
-                                                                           sixthSubdivision[p],
-                                                                           sixthSubdivision[p+1],
-                                                                           sixthSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-
-                        else if(grid[i][j][k]->getVertex(z).x() < internal_bbox.center().x() &&
-                                grid[i][j][k]->getVertex(z).y() > internal_bbox.center().y() &&
-                                grid[i][j][k]->getVertex(z).z() < internal_bbox.center().z())
-                        {
-                            for (int x=0; x< (int) fifthSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(-1,1,-1),
-                                                                           fifthSubdivision[p],
-                                                                           fifthSubdivision[p+1],
-                                                                           fifthSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-
-                        else if(grid[i][j][k]->getVertex(z).x() > internal_bbox.center().x() &&
-                                grid[i][j][k]->getVertex(z).y() < internal_bbox.center().y() &&
-                                grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
-                        {
-                            for (int x=0; x< (int) fourthSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(1,-1,1),
-                                                                           fourthSubdivision[p],
-                                                                           fourthSubdivision[p+1],
-                                                                           fourthSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-
-                        else if(grid[i][j][k]->getVertex(z).x() < internal_bbox.center().x() &&
-                                grid[i][j][k]->getVertex(z).y() < internal_bbox.center().y() &&
-                                grid[i][j][k]->getVertex(z).z() > internal_bbox.center().z())
-                        {
-                            for (int x=0; x< (int) thirdSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(-1,-1,1),
-                                                                           thirdSubdivision[p],
-                                                                           thirdSubdivision[p+1],
-                                                                           thirdSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-
-                        else if(grid[i][j][k]->getVertex(z).x() > internal_bbox.center().x() &&
-                                grid[i][j][k]->getVertex(z).y() < internal_bbox.center().y() &&
-                                grid[i][j][k]->getVertex(z).z() < internal_bbox.center().z())
-                        {
-                            for (int x=0; x< (int) secondSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(1,-1,-1),
-                                                                           secondSubdivision[p],
-                                                                           secondSubdivision[p+1],
-                                                                           secondSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-
-                        else
-                        {
-                            for (int x=0; x< (int) firstSubdivision.size()/3; x++)
-                            {
-                                if(CheckIntersection::rayTriangleIntersect(grid[i][j][k]->getVertex(z),
-                                                                           Pointd(-1,-1,-1),
-                                                                           firstSubdivision[p],
-                                                                           firstSubdivision[p+1],
-                                                                           firstSubdivision[p+2]))
-                                {
-                                    timesIntersected++;
-                                }
-
-                                p+=3;
-
-
-                            }
-                        }
-
-
-                        if (timesIntersected % 2 == 0) //Se il vertice è fuori dalla mesh
-                        {
-
-                            eraseGridCell(i, j, k); //Elimina l'intera cella dal grigliato.
-                            z=8;
-                        }
-                        else{
-                            alreadyCheckVertices.push_back(grid[i][j][k]->getVertex(z));
-
-                        }
-                        timesIntersected = 0;
-                        p = 0;
-
-                    }
-
-                }
-
-            }
-
-            if (grid[i][j].size() == 0)
-            {
-                grid[i].erase(grid[i].begin() + j);
-                j--;
-            }
-        }
-
-        if (grid[i].size() == 0)
-        {
-            grid.erase(grid.begin() + i);
-            i--;
-        }
-
-    }
-}
-
-*/
 }
 
 void Grid::eraseGridCell(int i, int j, int &k)
@@ -779,7 +492,7 @@ void Grid::createBox(){
         //qDebug() << "volume: " <<volume;
 
     }
-    while (nextCells.size() > 0);
+    while (nextCells.size() > 0 /*&& counter++ < 2*/);
 }
 
 void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &volume, int & xSize, int & ySize, int & zSize, std::vector<Pointd> &boxCoords){
@@ -801,6 +514,8 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
             vectorX.push_back(cell);
             cell = cell->getAdjCell(X_PLUS);
         }
+        vectorX.push_back(cell);
+
     }
 
 
@@ -911,12 +626,12 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
 
             boxCoords[0] = v0;
             boxCoords[1] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() );
-            boxCoords[2] = Pointd(v0.x(), v0.y() +length*(minY+1), v0.z() );
-            boxCoords[3] = Pointd(v0.x() +length*vectorX.size(), v0.y() + length*(minY+1), v0.z() );
-            boxCoords[4] = Pointd(v0.x(), v0.y(), v0.z() +length*(minZ+1) );
-            boxCoords[5] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() + length*(minZ+1) );
-            boxCoords[6] = Pointd(v0.x(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
-            boxCoords[7] = Pointd(v0.x() + length*vectorX.size(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
+            boxCoords[2] = Pointd(v0.x() + length*vectorX.size(), v0.y(), v0.z() + length*(minZ+1) );
+            boxCoords[3] = Pointd(v0.x(), v0.y(), v0.z() +length*(minZ+1) );
+            boxCoords[4] = Pointd(v0.x(), v0.y() +length*(minY+1), v0.z() );
+            boxCoords[5] = Pointd(v0.x() +length*vectorX.size(), v0.y() + length*(minY+1), v0.z() );
+            boxCoords[6] = Pointd(v0.x() + length*vectorX.size(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
+            boxCoords[7] = Pointd(v0.x(), v0.y() + length*(minY+1), v0.z() + length*(minZ+1) );
         }
     }
 }

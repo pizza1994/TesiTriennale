@@ -1,6 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
-
+#define SCALE 100
 #include <set>
 #include <vector>
 #include "lib/common/point.h"
@@ -16,6 +16,8 @@
 #include <CGAL/Side_of_triangle_mesh.h>
 
 
+
+
 typedef CGAL::Simple_cartesian<double> K;
 typedef CGAL::Polyhedron_3<K> Polyhedron;
 typedef CGAL::AABB_face_graph_triangle_primitive<Polyhedron> Primitive;
@@ -23,7 +25,7 @@ typedef CGAL::AABB_traits<K, Primitive> Traits;
 typedef CGAL::AABB_tree<Traits> Tree;
 typedef CGAL::Side_of_triangle_mesh<Polyhedron, K> Point_inside;
 
-#define EPSILON 0.0000001
+#define EPSILON 0.00000001
 
 #define ONE_ON_SQRT2 0.7071067811865475f
 #define ONE_ON_SQRT3 0.5773502691896258f

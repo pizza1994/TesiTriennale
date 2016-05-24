@@ -7,6 +7,7 @@
 #include "GUI/objects/sphere.h"
 #include "GUI/objects/cylinder.h"
 #include "common.h"
+#include "lib/hexmesh/mesh.h"
 
 class DrawableGrid : public Grid ,
                         public DrawableObject

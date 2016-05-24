@@ -11,6 +11,17 @@ DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, Dr
 {
     Grid::cleanGrid(t, p);
     Grid::createBox();
+
+    std::vector<int> empty;
+    mesh<double> mymesh = mesh<double>(finalBoxes, Grid::getLength());
+    save_mesh("/Users/lucapitzalis/volumetric.mesh", mymesh.coords(), mymesh.hexes(), 0 );
+    mymesh.construct_surface();
+
+    mymesh = mymesh.get_surface();
+    save_quadmesh("/Users/lucapitzalis/quadmesh.obj", mymesh.coords(), mymesh.quads(), 0);
+
+
+
 }
 
 
@@ -42,17 +53,17 @@ void DrawableGrid::draw() const
         for (std::vector<Pointd> finalBox : finalBoxes)
         {
             cylinder(finalBox[0], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[0], finalBox[2], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[0], finalBox[3], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
             cylinder(finalBox[0], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[3], finalBox[2], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[3], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[3], finalBox[7], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[5], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
             cylinder(finalBox[5], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[5], finalBox[7], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[6], finalBox[7], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[6], finalBox[2], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
-            cylinder(finalBox[6], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[5], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[5], finalBox[6], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[7], finalBox[6], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[7], finalBox[3], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[7], finalBox[4], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[2], finalBox[6], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[2], finalBox[3], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
+            cylinder(finalBox[2], finalBox[1], 0.005*internal_bbox.diag()/5, 0.005*internal_bbox.diag()/5, red);
         }
 
     }
