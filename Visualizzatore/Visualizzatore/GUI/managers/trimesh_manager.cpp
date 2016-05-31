@@ -186,6 +186,10 @@ void TrimeshManager::on_cbShowGrid_stateChanged(int state)
 
 }
 
+void TrimeshManager::on_sbGranularity_valueChanged(int value){
+    granularity = value;
+}
+
 
 
 void TrimeshManager::on_cbShowMaxBox_stateChanged(int state){
@@ -196,14 +200,17 @@ void TrimeshManager::on_cbShowMaxBox_stateChanged(int state){
         {
             if (visibleGrid == NULL)
             {
-                visibleGrid = new DrawableGrid( t->getBbox() , 30, *t, *p);
+                visibleGrid = new DrawableGrid( t->getBbox() , granularity, *t, *p);
                 visibleGrid->setVisible(true);
                 visibleGrid->setVisibleGrid(false);
                 ((MainWindow*)mw)->push_obj(visibleGrid);
             }
             else
             {
+                visibleGrid = new DrawableGrid( t->getBbox() , granularity, *t, *p);
                 visibleGrid->setVisible(true);
+                visibleGrid->setVisibleGrid(false);
+                ((MainWindow*)mw)->push_obj(visibleGrid);
             }
         }
         else { //TO complete

@@ -31,6 +31,7 @@ class TrimeshManager : public QDockWidget
     private
     slots:
 
+        void on_sbGranularity_valueChanged(int value);
         void on_butLoadTrimesh_clicked();
         void on_cbWireframe_stateChanged(int state);
         void on_rbPoints_toggled(bool checked);
@@ -58,6 +59,7 @@ class TrimeshManager : public QDockWidget
         Polyhedron *p = NULL;
         DrawableBBox * visibleBoundingBox;
         DrawableGrid * visibleGrid;
+        int granularity = 20;
 };
 
 #endif // Trimesh_manager_H

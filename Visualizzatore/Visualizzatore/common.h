@@ -1,6 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
-#define SCALE 100
+#define SCALE 100000
 #include <set>
 #include <vector>
 #include "lib/common/point.h"

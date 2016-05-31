@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
+    <width>526</width>
     <height>286</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>440</width>
+    <width>526</width>
     <height>286</height>
    </size>
   </property>
@@ -32,62 +32,16 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="6" rowspan="5">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="5" column="4">
+     <widget class="QSpinBox" name="sbGranularity">
+      <property name="minimum">
+       <number>10</number>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
+      <property name="maximum">
+       <number>100</number>
       </property>
-     </spacer>
-    </item>
-    <item row="0" column="3">
-     <widget class="QFrame" name="verticalFrame">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QPushButton" name="butLoadTrimesh">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Load TriMesh</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="3" column="3">
-     <widget class="QCheckBox" name="cbShowBBox">
-      <property name="text">
-       <string>Show Bbox</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="5">
-     <widget class="QCheckBox" name="cbShowMaxBox">
-      <property name="text">
-       <string>Show MaxBox</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="5">
-     <widget class="QCheckBox" name="cbShowGrid">
-      <property name="text">
-       <string>Show Grid</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5">
-     <widget class="QPushButton" name="butCalculateBox">
-      <property name="text">
-       <string>CalculateBox</string>
+      <property name="value">
+       <number>20</number>
       </property>
      </widget>
     </item>
@@ -179,7 +133,45 @@
       </layout>
      </widget>
     </item>
-    <item row="2" column="4">
+    <item row="3" column="3">
+     <widget class="QCheckBox" name="cbShowBBox">
+      <property name="text">
+       <string>Show Bbox</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QFrame" name="verticalFrame">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="butLoadTrimesh">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Load TriMesh</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="9" rowspan="6">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="5">
      <widget class="QFrame" name="frame_2">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="4" column="0" colspan="2">
@@ -261,7 +253,35 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="4" rowspan="2">
+    <item row="5" column="3">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>                 Granularity:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QCheckBox" name="cbShowMaxBox">
+      <property name="text">
+       <string>Show MaxBox</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="5">
+     <widget class="QCheckBox" name="cbShowGrid">
+      <property name="text">
+       <string>Show Grid</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="5">
+     <widget class="QPushButton" name="butCalculateBox">
+      <property name="text">
+       <string>CalculateBox</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5" rowspan="2">
      <widget class="QFrame" name="frame">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
