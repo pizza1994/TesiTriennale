@@ -50,8 +50,10 @@ private:
 
         m_vtx2tri.clear();
         m_vtx2tri.resize( num_vertices() );
+
         for( int i=0; i<num_tris(); i++ ){
             for( int j=0; j<3; j++ ){
+
                 m_vtx2tri[m_tris[i*3+j]].push_back( i );
                 m_vtx_on_surface[m_tris[i*3+j]] = true;
               }
@@ -59,48 +61,31 @@ private:
         m_vtx2quad.clear();
         m_vtx2quad.resize( num_vertices() );
 
-
-        qDebug()<<"A";
-
         for( int i=0; i<num_quads(); i++ ){
             for( int j=0; j<4; j++ ){
                 m_vtx2quad[m_quads[i*4+j]].push_back( i );
-               // m_vtx_on_surface[m_quads[i*4+j]] = true;
+                m_vtx_on_surface[m_quads[i*4+j]] = true;
+
             }
         }
 
-        qDebug()<<"B";
 
         m_vtx2tet.clear();
         m_vtx2tet.resize( num_vertices() );
         for( int i=0; i<num_tets(); i++ ){
             for( int j=0; j<4; j++ ){
                 m_vtx2tet[m_tets[i*4+j]].push_back( i );
-                qDebug()<<"shit";
             }
         }
+
         m_vtx2hex.clear();
         m_vtx2hex.resize( num_vertices() );
-        /*if(print_debug_info)
-            std::cout << "adjacency: hexes..." << std::endl;*/
-
-        /*if(print_debug_info)
-            std::cout << "adjacency: hexes... (2)" << std::endl;*/
-        qDebug()<<"C";
-
         for( int i=0; i<num_hexes(); i++ ){
             for( int j=0; j<8; j++ ){
-                qDebug () << "Size: " << m_vtx2hex.size();
-                qDebug () << m_hexes[i*8+j];
                 m_vtx2hex[m_hexes[i*8+j]].push_back( i );
-                qDebug () << "Ciao";
+
             }
         }
-        qDebug()<<"D";
-
-
-        qDebug ()<< "Fine Build Adjacency";
-
     }
     
 public:
@@ -122,14 +107,13 @@ public:
         std::vector<int> empty3;
         std::vector<int> hexes;
         std::vector<double> coords = subdivide(polyhedra, length, hexes);
-        qDebug () << "Costruttore";
         set(coords, empty1, empty2, empty3, hexes);
     }
 
     std::vector<double> subdivide(std::vector<std::vector<Pointd>> polyhedra, double length, std::vector<int> &hexes){
         std::vector<double> coords;
 
-        int i=1;
+        int i=0;
         std::map<Pointd, int> mymap;
 
         for(std::vector<Pointd> polyhedron : polyhedra){
@@ -183,8 +167,6 @@ public:
 
     void set( const std::vector<real> &coords, const std::vector<int> &tris, const std::vector<int> &quads, const std::vector<int> &tets, const std::vector<int> &hexes ){
         clear();
-        qDebug() << "Set";
-        qDebug() << coords.size();
         m_coords = coords;
         m_tris = tris;
         m_quads = quads;

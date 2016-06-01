@@ -1,11 +1,11 @@
 QT += core gui opengl xml widgets
-LIBS += -L/Users/bardOZ/Desktop/CGAL/gmp-6.1.0/BUILD/lib -lgmp
-LIBS += -L/Users/bardOZ/Desktop/CGAL/mpfr-3.1.3/BUILD/lib -lmpfr
-LIBS += -L/Users/bardOZ/Desktop/CGAL/boost_1_59_0/BUILD/lib -lboost_system-mt-s
-LIBS += -L/Users/bardOZ/Desktop/CGAL/boost_1_59_0/BUILD/lib -lboost_thread-mt-s
-LIBS += -L/Users/bardOZ/Desktop/CGAL/CGAL-4.8/BUILD/lib -lCGAL
-INCLUDEPATH += /Users/bardOZ/Desktop/CGAL/boost_1_59_0/BUILD/include
-INCLUDEPATH += /Users/bardOZ/Desktop/CGAL/CGAL-4.8/BUILD/include
+LIBS += -L/Users/lucapitzalis/librerie/gmp-6.1.0/BUILD/lib -lgmp
+LIBS += -L/Users/lucapitzalis/librerie/mpfr-3.1.3/BUILD/lib -lmpfr
+LIBS += -L/Users/lucapitzalis/librerie/boost_1_59_0/BUILD/lib -lboost_system-mt-s
+LIBS += -L/Users/lucapitzalis/librerie/boost_1_59_0/BUILD/lib -lboost_thread-mt-s
+LIBS += -L/Users/lucapitzalis/librerie/CGAL-4.8/BUILD/lib -lCGAL
+INCLUDEPATH += /Users/lucapitzalis/librerie/boost_1_59_0/BUILD/include
+INCLUDEPATH += /Users/lucapitzalis/librerie/CGAL-4.8/BUILD/include
 #LIBS += -lCGAL
 
 HEADERS += \
