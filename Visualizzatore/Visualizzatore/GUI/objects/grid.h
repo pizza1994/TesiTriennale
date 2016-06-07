@@ -57,7 +57,7 @@ class Grid
         void eraseGridCell(int i, int j, int &k);
 
     protected:
-        std::vector< std::vector<std::vector<GridCell*> > > grid;
+        std::vector< std::vector< std::vector<GridCell*> > > grid;
         int granularityFactor;
         BoundingBox internal_bbox;
         std::vector<GridCell*> nextCells;

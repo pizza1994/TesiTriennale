@@ -14,13 +14,15 @@ DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, Dr
 
     std::vector<int> empty;
     mesh<double> mymesh = mesh<double>(finalBoxes, Grid::getLength());
-    save_mesh("/Users/lucapitzalis/volumetric.mesh", mymesh.coords(), mymesh.hexes(), 1 );
+    save_mesh("/Users/bardOZ/volumetric.mesh", mymesh.coords(), mymesh.hexes(), 1 );
     //mymesh.construct_surface();
 
-     mesh<double> mymeshSurface = mymesh.get_surface();
-    save_quadmesh("/Users/lucapitzalis/quadmesh.obj", mymeshSurface.coords(), mymeshSurface.quads(), 1);
+    mesh<double> mymeshSurface = mymesh.get_surface();
+    save_quadmesh("/Users/bardOZ/quadmesh.obj", mymeshSurface.coords(), mymeshSurface.quads(), 1);
 
 
+    mymeshSurface.smoothNinetyDegreesAngles(Grid::getLength());
+    save_quadmesh("/Users/bardOZ/quadmeshSmooth.obj", mymeshSurface.coords(), mymeshSurface.quads(), 1);
 
 }
 
