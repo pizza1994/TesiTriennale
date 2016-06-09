@@ -18,11 +18,12 @@ DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, Dr
     //mymesh.construct_surface();
 
     mesh<double> mymeshSurface = mymesh.get_surface();
-    save_quadmesh("/Users/bardOZ/quadmesh.obj", mymeshSurface.coords(), mymeshSurface.quads(), 1);
+    mymeshSurface.cleanCoords();
+    save_quadmesh("/Users/bardOZ/quadmesh.obj", mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
 
 
-    mymeshSurface.smoothNinetyDegreesAngles(Grid::getLength());
-    save_quadmesh("/Users/bardOZ/quadmeshSmooth.obj", mymeshSurface.coords(), mymeshSurface.quads(), 1);
+    mymeshSurface.smoothNinetyDegreesAngles(Grid::getLength(), p);
+    save_quadmesh("/Users/bardOZ/quadmeshSmooth.obj", mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
 
 }
 

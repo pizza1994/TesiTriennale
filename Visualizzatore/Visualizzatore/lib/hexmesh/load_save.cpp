@@ -269,7 +269,7 @@ bool save_mesh( const char *filename, std::vector<double> &coords, std::vector<i
     return true;
 }
 
-bool save_quadmesh( const char *filename, std::vector<double> &coords, std::vector<int> &quads, int off ){
+bool save_quadmesh( const char *filename, std::vector<double> &coords, std::vector<int> &quads, std::vector<int> &tris, int off ){
     FILE *fp = fopen( filename, "w" );
 
     if( !fp )
@@ -286,6 +286,12 @@ bool save_quadmesh( const char *filename, std::vector<double> &coords, std::vect
     if( quads.size() > 0 ){
         for( int i=0; i<quads.size(); i+=4 ){
             fprintf( fp, "f %d %d %d %d\n", quads[i+3]+off, quads[i+2]+off, quads[i+1]+off, quads[i+0]+off );
+        }
+    }
+
+    if( tris.size() > 0 ){
+        for( int i=0; i<tris.size(); i+=3 ){
+            fprintf( fp, "f %d %d %d\n", tris[i+2]+off, tris[i+1]+off, tris[i+0]+off );
         }
     }
     fclose(fp);
