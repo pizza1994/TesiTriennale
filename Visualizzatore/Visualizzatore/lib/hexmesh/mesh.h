@@ -63,7 +63,6 @@ private:
         m_vtx2quad.clear();
         m_vtx2quad.resize( num_vertices() );
 
-        qDebug() << "a";
 
         for( int i=0; i<num_quads(); i++ ){
             for( int j=0; j<4; j++ ){
@@ -72,8 +71,6 @@ private:
 
             }
         }
-        qDebug() << "";
-
 
         m_vtx2tet.clear();
         m_vtx2tet.resize( num_vertices() );
@@ -118,7 +115,6 @@ public:
     void smoothNinetyDegreesAngles(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
         int i, j, p=0, p1=0;
-        Pointd min = Pointd(MAXFLOAT, MAXFLOAT, MAXFLOAT);
         std::vector<Pointd> quad;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
         std::list<Triangle> triangles;
@@ -185,19 +181,19 @@ public:
                                             {
                                                 flagNormal1 = true;
 
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
+                                                m_tris.push_back(vertexMap.at(quad[0]));
+                                                m_tris.push_back(vertexMap.at(quad[3]));
 
-                                                m_tris.push_back(vertexMap.at(quad[1]));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                                m_tris.push_back(vertexMap.at(quad[2]));
+                                                m_tris.push_back(vertexMap.at(quad[1]));
 
                                                 break;
                                             }
                                 }
                             }
-                        }
+
 
                         if(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                             for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
@@ -212,14 +208,14 @@ public:
                                             if (quads1[x] == quads2[y])
                                             {
                                                 flagNormal2 = true;
-
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
                                                 m_tris.push_back(vertexMap.at(quad[3]));
+                                                m_tris.push_back(vertexMap.at(quad[0]));
+                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
 
-                                                m_tris.push_back(vertexMap.at(quad[1]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
                                                 m_tris.push_back(vertexMap.at(quad[2]));
+                                                m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
+                                                m_tris.push_back(vertexMap.at(quad[1]));
+
 
                                                 break;
                                             }
@@ -233,24 +229,25 @@ public:
                         m_quads.push_back(vertexMap.at(quad[3]));
                         m_quads.push_back(vertexMap.at(quad[0]));
                         m_quads.push_back(vertexMap.at(quad[1]));
-                        qDebug() << "CiainoPaperino";
                     }
                     else
                     {
-                        qDebug () << "CiaonePaperone";
-                        m_quads.push_back(vertexMap.at(quad[0]));
-                        m_quads.push_back(vertexMap.at(quad[1]));
-                        m_quads.push_back(vertexMap.at(quad[2]));
+
+
                         m_quads.push_back(vertexMap.at(quad[3]));
+                        m_quads.push_back(vertexMap.at(quad[2]));
+                        m_quads.push_back(vertexMap.at(quad[1]));
+                        m_quads.push_back(vertexMap.at(quad[0]));
                     }
 
+                    flagNormal1 = false;
+                    flagNormal2 = false;
+
                 }
-                else qDebug() << "OK";
 
 
             }
-            flagNormal1 = false;
-            flagNormal2 = false;
+
             flag1 = false;
             flag2 = false;
             flag3 = false;
@@ -519,15 +516,11 @@ public:
 
         int num_deleted = 0;
 
-        for (int i=0; i<m_vtx_on_surface.size(); i++)
-
-
         for (int i=0, p=0; i < m_coords.size()/3; i++, p+=3)
         {
             if (!m_vtx_on_surface[i+num_deleted])
             {
 
-                //qDebug() << "Sto eliminando il vertice in posizione " << i;
                 m_coords.erase(m_coords.begin() + p);
                 m_coords.erase(m_coords.begin() + p);
                 m_coords.erase(m_coords.begin() + p);
@@ -543,13 +536,11 @@ public:
 
 
             }
-            else
-            {
-            }
+
 
         }
-        qDebug () << "Fatto";
-
+        m_vtx2quad.clear();
+        build_adjacency();
 
     }
 
