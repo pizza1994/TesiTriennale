@@ -113,6 +113,13 @@ public:
     }
 
     void smoothNinetyDegreesAngles(double length, Polyhedron &poly){
+
+        smoothAxis1(length, poly);
+        smoothAxis2(length, poly);
+
+    }
+
+    void smoothAxis1(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
         int i, j, p=0, p1=0;
         std::vector<Pointd> quad;
@@ -254,8 +261,154 @@ public:
             flag4 = false;
 
         }
-
     }
+
+    void smoothAxis2(double length, Polyhedron &poly){
+        std::map<Pointd, int> vertexMap;
+        int i, j, p=0, p1=0;
+        std::vector<Pointd> quad;
+        bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
+        std::list<Triangle> triangles;
+
+
+        Tree tree(faces(poly).first, faces(poly).second, poly);
+        tree.accelerate_distance_queries();
+
+        quad.push_back(Pointd(0, 0, 0));
+        quad.push_back(Pointd(0, 0, 0));
+        quad.push_back(Pointd(0, 0, 0));
+        quad.push_back(Pointd(0, 0, 0));
+
+        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        {
+            vertexMap.insert(std::pair<Pointd, int>(Pointd(coords()[p], coords()[p+1], coords()[p+2]), i));
+            /*if (Pointd(coords()[p], coords()[p+1], coords()[p+2]) < min)
+                min = Pointd(coords()[p], coords()[p+1], coords()[p+2]);*/
+        }
+
+        p=0;
+
+        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        {
+            quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]-length);
+            quad[1] = Pointd(coords()[p]-length, coords()[p+1]-length, coords()[p+2]-length);
+            quad[2] = Pointd(coords()[p]-length, coords()[p+1], coords()[p+2]);
+            quad[3] = Pointd(coords()[p], coords()[p+1], coords()[p+2]);
+
+            for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+            {
+                if (quad[0] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
+                    flag1 = true;
+                if (quad[1] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
+                    flag2 = true;
+                if (quad[2] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
+                    flag3 = true;
+                if (quad[3] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
+                    flag4 = true;
+            }
+
+
+            if (flag1 && flag2 && flag3 && flag4)
+            {
+                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
+                    !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
+                {
+                    for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+                    {
+                        int p2, k;
+
+
+                        if (Pointd(quad[0].x(), quad[0].y()+length, quad[0].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
+                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            {
+                                if(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
+                                {
+                                    std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
+                                    std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+
+                                    for (int x=0; x < quads1.size(); x++)
+                                        for (int y=0; y < quads2.size(); y++)
+                                            if (quads1[x] == quads2[y])
+                                            {
+                                                flagNormal1 = true;
+
+                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
+                                                m_tris.push_back(vertexMap.at(quad[0]));
+                                                m_tris.push_back(vertexMap.at(quad[3]));
+
+                                                m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                                m_tris.push_back(vertexMap.at(quad[2]));
+                                                m_tris.push_back(vertexMap.at(quad[1]));
+
+                                                break;
+                                            }
+                                }
+                            }
+                        /*
+
+                        if(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
+                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            {
+                                if(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
+                                {
+                                    std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
+                                    std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+
+                                    for (int x=0; x < quads1.size(); x++)
+                                        for (int y=0; y < quads2.size(); y++)
+                                            if (quads1[x] == quads2[y])
+                                            {
+                                                flagNormal2 = true;
+                                                m_tris.push_back(vertexMap.at(quad[3]));
+                                                m_tris.push_back(vertexMap.at(quad[0]));
+                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+
+                                                m_tris.push_back(vertexMap.at(quad[2]));
+                                                m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
+                                                m_tris.push_back(vertexMap.at(quad[1]));
+
+
+                                                break;
+                                            }
+                                }
+                            }*/
+                    }
+
+
+                    if (flagNormal1)
+                    {
+                        m_quads.push_back(vertexMap.at(quad[0]));
+                        m_quads.push_back(vertexMap.at(quad[1]));
+                        m_quads.push_back(vertexMap.at(quad[2]));
+                        m_quads.push_back(vertexMap.at(quad[3]));
+                    }
+                    else
+                    {
+
+
+                        m_quads.push_back(vertexMap.at(quad[1]));
+                        m_quads.push_back(vertexMap.at(quad[0]));
+                        m_quads.push_back(vertexMap.at(quad[3]));
+                        m_quads.push_back(vertexMap.at(quad[2]));
+                    }
+
+                    flagNormal1 = false;
+                    flagNormal2 = false;
+
+                }
+
+
+            }
+
+            flag1 = false;
+            flag2 = false;
+            flag3 = false;
+            flag4 = false;
+
+        }
+    }
+
+
 
     std::vector<double> subdivide(std::vector<std::vector<Pointd>> polyhedra, double length, std::vector<int> &hexes){
         std::vector<double> coords;

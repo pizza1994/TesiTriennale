@@ -12,18 +12,23 @@ DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, Dr
     Grid::cleanGrid(t, p);
     Grid::createBox();
 
+    char* home = getenv("HOME");
+    char homeToStrcat[100];
+    strcpy(homeToStrcat, home);
     std::vector<int> empty;
     mesh<double> mymesh = mesh<double>(finalBoxes, Grid::getLength());
-    save_mesh("/Users/lucapitzalis/volumetric.mesh", mymesh.coords(), mymesh.hexes(), 1 );
+    save_mesh((strcat(homeToStrcat,"/volumetric.mesh")), mymesh.coords(), mymesh.hexes(), 1 );
     //mymesh.construct_surface();
-
     mesh<double> mymeshSurface = mymesh.get_surface();
     mymeshSurface.cleanCoords();
-    save_quadmesh("/Users/lucapitzalis/quadmesh.obj", mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
 
+
+    strcpy(homeToStrcat, home);
+    save_quadmesh((strcat(homeToStrcat,"/quadmesh.obj")), mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
 
     mymeshSurface.smoothNinetyDegreesAngles(Grid::getLength(), p);
-    save_quadmesh("/Users/lucapitzalis/quadmeshSmooth.obj", mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
+    strcpy(homeToStrcat, home);
+    save_quadmesh((strcat(homeToStrcat,"/quadmeshSmooth.obj")), mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
 
 }
 
