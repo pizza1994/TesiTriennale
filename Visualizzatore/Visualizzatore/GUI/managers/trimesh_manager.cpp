@@ -6,10 +6,11 @@
 #include "trimesh_manager.h"
 #include "ui_trimesh_manager.h"
 #include "GUI/mainwindow.h"
-#include "lib/common/importobj.h"
 #include <QFileDialog>
 #include <QColorDialog>
 #include <iostream>
+#include "lib/common/importobj.h"
+
 
 TrimeshManager::TrimeshManager(QWidget *parent) : QDockWidget(parent), ui(new Ui::Trimesh_manager)
 {
