@@ -20,7 +20,7 @@ private:
     std::vector<int>                m_quads;
     std::vector<int>                m_tets;
     std::vector<int>                m_hexes;
-
+    std::vector<std::vector<Pointd>> quads_used;
 	std::vector<int>				m_anchors;
     
     std::vector< bool >             m_vtx_on_surface;
@@ -114,9 +114,9 @@ public:
 
     void smoothNinetyDegreesAngles(double length, Polyhedron &poly){
 
-        smoothAxis1(length, poly);
-        smoothAxis2(length, poly);
-        smoothAxis3(length, poly);
+        //smoothAxis1(length, poly);
+        //smoothAxis2(length, poly);
+        //smoothAxis3(length, poly);
         smoothAxis4(length, poly);
 
     }
@@ -125,6 +125,7 @@ public:
         std::map<Pointd, int> vertexMap;
         int i, j, p=0, p1=0;
         std::vector<Pointd> quad;
+        std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
         std::list<Triangle> triangles;
 
@@ -238,15 +239,28 @@ public:
                         m_quads.push_back(vertexMap.at(quad[3]));
                         m_quads.push_back(vertexMap.at(quad[0]));
                         m_quads.push_back(vertexMap.at(quad[1]));
+
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[3]);
+                        temp.push_back(quad[0]);
+                        temp.push_back(quad[1]);
+                        quads_used_here.push_back(temp);
                     }
-                    else
+                    else if (flagNormal2)
                     {
-
-
                         m_quads.push_back(vertexMap.at(quad[3]));
                         m_quads.push_back(vertexMap.at(quad[2]));
                         m_quads.push_back(vertexMap.at(quad[1]));
                         m_quads.push_back(vertexMap.at(quad[0]));
+
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[3]);
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[1]);
+                        temp.push_back(quad[0]);
+                        quads_used_here.push_back(temp);
+
                     }
 
                     flagNormal1 = false;
@@ -263,12 +277,16 @@ public:
             flag4 = false;
 
         }
+        for (std::vector<Pointd> quad_used : quads_used_here)
+            quads_used.push_back(quad_used);
+
     }
 
     void smoothAxis2(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
         int i, j, p=0, p1=0;
         std::vector<Pointd> quad;
+        std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
         std::list<Triangle> triangles;
 
@@ -292,10 +310,28 @@ public:
 
         for(int i = 0; i < coords().size()/3; i++, p+=3)
         {
+            bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]-length);
             quad[1] = Pointd(coords()[p]-length, coords()[p+1]-length, coords()[p+2]-length);
             quad[2] = Pointd(coords()[p]-length, coords()[p+1], coords()[p+2]);
             quad[3] = Pointd(coords()[p], coords()[p+1], coords()[p+2]);
+
+            for (std::vector<Pointd> quad_already_used : quads_used){
+                int intersections = 0;
+                if (quad[0] == quad_already_used[0] || quad[0] == quad_already_used[1] || quad[0] == quad_already_used[2] || quad[0] == quad_already_used[3])
+                    intersections++;
+                if (quad[1] == quad_already_used[0] || quad[1] == quad_already_used[1] || quad[1] == quad_already_used[2] || quad[1] == quad_already_used[3])
+                    intersections++;
+                if (quad[2] == quad_already_used[0] || quad[2] == quad_already_used[1] || quad[2] == quad_already_used[2] || quad[2] == quad_already_used[3])
+                    intersections++;
+                if (quad[3] == quad_already_used[0] || quad[3] == quad_already_used[1] || quad[3] == quad_already_used[2] || quad[3] == quad_already_used[3])
+                    intersections++;
+                if (intersections > 1)
+                {
+                    flag_quad_intersection = true;
+                    break;
+                }
+            }
 
             for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
             {
@@ -310,7 +346,7 @@ public:
             }
 
 
-            if (flag1 && flag2 && flag3 && flag4)
+            if (flag1 && flag2 && flag3 && flag4 && !flag_quad_intersection)
             {
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
@@ -383,15 +419,28 @@ public:
                         m_quads.push_back(vertexMap.at(quad[1]));
                         m_quads.push_back(vertexMap.at(quad[2]));
                         m_quads.push_back(vertexMap.at(quad[3]));
+
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[0]);
+                        temp.push_back(quad[1]);
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[3]);
+                        quads_used_here.push_back(temp);
+
                     }
-                    else
+                    else if (flagNormal2)
                     {
-
-
                         m_quads.push_back(vertexMap.at(quad[1]));
                         m_quads.push_back(vertexMap.at(quad[0]));
                         m_quads.push_back(vertexMap.at(quad[3]));
                         m_quads.push_back(vertexMap.at(quad[2]));
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[0]);
+                        temp.push_back(quad[1]);
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[3]);
+                        quads_used_here.push_back(temp);
+
                     }
 
                     flagNormal1 = false;
@@ -408,12 +457,17 @@ public:
             flag4 = false;
 
         }
+
+        for (std::vector<Pointd> quad_used : quads_used_here)
+            quads_used.push_back(quad_used);
+
     }
 
     void smoothAxis3(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
         int i, j, p=0, p1=0;
         std::vector<Pointd> quad;
+        std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
         std::list<Triangle> triangles;
 
@@ -437,10 +491,30 @@ public:
 
         for(int i = 0; i < coords().size()/3; i++, p+=3)
         {
+            bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]);
             quad[1] = Pointd(coords()[p]+length, coords()[p+1]-length, coords()[p+2]+length);
             quad[2] = Pointd(coords()[p]+length, coords()[p+1], coords()[p+2]+length);
             quad[3] = Pointd(coords()[p], coords()[p+1], coords()[p+2]);
+
+
+            for (std::vector<Pointd> quad_already_used : quads_used){
+                int intersections = 0;
+                if (quad[0] == quad_already_used[0] || quad[0] == quad_already_used[1] || quad[0] == quad_already_used[2] || quad[0] == quad_already_used[3])
+                    intersections++;
+                if (quad[1] == quad_already_used[0] || quad[1] == quad_already_used[1] || quad[1] == quad_already_used[2] || quad[1] == quad_already_used[3])
+                    intersections++;
+                if (quad[2] == quad_already_used[0] || quad[2] == quad_already_used[1] || quad[2] == quad_already_used[2] || quad[2] == quad_already_used[3])
+                    intersections++;
+                if (quad[3] == quad_already_used[0] || quad[3] == quad_already_used[1] || quad[3] == quad_already_used[2] || quad[3] == quad_already_used[3])
+                    intersections++;
+                if (intersections > 1)
+                {
+                    flag_quad_intersection = true;
+                    break;
+                }
+            }
+
 
             for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
             {
@@ -455,7 +529,8 @@ public:
             }
 
 
-            if (flag1 && flag2 && flag3 && flag4)
+
+            if (flag1 && flag2 && flag3 && flag4 && !flag_quad_intersection)
             {
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
@@ -530,8 +605,15 @@ public:
                         m_quads.push_back(vertexMap.at(quad[1]));
                         m_quads.push_back(vertexMap.at(quad[2]));
                         m_quads.push_back(vertexMap.at(quad[3]));
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[0]);
+                        temp.push_back(quad[1]);
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[3]);
+                        quads_used_here.push_back(temp);
+
                     }
-                    else
+                    else if (flagNormal2)
                     {
 
 
@@ -539,6 +621,13 @@ public:
                         m_quads.push_back(vertexMap.at(quad[0]));
                         m_quads.push_back(vertexMap.at(quad[3]));
                         m_quads.push_back(vertexMap.at(quad[2]));
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[0]);
+                        temp.push_back(quad[1]);
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[3]);
+                        quads_used_here.push_back(temp);
+
 
                     }
 
@@ -556,12 +645,17 @@ public:
             flag4 = false;
 
         }
+
+        for (std::vector<Pointd> quad_used : quads_used_here)
+            quads_used.push_back(quad_used);
+
     }
 
     void smoothAxis4(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
         int i, j, p=0, p1=0;
         std::vector<Pointd> quad;
+        std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
         std::list<Triangle> triangles;
 
@@ -585,10 +679,30 @@ public:
 
         for(int i = 0; i < coords().size()/3; i++, p+=3)
         {
+            bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]);
             quad[1] = Pointd(coords()[p]+length, coords()[p+1]-length, coords()[p+2]-length);
             quad[2] = Pointd(coords()[p]+length, coords()[p+1], coords()[p+2]-length);
             quad[3] = Pointd(coords()[p], coords()[p+1], coords()[p+2]);
+
+
+            for (std::vector<Pointd> quad_already_used : quads_used){
+                int intersections = 0;
+                if (quad[0] == quad_already_used[0] || quad[0] == quad_already_used[1] || quad[0] == quad_already_used[2] || quad[0] == quad_already_used[3])
+                    intersections++;
+                if (quad[1] == quad_already_used[0] || quad[1] == quad_already_used[1] || quad[1] == quad_already_used[2] || quad[1] == quad_already_used[3])
+                    intersections++;
+                if (quad[2] == quad_already_used[0] || quad[2] == quad_already_used[1] || quad[2] == quad_already_used[2] || quad[2] == quad_already_used[3])
+                    intersections++;
+                if (quad[3] == quad_already_used[0] || quad[3] == quad_already_used[1] || quad[3] == quad_already_used[2] || quad[3] == quad_already_used[3])
+                    intersections++;
+                if (intersections > 1)
+                {
+                    flag_quad_intersection = true;
+                    break;
+                }
+            }
+
 
             for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
             {
@@ -603,7 +717,7 @@ public:
             }
 
 
-            if (flag1 && flag2 && flag3 && flag4)
+            if (flag1 && flag2 && flag3 && flag4 && !flag_quad_intersection)
             {
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
@@ -677,8 +791,15 @@ public:
                         m_quads.push_back(vertexMap.at(quad[0]));
                         m_quads.push_back(vertexMap.at(quad[3]));
                         m_quads.push_back(vertexMap.at(quad[2]));
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[0]);
+                        temp.push_back(quad[1]);
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[3]);
+                        quads_used_here.push_back(temp);
+
                     }
-                    else
+                    else if (flagNormal2)
                     {
 
 
@@ -686,6 +807,13 @@ public:
                         m_quads.push_back(vertexMap.at(quad[1]));
                         m_quads.push_back(vertexMap.at(quad[2]));
                         m_quads.push_back(vertexMap.at(quad[3]));
+                        std::vector<Pointd> temp;
+                        temp.push_back(quad[0]);
+                        temp.push_back(quad[1]);
+                        temp.push_back(quad[2]);
+                        temp.push_back(quad[3]);
+                        quads_used_here.push_back(temp);
+
 
 
                     }
@@ -704,6 +832,9 @@ public:
             flag4 = false;
 
         }
+        for (std::vector<Pointd> quad_used : quads_used_here)
+            quads_used.push_back(quad_used);
+
     }
 
     std::vector<double> subdivide(std::vector<std::vector<Pointd>> polyhedra, double length, std::vector<int> &hexes){
