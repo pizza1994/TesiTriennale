@@ -114,10 +114,13 @@ public:
 
     void smoothNinetyDegreesAngles(double length, Polyhedron &poly){
 
-        //smoothAxis1(length, poly);
-        //smoothAxis2(length, poly);
-        //smoothAxis3(length, poly);
+        smoothAxis1(length, poly);
+        smoothAxis2(length, poly);
+        smoothAxis3(length, poly);
         smoothAxis4(length, poly);
+
+
+
 
     }
 
@@ -184,10 +187,18 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal1 = true;
 
@@ -212,10 +223,18 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal2 = true;
                                                 m_tris.push_back(vertexMap.at(quad[3]));
@@ -363,10 +382,18 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal1 = true;
 
@@ -391,10 +418,18 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal2 = true;
                                                 m_tris.push_back(vertexMap.at(quad[3]));
@@ -547,10 +582,18 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length)));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal1 = true;
 
@@ -576,10 +619,18 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal2 = true;
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())));
@@ -734,10 +785,18 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal1 = true;
 
@@ -762,10 +821,17 @@ public:
                                 {
                                     std::vector<int> quads1 = adjacent_quads(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())));
                                     std::vector<int> quads2 = adjacent_quads(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
+                                    std::vector<int> shared_quads;
+                                    for(int qd : quads1){
+                                        for(int qd2 : quads2){
+                                            if(qd==qd2)
+                                                shared_quads.push_back(qd);
+                                        }
+                                    }
 
-                                    for (int x=0; x < quads1.size(); x++)
-                                        for (int y=0; y < quads2.size(); y++)
-                                            if (quads1[x] == quads2[y])
+                                    for (int x=0; x < shared_quads.size(); x++)
+                                        for (int y=0; y < shared_quads.size(); y++)
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
                                             {
                                                 flagNormal2 = true;
 
@@ -834,6 +900,32 @@ public:
         }
         for (std::vector<Pointd> quad_used : quads_used_here)
             quads_used.push_back(quad_used);
+
+    }
+
+    bool checkOrthoNormals(int quad1, int quad2){
+
+        std::vector<Pointd> first;
+        first.push_back(Pointd(m_coords[m_quads[quad1*4]*3], m_coords[m_quads[quad1*4]*3+1], m_coords[m_quads[quad1*4]*3+2]));
+        first.push_back(Pointd(m_coords[m_quads[quad1*4+1]*3], m_coords[m_quads[quad1*4+1]*3+1], m_coords[m_quads[quad1*4+1]*3+2]));
+        first.push_back(Pointd(m_coords[m_quads[quad1*4+2]*3], m_coords[m_quads[quad1*4+2]*3+1], m_coords[m_quads[quad1*4+2]*3+2]));
+        first.push_back(Pointd(m_coords[m_quads[quad1*4+3]*3], m_coords[m_quads[quad1*4+3]*3+1], m_coords[m_quads[quad1*4+3]*3+2]));
+
+
+
+        std::vector<Pointd> second;
+        second.push_back(Pointd(m_coords[m_quads[quad2*4]*3], m_coords[m_quads[quad2*4]*3+1], m_coords[m_quads[quad2*4]*3+2]));
+        second.push_back(Pointd(m_coords[m_quads[quad2*4+1]*3], m_coords[m_quads[quad2*4+1]*3+1], m_coords[m_quads[quad2*4+1]*3+2]));
+        second.push_back(Pointd(m_coords[m_quads[quad2*4+2]*3], m_coords[m_quads[quad2*4+2]*3+1], m_coords[m_quads[quad2*4+2]*3+2]));
+        second.push_back(Pointd(m_coords[m_quads[quad2*4+3]*3], m_coords[m_quads[quad2*4+3]*3+1], m_coords[m_quads[quad2*4+3]*3+2]));
+
+        Pointd normal1 = (first[1] - first[0]).cross((first[3]-first[0]));
+        Pointd normal2 = (second[1] - second[0]).cross((second[3]-second[0]));
+        normal1.normalize();
+        normal2.normalize();
+        //qDebug()<<normal1.dot(normal2);
+        return normal1.dot(normal2) == 0;
+        //return true;
 
     }
 
