@@ -114,9 +114,9 @@ public:
 
     void smoothNinetyDegreesAngles(double length, Polyhedron &poly){
 
-        smoothAxis1(length, poly);
-        smoothAxis2(length, poly);
-        smoothAxis3(length, poly);
+        //smoothAxis1(length, poly);
+        //smoothAxis2(length, poly);
+        //smoothAxis3(length, poly);
         smoothAxis4(length, poly);
 
 
@@ -796,7 +796,9 @@ public:
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                         for (int y=0; y < shared_quads.size(); y++)
-                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
+                                                    && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)), vertexMap.at(quad[0])) &&
+                                                    checkQuadExists(vertexMap.at(quad[1]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)), vertexMap.at(quad[2])))
                                             {
                                                 flagNormal1 = true;
 
@@ -831,7 +833,9 @@ public:
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                         for (int y=0; y < shared_quads.size(); y++)
-                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]))
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y]) &&
+                                                    checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[0])) &&
+                                                    checkQuadExists(vertexMap.at(quad[1]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[2])))
                                             {
                                                 flagNormal2 = true;
 
@@ -903,6 +907,23 @@ public:
 
     }
 
+
+    bool checkQuadExists (int a, int b, int c, int d)
+    {
+
+        for (int i=0, p=0; i<quads().size()/4; i++, p+=4)
+        {
+            if (quads()[p] == a || quads()[p] == b || quads()[p] == c || quads()[p] == d)
+                if (quads()[p+1] == a || quads()[p+1] == b || quads()[p+1] == c || quads()[p+1] == d)
+                    if (quads()[p+2] == a || quads()[p+2] == b || quads()[p+2] == c || quads()[p+2] == d)
+                        if (quads()[p+3] == a || quads()[p+3] == b || quads()[p+3] == c || quads()[p+3] == d)
+                            return true;
+
+        }
+
+        return false;
+    }
+
     bool checkOrthoNormals(int quad1, int quad2){
 
         std::vector<Pointd> first;
@@ -927,6 +948,56 @@ public:
         return normal1.dot(normal2) == 0;
         //return true;
 
+    }
+
+    bool checkSameVerseNormals(int quad1, int quad2){
+
+        std::vector<Pointd> first;
+        first.push_back(Pointd(m_coords[m_quads[quad1*4]*3], m_coords[m_quads[quad1*4]*3+1], m_coords[m_quads[quad1*4]*3+2]));
+        first.push_back(Pointd(m_coords[m_quads[quad1*4+1]*3], m_coords[m_quads[quad1*4+1]*3+1], m_coords[m_quads[quad1*4+1]*3+2]));
+        first.push_back(Pointd(m_coords[m_quads[quad1*4+2]*3], m_coords[m_quads[quad1*4+2]*3+1], m_coords[m_quads[quad1*4+2]*3+2]));
+        first.push_back(Pointd(m_coords[m_quads[quad1*4+3]*3], m_coords[m_quads[quad1*4+3]*3+1], m_coords[m_quads[quad1*4+3]*3+2]));
+
+        std::vector<Pointd> second;
+        second.push_back(Pointd(m_coords[m_quads[quad2*4]*3], m_coords[m_quads[quad2*4]*3+1], m_coords[m_quads[quad2*4]*3+2]));
+        second.push_back(Pointd(m_coords[m_quads[quad2*4+1]*3], m_coords[m_quads[quad2*4+1]*3+1], m_coords[m_quads[quad2*4+1]*3+2]));
+        second.push_back(Pointd(m_coords[m_quads[quad2*4+2]*3], m_coords[m_quads[quad2*4+2]*3+1], m_coords[m_quads[quad2*4+2]*3+2]));
+        second.push_back(Pointd(m_coords[m_quads[quad2*4+3]*3], m_coords[m_quads[quad2*4+3]*3+1], m_coords[m_quads[quad2*4+3]*3+2]));
+
+        Pointd normal1 = (first[1] - first[0]).cross((first[3]-first[0]));
+        Pointd normal2 = (second[1] - second[0]).cross((second[3]-second[0]));
+
+
+        std::vector<Pointd> sharedVertices;
+
+        std::vector<int> indicesFound;
+
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+            {
+                if (first[i] == second[j])
+                {
+                    sharedVertices.push_back(first[i]);
+                    indicesFound.push_back(i);
+                }
+            }
+
+        if (indicesFound[0] == 0 && indicesFound[1] == 3)
+        {
+            Pointd temp;
+            temp = sharedVertices[0];
+            sharedVertices[0] = sharedVertices[1];
+            sharedVertices[1] = temp;
+        }
+
+        // sharedVertices[0] poi sharedVertices[1] nel primo quad
+        // viceversa
+
+        Pointd crossNormal = normal1.cross(normal2);
+
+        Pointd diffVertices = sharedVertices[0] - sharedVertices[1];
+
+        return crossNormal.dot(diffVertices) < 0;
     }
 
     std::vector<double> subdivide(std::vector<std::vector<Pointd>> polyhedra, double length, std::vector<int> &hexes){
