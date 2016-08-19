@@ -22,6 +22,7 @@ private:
     std::vector<int>                m_hexes;
     std::vector<std::vector<Pointd>> quads_used;
 	std::vector<int>				m_anchors;
+    std::vector<int>                m_quads_to_delete;
     
     std::vector< bool >             m_vtx_on_surface;
     std::vector< std::vector<int> > m_vtx2tri;
@@ -120,8 +121,7 @@ public:
         smoothAxis4(length, poly);
         smoothAxis5(length, poly);
         smoothAxis6(length, poly);
-
-
+        cleanQuads();
 
     }
 
@@ -198,7 +198,9 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
+                                        {
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
                                                     checkQuadExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[3])))
@@ -213,8 +215,14 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[2]));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
+
                                                 break;
                                             }
+                                        }
+                                    if (flagNormal1) break;
+                                    }
                                 }
                             }
 
@@ -236,6 +244,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
@@ -250,9 +259,14 @@ public:
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
+
+                                        if (flagNormal2) break;
+                                    }
                                 }
                             }
                     }
@@ -397,6 +411,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
@@ -412,8 +427,13 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[2]));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
+
                                                 break;
                                             }
+                                        if(flagNormal1) break;
+                                    }
                                 }
                             }
 
@@ -435,6 +455,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
@@ -449,13 +470,16 @@ public:
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
+                                        if(flagNormal2) break;
+                                    }
                                 }
                             }
-                    }
-
+                        }
 
                     if (flagNormal1)
                     {
@@ -601,6 +625,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)), vertexMap.at(quad[0])) &&
@@ -616,9 +641,13 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[0]));
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)));
 
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
+                                        if(flagNormal1) break;
+                                    }
                                 }
                             }
 
@@ -641,6 +670,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[0])) &&
@@ -655,12 +685,15 @@ public:
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
                                                 m_tris.push_back(vertexMap.at(quad[0]));
 
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
+                                        if(flagNormal2) break;
+                                    }
                                 }
                             }
-
                     }
 
 
@@ -809,6 +842,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)), vertexMap.at(quad[0])) &&
@@ -824,11 +858,15 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[0]));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
+
                                                 break;
                                             }
+                                        if(flagNormal1) break;
+                                    }
                                 }
                             }
-
 
                         if(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                             for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
@@ -846,6 +884,7 @@ public:
                                     }
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y]) &&
                                                     checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[0])) &&
@@ -860,12 +899,15 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[1]));
                                                 m_tris.push_back(vertexMap.at(quad[0]));
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
+                                        if(flagNormal2) break;
+                                    }
                                 }
                             }
-
                     }
 
 
@@ -1014,6 +1056,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
@@ -1029,8 +1072,13 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[2]));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                //m_quads_to_delete.push_back(shared_quads[x]);
+                                                //m_quads_to_delete.push_back(shared_quads[y]);
+
                                                 break;
                                             }
+                                        if(flagNormal1) break;
+                                    }
                                 }
                             }
 
@@ -1052,6 +1100,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
@@ -1065,10 +1114,13 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[2]));
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
-
+                                                //m_quads_to_delete.push_back(shared_quads[x]);
+                                                //m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
+                                        if(flagNormal2) break;
+                                    }
                                 }
                             }
                     }
@@ -1213,6 +1265,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
@@ -1228,8 +1281,13 @@ public:
                                                 m_tris.push_back(vertexMap.at(quad[2]));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                //m_quads_to_delete.push_back(shared_quads[x]);
+                                                //m_quads_to_delete.push_back(shared_quads[y]);
+
                                                 break;
                                             }
+                                        if(flagNormal1) break;
+                                    }
                                 }
                             }
 
@@ -1251,6 +1309,7 @@ public:
 
 
                                     for (int x=0; x < shared_quads.size(); x++)
+                                    {
                                         for (int y=0; y < shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
@@ -1265,9 +1324,13 @@ public:
                                                 m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
                                                 m_tris.push_back(vertexMap.at(quad[1]));
 
+                                                //m_quads_to_delete.push_back(shared_quads[x]);
+                                                //m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
+                                        if(flagNormal2) break;
+                                    }
                                 }
                             }
                     }
@@ -1322,6 +1385,8 @@ public:
             quads_used.push_back(quad_used);
 
     }
+
+
 
     bool checkQuadExists (int a, int b, int c, int d)
     {
@@ -1414,6 +1479,19 @@ public:
 
         return crossNormal.dot(diffVertices) < 0;
     }
+
+
+
+    void cleanQuads(){
+
+        std::sort(m_quads_to_delete.begin(), m_quads_to_delete.end(), std::greater<int>());
+
+        for (int i : m_quads_to_delete)
+        {
+            //m_quads.erase(m_quads.begin()+(i*4), m_quads.begin()+(i*4)+4);
+        }
+    }
+
 
     std::vector<double> subdivide(std::vector<std::vector<Pointd>> polyhedra, double length, std::vector<int> &hexes){
         std::vector<double> coords;
