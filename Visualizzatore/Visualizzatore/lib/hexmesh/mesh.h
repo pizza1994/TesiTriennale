@@ -23,7 +23,8 @@ private:
     std::vector<std::vector<Pointd>> quads_used;
 	std::vector<int>				m_anchors;
     std::vector<int>                m_quads_to_delete;
-    
+    std::vector<int>                m_tris_to_delete;
+
     std::vector< bool >             m_vtx_on_surface;
     std::vector< std::vector<int> > m_vtx2tri;
     std::vector< std::vector<int> > m_vtx2quad;
@@ -122,7 +123,7 @@ public:
         smoothAxis5(length, poly);
         smoothAxis6(length, poly);
         cleanQuads();
-
+        cleanTris();
     }
 
     void smoothAxis1(double length, Polyhedron &poly){
@@ -173,7 +174,7 @@ public:
 
             if (flag1 && flag2 && flag3 && flag4)
             {
-                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
+                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
                     for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
@@ -196,6 +197,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -206,14 +208,28 @@ public:
                                                     checkQuadExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[3])))
                                             {
                                                 flagNormal1 = true;
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(quad[0]), vertexMap.at(quad[3]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[2]), vertexMap.at(quad[1]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
@@ -242,6 +258,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -250,15 +267,27 @@ public:
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
                                             {
+                                                int indexToDelete;
                                                 flagNormal2 = true;
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
 
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
-
+                                                if(!checkIfTriangleExists( vertexMap.at(quad[3]), vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+                                                }
+                                                else{
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+                                                if(!checkIfTriangleExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())) , vertexMap.at(quad[1]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else{
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
 
@@ -386,7 +415,7 @@ public:
 
             if (flag1 && flag2 && flag3 && flag4 && !flag_quad_intersection)
             {
-                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
+                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
                     for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
@@ -409,6 +438,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -419,13 +449,31 @@ public:
                                             {
                                                 flagNormal1 = true;
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(quad[3]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
+
 
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
@@ -453,6 +501,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -462,13 +511,31 @@ public:
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
                                             {
                                                 flagNormal2 = true;
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
 
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(quad[3]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
 
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
@@ -600,7 +667,7 @@ public:
 
             if (flag1 && flag2 && flag3 && flag4 && !flag_quad_intersection)
             {
-                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
+                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
                     for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
@@ -623,6 +690,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -633,13 +701,29 @@ public:
                                             {
                                                 flagNormal1 = true;
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length)));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length)), vertexMap.at(quad[3]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length)));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                m_tris.push_back(vertexMap.at(quad[1]));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)));
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)), vertexMap.at(quad[1]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
 
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
@@ -668,6 +752,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -677,13 +762,29 @@ public:
                                                     checkQuadExists(vertexMap.at(quad[1]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[2])))
                                             {
                                                 flagNormal2 = true;
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
 
-                                                m_tris.push_back(vertexMap.at(quad[1]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(quad[3]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[1]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
@@ -817,7 +918,7 @@ public:
 
             if (flag1 && flag2 && flag3 && flag4 && !flag_quad_intersection)
             {
-                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
+                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
                     for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
@@ -840,6 +941,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -850,13 +952,29 @@ public:
                                             {
                                                 flagNormal1 = true;
 
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)), vertexMap.at(quad[3]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)), vertexMap.at(quad[1]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
 
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
@@ -883,6 +1001,8 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
+
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
                                         for (int y=0; y < shared_quads.size(); y++)
@@ -892,13 +1012,29 @@ public:
                                             {
                                                 flagNormal2 = true;
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(quad[3]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                m_tris.push_back(vertexMap.at(quad[1]));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[1]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
                                                 m_quads_to_delete.push_back(shared_quads[x]);
                                                 m_quads_to_delete.push_back(shared_quads[y]);
 
@@ -1031,7 +1167,7 @@ public:
 
             if (flag1 && flag2 && flag3 && flag4  && !flag_quad_intersection)
             {
-                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
+                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
                     for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
@@ -1054,6 +1190,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -1062,18 +1199,34 @@ public:
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
                                                     checkQuadExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[3])))
                                             {
+
                                                 flagNormal1 = true;
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(quad[0]), vertexMap.at(quad[3]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[2]), vertexMap.at(quad[1]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
 
-                                                //m_quads_to_delete.push_back(shared_quads[x]);
-                                                //m_quads_to_delete.push_back(shared_quads[y]);
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
@@ -1099,23 +1252,40 @@ public:
                                     }
 
 
+                                    cleanSharedQuads(quad, shared_quads);
+
+
+
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
                                         for (int y=0; y < shared_quads.size(); y++)
-                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
+                                            if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
                                             {
+                                                int indexToDelete;
                                                 flagNormal2 = true;
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
 
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
-                                                //m_quads_to_delete.push_back(shared_quads[x]);
-                                                //m_quads_to_delete.push_back(shared_quads[y]);
+                                                if(!checkIfTriangleExists( vertexMap.at(quad[3]), vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+                                                }
+                                                else{
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+                                                if(!checkIfTriangleExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())) , vertexMap.at(quad[1]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else{
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
@@ -1240,7 +1410,7 @@ public:
 
             if (flag1 && flag2 && flag3 && flag4 && !flag_quad_intersection)
             {
-                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) ||
+                if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
                     for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
@@ -1263,6 +1433,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -1273,16 +1444,33 @@ public:
                                             {
                                                 flagNormal1 = true;
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(quad[3]));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(quad[3]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
 
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                //m_quads_to_delete.push_back(shared_quads[x]);
-                                                //m_quads_to_delete.push_back(shared_quads[y]);
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
+
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
@@ -1307,6 +1495,7 @@ public:
                                         }
                                     }
 
+                                    cleanSharedQuads(quad, shared_quads);
 
                                     for (int x=0; x < shared_quads.size(); x++)
                                     {
@@ -1316,16 +1505,34 @@ public:
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
                                             {
                                                 flagNormal2 = true;
-                                                m_tris.push_back(vertexMap.at(quad[3]));
-                                                m_tris.push_back(vertexMap.at(quad[0]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
 
-                                                m_tris.push_back(vertexMap.at(quad[2]));
-                                                m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
-                                                m_tris.push_back(vertexMap.at(quad[1]));
+                                                int indexToDelete;
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(quad[3]), vertexMap.at(quad[0]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[3]));
+                                                    m_tris.push_back(vertexMap.at(quad[0]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
 
-                                                //m_quads_to_delete.push_back(shared_quads[x]);
-                                                //m_quads_to_delete.push_back(shared_quads[y]);
+                                                if (!checkIfTriangleExists(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1]), vertexMap.at(quad[2]), indexToDelete))
+                                                {
+                                                    m_tris.push_back(vertexMap.at(quad[2]));
+                                                    m_tris.push_back(vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())));
+                                                    m_tris.push_back(vertexMap.at(quad[1]));
+                                                }
+                                                else
+                                                {
+                                                    m_tris_to_delete.push_back(indexToDelete);
+                                                }
+
+
+
+                                                m_quads_to_delete.push_back(shared_quads[x]);
+                                                m_quads_to_delete.push_back(shared_quads[y]);
 
                                                 break;
                                             }
@@ -1387,6 +1594,23 @@ public:
     }
 
 
+
+    bool checkIfTriangleExists(int a, int b, int c, int &index)
+    {
+
+        for (int i=0, p=0; i<tris().size()/3; i++, p+=3)
+        {
+            if (tris()[p] == a || tris()[p] == b || tris()[p] == c)
+                if (tris()[p+1] == a || tris()[p+1] == b || tris()[p+1] == c)
+                    if (tris()[p+2] == a || tris()[p+2] == b || tris()[p+2] == c)
+                    {
+                        index = i;
+                        return true;
+                    }
+        }
+
+        return false;
+    }
 
     bool checkQuadExists (int a, int b, int c, int d)
     {
@@ -1481,6 +1705,38 @@ public:
     }
 
 
+    void cleanSharedQuads(std::vector<Pointd> quadWedge, std::vector<int> &sharedQuads){
+
+        std::vector<int> indicesToDelete;
+
+        for (int i=0 ; i<sharedQuads.size(); i++)
+        {
+            int counter = 0;
+            for (int j=0; j<4; j++) if (quadWedge[j] == (Pointd(m_coords[m_quads[sharedQuads[i]*4]*3], m_coords[m_quads[sharedQuads[i]*4]*3+1], m_coords[m_quads[sharedQuads[i]*4]*3+2]))) counter++;
+            for (int j=0; j<4; j++) if (quadWedge[j] == (Pointd(m_coords[m_quads[sharedQuads[i]*4+1]*3], m_coords[m_quads[sharedQuads[i]*4+1]*3+1], m_coords[m_quads[sharedQuads[i]*4+1]*3+2]))) counter++;
+            for (int j=0; j<4; j++) if (quadWedge[j] == (Pointd(m_coords[m_quads[sharedQuads[i]*4+2]*3], m_coords[m_quads[sharedQuads[i]*4+2]*3+1], m_coords[m_quads[sharedQuads[i]*4+2]*3+2]))) counter++;
+            for (int j=0; j<4; j++) if (quadWedge[j] == (Pointd(m_coords[m_quads[sharedQuads[i]*4+3]*3], m_coords[m_quads[sharedQuads[i]*4+3]*3+1], m_coords[m_quads[sharedQuads[i]*4+3]*3+2]))) counter++;
+
+            if (counter==0) indicesToDelete.push_back(i);
+        }
+
+        std::sort(indicesToDelete.begin(), indicesToDelete.end(), std::greater<int>());
+
+        for (int i : indicesToDelete)
+            sharedQuads.erase(sharedQuads.begin()+(i));
+
+    }
+
+    void cleanTris(){
+
+        std::sort(m_tris_to_delete.begin(), m_tris_to_delete.end(), std::greater<int>());
+
+        for (int i : m_tris_to_delete)
+        {
+            m_tris.erase(m_tris.begin()+(i*3), m_tris.begin()+(i*3)+3);
+        }
+
+    }
 
     void cleanQuads(){
 
@@ -1488,7 +1744,7 @@ public:
 
         for (int i : m_quads_to_delete)
         {
-            //m_quads.erase(m_quads.begin()+(i*4), m_quads.begin()+(i*4)+4);
+            m_quads.erase(m_quads.begin()+(i*4), m_quads.begin()+(i*4)+4);
         }
     }
 
