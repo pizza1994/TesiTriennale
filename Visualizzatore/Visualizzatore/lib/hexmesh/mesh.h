@@ -124,6 +124,7 @@ public:
         smoothAxis6(length, poly);
         cleanQuads();
         cleanTris();
+        cleanTrisOnQuads();
     }
 
     void smoothAxis1(double length, Polyhedron &poly){
@@ -1704,7 +1705,6 @@ public:
         return crossNormal.dot(diffVertices) < 0;
     }
 
-
     void cleanSharedQuads(std::vector<Pointd> quadWedge, std::vector<int> &sharedQuads){
 
         std::vector<int> indicesToDelete;
@@ -1746,6 +1746,66 @@ public:
         {
             m_quads.erase(m_quads.begin()+(i*4), m_quads.begin()+(i*4)+4);
         }
+    }
+
+    static bool comp(const std::pair<int, int>&i, const std::pair<int, int>&j)
+    {
+        return i.second > j.second;
+    }
+
+
+    void cleanTrisOnQuads(){
+
+        std::vector<std::pair<int, int>> indicesTrisQuads;
+
+        for (int i = 0, p = 0; i<m_tris.size()/3; i++, p+=3)
+        {
+            for (int iq = 0, pq = 0; iq<m_quads.size()/4; iq++, pq+=4)
+            {
+                int counter = 0;
+                if (m_tris[p] == m_quads[pq] || m_tris[p] == m_quads[pq+1] || m_tris[p] == m_quads[pq+2] || m_tris[p] == m_quads[pq+3])
+                    counter++;
+                if (m_tris[p+1] == m_quads[pq] || m_tris[p+1] == m_quads[pq+1] || m_tris[p+1] == m_quads[pq+2] || m_tris[p+1] == m_quads[pq+3])
+                    counter++;
+                if (m_tris[p+2] == m_quads[pq] || m_tris[p+2] == m_quads[pq+1] || m_tris[p+2] == m_quads[pq+2] || m_tris[p+2] == m_quads[pq+3])
+                    counter++;
+                if (counter==3)
+                    indicesTrisQuads.push_back(std::pair<int, int>(p,pq));
+            }
+        }
+
+        std::sort(indicesTrisQuads.begin(), indicesTrisQuads.end(), comp);
+
+        for (std::pair<int, int> index : indicesTrisQuads)
+        {
+            int indexVertexToKeep, indexVertexToDelete;
+            for (int i=0; i<4; i++)
+            {
+                if (!(m_quads[index.second+i] == m_tris[index.first] || m_quads[index.second+i] == m_tris[index.first+1] || m_quads[index.second+i] == m_tris[index.first+2] ))
+                    indexVertexToKeep = i;
+            }
+
+
+            if (indexVertexToKeep >= 2)
+                indexVertexToDelete = indexVertexToKeep - 2;
+            else
+                indexVertexToDelete = indexVertexToKeep + 2;
+
+            for (int i=0, p=0; i<4; i++)
+            {
+                if (i != indexVertexToDelete)
+                {
+                    m_tris[index.first+p] = m_quads[index.second+i];
+                    p++;
+                }
+            }
+
+            m_quads.erase(m_quads.begin()+index.second, m_quads.begin()+index.second+4);
+
+        }
+
+
+
     }
 
 
