@@ -11955,11 +11955,11 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 		../Visualizzatore/GUI/mainwindow.h \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../Visualizzatore/lib/common/importobj.h \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/QFileDialog \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/qfiledialog.h \
 		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/QColorDialog \
-		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/qcolordialog.h
+		../../../Qt/5.6/clang_64/lib/QtWidgets.framework/Headers/qcolordialog.h \
+		../Visualizzatore/lib/common/importobj.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o .obj/trimesh_manager.o ../Visualizzatore/GUI/managers/trimesh_manager.cpp
 
 .obj/window_manager.o: ../Visualizzatore/GUI/managers/window_manager.cpp ../Visualizzatore/GUI/managers/window_manager.h \

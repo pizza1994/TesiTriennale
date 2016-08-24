@@ -25,7 +25,7 @@ typedef CGAL::AABB_traits<K, Primitive> Traits;
 typedef CGAL::AABB_tree<Traits> Tree;
 typedef CGAL::Side_of_triangle_mesh<Polyhedron, K> Point_inside;
 
-#define EPSILON 0.00000001
+#define EPSILON 0.000001
 
 #define ONE_ON_SQRT2 0.7071067811865475f
 #define ONE_ON_SQRT3 0.5773502691896258f

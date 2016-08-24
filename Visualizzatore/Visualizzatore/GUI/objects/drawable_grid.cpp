@@ -11,7 +11,6 @@ DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, Dr
 {
     Grid::cleanGrid(t, p);
     Grid::createBox();
-
     char* home = getenv("HOME");
     char homeToStrcat[100];
     strcpy(homeToStrcat, home);
