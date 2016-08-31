@@ -74,7 +74,7 @@ double min3Double(double a, double b, double c){
 
 bool checkPointInVector(Pointd p, std::vector<Pointd> vct)
 {
-    for(int i = 0; i<vct.size(); i++){
+    for(int i = 0; i< (int) vct.size(); i++){
 
 
         if(p.x() == vct[i].x() && p.y() == vct[i].y() && p.z() == vct[i].z()){

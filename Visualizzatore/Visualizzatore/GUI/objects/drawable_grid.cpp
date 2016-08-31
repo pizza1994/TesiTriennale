@@ -38,11 +38,11 @@ void DrawableGrid::draw() const
     GLfloat red[3] = {1,0,0};
 
     if(visibleGrid){
-        for (int i=0; i < grid.size(); i++)
+        for (int i=0; i < (int) grid.size(); i++)
         {
-            for(int j=0; j < grid[i].size(); j++)
+            for(int j=0; j < (int) grid[i].size(); j++)
             {
-                for(int k=0; k < grid[i][j].size(); k++)
+                for(int k=0; k < (int) grid[i][j].size(); k++)
                 {
 
                     for(int z=0; z<8; z++){

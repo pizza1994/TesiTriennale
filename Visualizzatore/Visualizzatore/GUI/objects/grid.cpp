@@ -36,9 +36,10 @@ void Grid::setLength()
     int intLength = length;
     qDebug()<<intLength;
     qDebug()<<length;
-    if(length-intLength > 0){
+    if(length-intLength > 0.4){
         length = intLength + 1;
     }
+    else length = intLength;
     qDebug()<<length;
 
 }
@@ -146,7 +147,6 @@ void Grid::createGrid()
 void Grid::cleanGrid(DrawableTrimesh &t, Polyhedron &poly)
 {
     std::list<Triangle> triangles;
-    int p = 0;
 
     Tree tree(faces(poly).first, faces(poly).second, poly);
 
@@ -297,9 +297,6 @@ void Grid::createBox(){
             }
         }
     }
-
-
-    int counter = 0;
 
 
     do
@@ -582,7 +579,7 @@ void Grid::calculateBox(GridCell* startingCell, GridCell * & finalCell, double &
             tempCellk = startingCell;
 
 
-            for (int x = 0; x < vectorX.size(); x++)
+            for (int x = 0; x < (int) vectorX.size(); x++)
             {
                 tempCelli = tempCellk;
                 for (int y = 0; y < minY+1 ; y++)

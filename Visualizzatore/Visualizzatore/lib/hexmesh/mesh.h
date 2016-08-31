@@ -111,8 +111,57 @@ public:
         std::vector<int> empty3;
         std::vector<int> hexes;
         std::vector<double> coords = subdivide(polyhedra, length, hexes);
+        //deleteNotManifoldHexes(hexes);
         set(coords, empty1, empty2, empty3, hexes);
     }
+
+    /*void deleteNotManifoldHexes(std::vector<int> &hexes){
+
+        std::vector<int> hexesToDelete;
+
+        for(int i = 0, p = 0; i < (int) hexes.size()/8; i++, p+=8){
+            for(int j = 0, p1=0; j < (int) hexes.size()/8; j++, p1+=8){
+                int counter = 0;
+                if(i!=j){
+
+                    if(hexes[p] == hexes[p1] || hexes[p] == hexes[p1+1] || hexes[p] == hexes[p1+2] || hexes[p] == hexes[p1+3] || hexes[p] == hexes[p1+4] || hexes[p] == hexes[p1+5] || hexes[p] == hexes[p1+6] || hexes[p] == hexes[p1+7])
+                        counter++;
+                    if(hexes[p+1] == hexes[p1] || hexes[p+1] == hexes[p1+1] || hexes[p+1] == hexes[p1+2] || hexes[p+1] == hexes[p1+3] || hexes[p+1] == hexes[p1+4] || hexes[p+1] == hexes[p1+5] || hexes[p+1] == hexes[p1+6] || hexes[p+1] == hexes[p1+7])
+                        counter++;
+                    if(hexes[p+2] == hexes[p1] || hexes[p+2] == hexes[p1+1] || hexes[p+2] == hexes[p1+2] || hexes[p+2] == hexes[p1+3] || hexes[p+2] == hexes[p1+4] || hexes[p+2] == hexes[p1+5] || hexes[p+2] == hexes[p1+6] || hexes[p+2] == hexes[p1+7])
+                        counter++;
+                    if(hexes[p+3] == hexes[p1] || hexes[p+3] == hexes[p1+1] || hexes[p+3] == hexes[p1+2] || hexes[p+3] == hexes[p1+3] || hexes[p+3] == hexes[p1+4] || hexes[p+3] == hexes[p1+5] || hexes[p+3] == hexes[p1+6] || hexes[p+3] == hexes[p1+7])
+                        counter++;
+                    if(hexes[p+4] == hexes[p1] || hexes[p+4] == hexes[p1+1] || hexes[p+4] == hexes[p1+2] || hexes[p+4] == hexes[p1+3] || hexes[p+4] == hexes[p1+4] || hexes[p+4] == hexes[p1+5] || hexes[p+4] == hexes[p1+6] || hexes[p+4] == hexes[p1+7])
+                        counter++;
+                    if(hexes[p+5] == hexes[p1] || hexes[p+5] == hexes[p1+1] || hexes[p+5] == hexes[p1+2] || hexes[p+5] == hexes[p1+3] || hexes[p+5] == hexes[p1+4] || hexes[p+5] == hexes[p1+5] || hexes[p+5] == hexes[p1+6] || hexes[p+5] == hexes[p1+7])
+                        counter++;
+                    if(hexes[p+6] == hexes[p1] || hexes[p+6] == hexes[p1+1] || hexes[p+6] == hexes[p1+2] || hexes[p+6] == hexes[p1+3] || hexes[p+6] == hexes[p1+4] || hexes[p+6] == hexes[p1+5] || hexes[p+6] == hexes[p1+6] || hexes[p+6] == hexes[p1+7])
+                        counter++;
+                    if(hexes[p+7] == hexes[p1] || hexes[p+7] == hexes[p1+1] || hexes[p+7] == hexes[p1+2] || hexes[p+7] == hexes[p1+3] || hexes[p+7] == hexes[p1+4] || hexes[p+7] == hexes[p1+5] || hexes[p+7] == hexes[p1+6] || hexes[p+7] == hexes[p1+7])
+                        counter++;
+
+                    if(counter==2)
+                    {
+                        bool flag = false;
+                        for(int k : hexesToDelete){
+                            if (p == k) flag=true;
+                        }
+                        if(!flag) hexesToDelete.push_back(p);
+
+                    }
+                }
+            }
+        }
+
+       std::sort(hexesToDelete.begin(), hexesToDelete.end(), std::greater<int>());
+
+       for(int i : hexesToDelete){
+           qDebug()<<i;
+           hexes.erase(hexes.begin()+i, hexes.begin()+i+8);
+       }
+
+    }*/
 
     void smoothNinetyDegreesAngles(double length, Polyhedron &poly){
 
@@ -129,7 +178,7 @@ public:
 
     void smoothAxis1(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
-        int i, j, p=0, p1=0;
+        int j, p=0, p1=0;
         std::vector<Pointd> quad;
         std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
@@ -144,7 +193,7 @@ public:
         quad.push_back(Pointd(0, 0, 0));
         quad.push_back(Pointd(0, 0, 0));
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             vertexMap.insert(std::pair<Pointd, int>(Pointd(coords()[p], coords()[p+1], coords()[p+2]), i));
             /*if (Pointd(coords()[p], coords()[p+1], coords()[p+2]) < min)
@@ -153,14 +202,14 @@ public:
 
         p=0;
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]+length);
             quad[1] = Pointd(coords()[p]+length, coords()[p+1]-length, coords()[p+2]+length);
             quad[2] = Pointd(coords()[p]+length, coords()[p+1], coords()[p+2]);
             quad[3] = Pointd(coords()[p], coords()[p+1], coords()[p+2]);
 
-            for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+            for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
             {
                 if (quad[0] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                     flag1 = true;
@@ -178,13 +227,13 @@ public:
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
-                    for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+                    for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
                     {
                         int p2, k;
 
 
                         if (Pointd(quad[0].x(), quad[0].y()+length, quad[0].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -200,9 +249,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                         {
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
@@ -245,7 +294,7 @@ public:
 
 
                         if(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -261,9 +310,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
@@ -352,7 +401,7 @@ public:
 
     void smoothAxis2(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
-        int i, j, p=0, p1=0;
+        int j, p=0, p1=0;
         std::vector<Pointd> quad;
         std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
@@ -367,7 +416,7 @@ public:
         quad.push_back(Pointd(0, 0, 0));
         quad.push_back(Pointd(0, 0, 0));
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             vertexMap.insert(std::pair<Pointd, int>(Pointd(coords()[p], coords()[p+1], coords()[p+2]), i));
             /*if (Pointd(coords()[p], coords()[p+1], coords()[p+2]) < min)
@@ -376,7 +425,7 @@ public:
 
         p=0;
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]-length);
@@ -401,7 +450,7 @@ public:
                 }
             }
 
-            for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+            for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
             {
                 if (quad[0] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                     flag1 = true;
@@ -419,13 +468,13 @@ public:
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
-                    for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+                    for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
                     {
                         int p2, k;
 
 
                         if (Pointd(quad[0].x(), quad[0].y()+length, quad[0].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -441,9 +490,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
                                                     checkQuadExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[3])))
@@ -488,7 +537,7 @@ public:
 
 
                         if(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -504,9 +553,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
@@ -601,7 +650,7 @@ public:
 
     void smoothAxis3(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
-        int i, j, p=0, p1=0;
+        int j, p=0, p1=0;
         std::vector<Pointd> quad;
         std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
@@ -616,7 +665,7 @@ public:
         quad.push_back(Pointd(0, 0, 0));
         quad.push_back(Pointd(0, 0, 0));
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             vertexMap.insert(std::pair<Pointd, int>(Pointd(coords()[p], coords()[p+1], coords()[p+2]), i));
             /*if (Pointd(coords()[p], coords()[p+1], coords()[p+2]) < min)
@@ -625,7 +674,7 @@ public:
 
         p=0;
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]);
@@ -652,7 +701,7 @@ public:
             }
 
 
-            for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+            for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
             {
                 if (quad[0] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                     flag1 = true;
@@ -671,13 +720,13 @@ public:
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
-                    for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+                    for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
                     {
                         int p2, k;
 
 
                         if (Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k < (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -693,9 +742,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)), vertexMap.at(quad[0])) &&
                                                     checkQuadExists(vertexMap.at(quad[1]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()+length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()+length)), vertexMap.at(quad[2])))
@@ -738,7 +787,7 @@ public:
 
 
                         if(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2])
                                         )
@@ -755,9 +804,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y])&& checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[0])) &&
                                                     checkQuadExists(vertexMap.at(quad[1]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[2])))
@@ -853,7 +902,7 @@ public:
 
     void smoothAxis4(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
-        int i, j, p=0, p1=0;
+        int j, p=0, p1=0;
         std::vector<Pointd> quad;
         std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
@@ -868,7 +917,7 @@ public:
         quad.push_back(Pointd(0, 0, 0));
         quad.push_back(Pointd(0, 0, 0));
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             vertexMap.insert(std::pair<Pointd, int>(Pointd(coords()[p], coords()[p+1], coords()[p+2]), i));
             /*if (Pointd(coords()[p], coords()[p+1], coords()[p+2]) < min)
@@ -877,7 +926,7 @@ public:
 
         p=0;
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p], coords()[p+1]-length, coords()[p+2]);
@@ -904,7 +953,7 @@ public:
             }
 
 
-            for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+            for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
             {
                 if (quad[0] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                     flag1 = true;
@@ -922,13 +971,13 @@ public:
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
-                    for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+                    for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
                     {
                         int p2, k;
 
 
                         if (Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -944,9 +993,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)), vertexMap.at(quad[0])) &&
                                                     checkQuadExists(vertexMap.at(quad[1]), vertexMap.at(Pointd(quad[3].x(), quad[3].y(), quad[3].z()-length)), vertexMap.at(Pointd(quad[0].x(), quad[0].y(), quad[0].z()-length)), vertexMap.at(quad[2])))
@@ -988,7 +1037,7 @@ public:
                             }
 
                         if(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -1004,9 +1053,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y]) &&
                                                     checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[0])) &&
                                                     checkQuadExists(vertexMap.at(quad[1]), vertexMap.at(Pointd(quad[3].x()+length, quad[3].y(), quad[3].z())), vertexMap.at(Pointd(quad[0].x()+length, quad[0].y(), quad[0].z())), vertexMap.at(quad[2])))
@@ -1102,7 +1151,7 @@ public:
 
     void smoothAxis5(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
-        int i, j, p=0, p1=0;
+        int j, p=0, p1=0;
         std::vector<Pointd> quad;
         std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
@@ -1117,7 +1166,7 @@ public:
         quad.push_back(Pointd(0, 0, 0));
         quad.push_back(Pointd(0, 0, 0));
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             vertexMap.insert(std::pair<Pointd, int>(Pointd(coords()[p], coords()[p+1], coords()[p+2]), i));
             /*if (Pointd(coords()[p], coords()[p+1], coords()[p+2]) < min)
@@ -1126,7 +1175,7 @@ public:
 
         p=0;
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p]-length, coords()[p+1]-length, coords()[p+2]);
@@ -1153,7 +1202,7 @@ public:
             }
 
 
-            for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+            for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
             {
                 if (quad[0] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                     flag1 = true;
@@ -1171,13 +1220,13 @@ public:
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
-                    for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+                    for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
                     {
                         int p2, k;
 
 
                         if (Pointd(quad[0].x(), quad[0].y()+length, quad[0].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -1193,9 +1242,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
                                                     checkQuadExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[3])))
@@ -1238,7 +1287,7 @@ public:
 
 
                         if(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -1257,9 +1306,9 @@ public:
 
 
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
@@ -1347,7 +1396,7 @@ public:
 
     void smoothAxis6(double length, Polyhedron &poly){
         std::map<Pointd, int> vertexMap;
-        int i, j, p=0, p1=0;
+        int j, p=0, p1=0;
         std::vector<Pointd> quad;
         std::vector<std::vector<Pointd>> quads_used_here;
         bool flag1=false, flag2=false, flag3=false, flag4=false, flagNormal1=false, flagNormal2=false;
@@ -1362,7 +1411,7 @@ public:
         quad.push_back(Pointd(0, 0, 0));
         quad.push_back(Pointd(0, 0, 0));
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             vertexMap.insert(std::pair<Pointd, int>(Pointd(coords()[p], coords()[p+1], coords()[p+2]), i));
             /*if (Pointd(coords()[p], coords()[p+1], coords()[p+2]) < min)
@@ -1371,7 +1420,7 @@ public:
 
         p=0;
 
-        for(int i = 0; i < coords().size()/3; i++, p+=3)
+        for(int i = 0; i < (int) coords().size()/3; i++, p+=3)
         {
             bool flag_quad_intersection = false;
             quad[0] = Pointd(coords()[p]+length, coords()[p+1]-length, coords()[p+2]);
@@ -1396,7 +1445,7 @@ public:
                 }
             }
 
-            for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+            for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
             {
                 if (quad[0] == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
                     flag1 = true;
@@ -1414,13 +1463,13 @@ public:
                 if (!(tree.do_intersect(K::Triangle_3(point_to_point3(quad[0]), point_to_point3(quad[1]), point_to_point3(quad[3])))) &&
                     !(tree.do_intersect(K::Triangle_3(point_to_point3(quad[1]), point_to_point3(quad[2]), point_to_point3(quad[3])))))
                 {
-                    for (j=0, p1=0; j<coords().size()/3; j++, p1+=3)
+                    for (j=0, p1=0; j< (int) coords().size()/3; j++, p1+=3)
                     {
                         int p2, k;
 
 
                         if (Pointd(quad[0].x(), quad[0].y()+length, quad[0].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -1436,9 +1485,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[1])) &&
                                                     checkQuadExists(vertexMap.at(quad[2]), vertexMap.at(Pointd(quad[0].x(), quad[0].y()+length, quad[0].z())), vertexMap.at(Pointd(quad[1].x(), quad[1].y()+length, quad[1].z())), vertexMap.at(quad[3])))
@@ -1482,7 +1531,7 @@ public:
 
 
                         if(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z()) == Pointd(coords()[p1], coords()[p1+1], coords()[p1+2]))
-                            for (k=0, p2=0; k<coords().size()/3; k++, p2+=3)
+                            for (k=0, p2=0; k< (int) coords().size()/3; k++, p2+=3)
                             {
                                 if(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z()) == Pointd(coords()[p2], coords()[p2+1], coords()[p2+2]))
                                 {
@@ -1498,9 +1547,9 @@ public:
 
                                     cleanSharedQuads(quad, shared_quads);
 
-                                    for (int x=0; x < shared_quads.size(); x++)
+                                    for (int x=0; x < (int) shared_quads.size(); x++)
                                     {
-                                        for (int y=0; y < shared_quads.size(); y++)
+                                        for (int y=0; y < (int) shared_quads.size(); y++)
                                             if (shared_quads[x] != shared_quads[y] && checkOrthoNormals(shared_quads[x], shared_quads[y]) && checkSameVerseNormals(shared_quads[x], shared_quads[y])
                                                     && checkQuadExists(vertexMap.at(quad[3]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[2])) &&
                                                     checkQuadExists(vertexMap.at(quad[0]), vertexMap.at(Pointd(quad[3].x(), quad[3].y()-length, quad[3].z())), vertexMap.at(Pointd(quad[2].x(), quad[2].y()-length, quad[2].z())), vertexMap.at(quad[1])))
@@ -1599,7 +1648,7 @@ public:
     bool checkIfTriangleExists(int a, int b, int c, int &index)
     {
 
-        for (int i=0, p=0; i<tris().size()/3; i++, p+=3)
+        for (int i=0, p=0; i< (int) tris().size()/3; i++, p+=3)
         {
             if (tris()[p] == a || tris()[p] == b || tris()[p] == c)
                 if (tris()[p+1] == a || tris()[p+1] == b || tris()[p+1] == c)
@@ -1616,7 +1665,7 @@ public:
     bool checkQuadExists (int a, int b, int c, int d)
     {
 
-        for (int i=0, p=0; i<quads().size()/4; i++, p+=4)
+        for (int i=0, p=0; i< (int) quads().size()/4; i++, p+=4)
         {
             if (quads()[p] == a || quads()[p] == b || quads()[p] == c || quads()[p] == d)
                 if (quads()[p+1] == a || quads()[p+1] == b || quads()[p+1] == c || quads()[p+1] == d)
@@ -1709,7 +1758,7 @@ public:
 
         std::vector<int> indicesToDelete;
 
-        for (int i=0 ; i<sharedQuads.size(); i++)
+        for (int i=0 ; i< (int) sharedQuads.size(); i++)
         {
             int counter = 0;
             for (int j=0; j<4; j++) if (quadWedge[j] == (Pointd(m_coords[m_quads[sharedQuads[i]*4]*3], m_coords[m_quads[sharedQuads[i]*4]*3+1], m_coords[m_quads[sharedQuads[i]*4]*3+2]))) counter++;
@@ -1758,9 +1807,9 @@ public:
 
         std::vector<std::pair<int, int>> indicesTrisQuads;
 
-        for (int i = 0, p = 0; i<m_tris.size()/3; i++, p+=3)
+        for (int i = 0, p = 0; i< (int) m_tris.size()/3; i++, p+=3)
         {
-            for (int iq = 0, pq = 0; iq<m_quads.size()/4; iq++, pq+=4)
+            for (int iq = 0, pq = 0; iq< (int) m_quads.size()/4; iq++, pq+=4)
             {
                 int counter = 0;
                 if (m_tris[p] == m_quads[pq] || m_tris[p] == m_quads[pq+1] || m_tris[p] == m_quads[pq+2] || m_tris[p] == m_quads[pq+3])
@@ -2068,7 +2117,7 @@ public:
 
         int num_deleted = 0;
 
-        for (int i=0, p=0; i < m_coords.size()/3; i++, p+=3)
+        for (int i=0, p=0; i < (int) m_coords.size()/3; i++, p+=3)
         {
             if (!m_vtx_on_surface[i+num_deleted])
             {
@@ -2081,7 +2130,7 @@ public:
 
                 num_deleted++;
 
-                for (int k = 0; k < m_quads.size(); k++)
+                for (int k = 0; k < (int) m_quads.size(); k++)
                 {
                     if (m_quads[k] > i) m_quads[k]--;
                 }
