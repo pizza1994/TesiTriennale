@@ -4,6 +4,7 @@
 #include <float.h>
 #include "lib/common/point.h"
 
+
 /**
  * @interface DrawableObject
  * @brief L'interfaccia DrawableObject modella un oggetto renderizzabile da una GLcanvas.

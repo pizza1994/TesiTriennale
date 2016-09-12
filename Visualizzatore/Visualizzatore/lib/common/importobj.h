@@ -1,20 +1,26 @@
-#ifndef _SMESHLIB_IO_IMPORTOBJ_H_
-#define _SMESHLIB_IO_IMPORTOBJ_H_
+#ifndef IMPORTOBJ_H
+#define IMPORTOBJ_H
 
-#include "CGAL/Polyhedron_incremental_builder_3.h"
-#include "CGAL/Modifier_base.h"
-#include "CGAL/exceptions.h"
-#include "CGAL/Polyhedron_items_3.h"
-#include "CGAL/HalfedgeDS_list.h"
-#include "CGAL/Polyhedron_3.h"
 #include <string>
 #include <fstream>
 #include <exception>
-#include "common.h"
+#include <CGAL/Simple_cartesian.h>
+#include <CGAL/AABB_tree.h>
+#include <CGAL/AABB_traits.h>
+#include <CGAL/Polyhedron_3.h>
+#include <CGAL/boost/graph/graph_traits_Polyhedron_3.h>
+#include "CGAL/HalfedgeDS_list.h"
+#include "CGAL/Polyhedron_items_3.h"
+#include <CGAL/AABB_face_graph_triangle_primitive.h>
+#include <CGAL/algorithm.h>
+#include <CGAL/Side_of_triangle_mesh.h>
+#include "CGAL/Polyhedron_incremental_builder_3.h"
+#include "CGAL/Modifier_base.h"
+#include "CGAL/exceptions.h"
 
-namespace SMeshLib {
-namespace IO       {
-;
+typedef CGAL::Simple_cartesian<double> E;
+typedef CGAL::Polyhedron_3<E> Polyhedrone;
+
 
 // The BuildCgalPolyhedronFromObj class builds a CGAL::Polyhedron_3 from Wavefront OBJ file.
 // This is very simple reader and only reads vertex coordinates and vertex index for faces.
@@ -127,38 +133,5 @@ private:
 
 // Import a OBJ file given by fileName to polyhedron.
 // TPoly is a type of CGAL::Polyhdeon_3.
-void importOBJ(const std::string& fileName, Polyhedron* polyhedron)
-{
-    if(polyhedron)
-    {
-        try
-        {
-            // Build Polyhedron_3 from the OBJ file.
-            BuildCgalPolyhedronFromObj<Polyhedron::HalfedgeDS> _buildPolyhedron(fileName);
-
-            // Calls is_valid at the end. Throws an exception in debug mode if polyhedron is not
-            // manifold.
-            polyhedron->delegate(_buildPolyhedron);
-
-            // CGAL::Assert_exception is thrown in the debug mode when
-            // CGAL::Polyhedron_incremental_builder_3 is destroyed in BuildCgalPolyhedronFromObj.
-            // However, in the release mode assertions is disabled and hence no exception is thrown.
-            // Thus for uniform error reporting, if the polyhedron is not valid then throw a dummy
-            // exception in release mode.
-            if(!polyhedron->is_valid())
-            {
-                throw CGAL::Assertion_exception("", "", "", 0, "");
-            }
-        }
-        catch(const CGAL::Assertion_exception&)
-        {
-            std::string _msg = "SMeshLib::importOBJ: Error loading " + fileName;
-            //throw std::exception(_msg.c_str());
-        }
-    }
-}
-
-};	// End namespace IO.
-};	// End namespace SMeshLib.
 
 #endif // _SMESHLIB_IO_IMPORTOBJ_H_

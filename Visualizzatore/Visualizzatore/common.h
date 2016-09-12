@@ -9,14 +9,14 @@
 #include <CGAL/AABB_traits.h>
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/boost/graph/graph_traits_Polyhedron_3.h>
-#include "CGAL/Polyhedron_items_3.h"
 #include "CGAL/HalfedgeDS_list.h"
+#include "CGAL/Polyhedron_items_3.h"
 #include <CGAL/AABB_face_graph_triangle_primitive.h>
 #include <CGAL/algorithm.h>
 #include <CGAL/Side_of_triangle_mesh.h>
-
-
-
+#include "CGAL/Polyhedron_incremental_builder_3.h"
+#include "CGAL/Modifier_base.h"
+#include "CGAL/exceptions.h"
 
 typedef CGAL::Simple_cartesian<double> K;
 typedef CGAL::Polyhedron_3<K> Polyhedron;
@@ -24,15 +24,17 @@ typedef CGAL::AABB_face_graph_triangle_primitive<Polyhedron> Primitive;
 typedef CGAL::AABB_traits<K, Primitive> Traits;
 typedef CGAL::AABB_tree<Traits> Tree;
 typedef CGAL::Side_of_triangle_mesh<Polyhedron, K> Point_inside;
+typedef K::Ray_3 Ray;
+typedef K::Triangle_3 Triangle;
+typedef std::list<Triangle>::iterator Iterator;
+
+
 
 #define EPSILON 0.000001
 
 #define ONE_ON_SQRT2 0.7071067811865475f
 #define ONE_ON_SQRT3 0.5773502691896258f
 
-typedef K::Ray_3 Ray;
-typedef K::Triangle_3 Triangle;
-typedef std::list<Triangle>::iterator Iterator;
 
 
 extern int WINDOW_MANAGER_ID;
@@ -80,5 +82,6 @@ bool epsilonEqual(float x, float v);
 bool epsilonEqual(const Vec3 &x, const Vec3 &v);
 
 bool pointInside(Tree &tree, K::Point_3 query);
+
 
 #endif // COMMON_H

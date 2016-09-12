@@ -16,10 +16,6 @@
 #include "lib/common/bounding_box.h"
 #include "lib/trimesh/drawable_trimesh.h"
 #include <math.h>
-#include <CGAL/AABB_tree.h>
-#include <CGAL/AABB_traits.h>
-#include <CGAL/Simple_cartesian.h>
-#include <CGAL/AABB_triangle_primitive.h>
 
 
 #include <algorithm>
@@ -42,6 +38,14 @@
  */
 
 //TODO: Optimize the amount of useless cubes we create.
+
+typedef CGAL::Simple_cartesian<double> K;
+typedef CGAL::Polyhedron_3<K> Polyhedron;
+typedef CGAL::AABB_face_graph_triangle_primitive<Polyhedron> Primitive;
+typedef CGAL::AABB_traits<K, Primitive> Traits;
+typedef CGAL::AABB_tree<Traits> Tree;
+
+
 
 class Grid
 {

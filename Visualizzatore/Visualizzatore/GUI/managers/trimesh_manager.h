@@ -10,10 +10,14 @@
 #include <QColor>
 #include "lib/trimesh/drawable_trimesh.h"
 #include "GUI/objects/drawable_bbox.h"
-#include "GUI/objects/drawable_grid.h"
 #include "common.h"
+<<<<<<< Updated upstream
 //#include "lib/common/importobj.h"
 
+=======
+#include "GUI/objects/drawable_grid.h"
+#include "lib/common/importobj.h"
+>>>>>>> Stashed changes
 
 namespace Ui
 {
@@ -30,6 +34,7 @@ class TrimeshManager : public QDockWidget
         ~TrimeshManager();
 
 
+    void importOBJ(const std::string &fileName, Polyhedrone *polyhedron);
     private
     slots:
 

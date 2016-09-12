@@ -56,7 +56,8 @@ SOURCES += \
     GUI/objects/grid.cpp \
     GUI/objects/grid_cell.cpp \
     GUI/objects/drawable_grid.cpp \
-    lib/hexmesh/load_save.cpp
+    lib/hexmesh/load_save.cpp \
+    lib/common/importobj.cpp
 
 
 QMAKE_CXXFLAGS += -std=c++11

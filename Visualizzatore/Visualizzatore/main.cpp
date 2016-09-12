@@ -1,7 +1,6 @@
 #include "GUI/mainwindow.h"
 #include "GUI/managers/trimesh_manager.h"
 #include "GUI/managers/window_manager.h"
-#include "common.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]){

@@ -1,7 +1,6 @@
 #include "drawable_grid.h"
 #include <math.h>
 
-
 DrawableGrid::DrawableGrid()
 {
     visible = false;
@@ -24,8 +23,13 @@ DrawableGrid::DrawableGrid(const BoundingBox& b, const int granularityFactor, Dr
 
     strcpy(homeToStrcat, home);
     save_quadmesh((strcat(homeToStrcat,"/quadmesh.obj")), mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
+    Polyhedron* pStructure = new Polyhedron();
 
-    mymeshSurface.smoothNinetyDegreesAngles(Grid::getLength(), p);
+    strcpy(homeToStrcat, home);
+
+    importOBJ((strcat(homeToStrcat,"/quadmesh.obj")), pStructure);
+
+    mymeshSurface.smoothNinetyDegreesAngles(Grid::getLength(), p, *pStructure);
     strcpy(homeToStrcat, home);
     save_quadmesh((strcat(homeToStrcat,"/quadmeshSmooth.obj")), mymeshSurface.coords(), mymeshSurface.quads(), mymeshSurface.tris(), 1);
 
@@ -75,6 +79,41 @@ void DrawableGrid::draw() const
 
     }
 }
+
+
+
+void DrawableGrid::importOBJ(const std::string& fileName, Polyhedrone* polyhedron)
+{
+    if(polyhedron)
+    {
+        try
+        {
+            // Build Polyhedron_3 from the OBJ file.
+            BuildCgalPolyhedronFromObj<Polyhedron::HalfedgeDS> _buildPolyhedron(fileName);
+
+            // Calls is_valid at the end. Throws an exception in debug mode if polyhedron is not
+            // manifold.
+            polyhedron->delegate(_buildPolyhedron);
+
+            // CGAL::Assert_exception is thrown in the debug mode when
+            // CGAL::Polyhedron_incremental_builder_3 is destroyed in BuildCgalPolyhedronFromObj.
+            // However, in the release mode assertions is disabled and hence no exception is thrown.
+            // Thus for uniform error reporting, if the polyhedron is not valid then throw a dummy
+            // exception in release mode.
+            if(!polyhedron->is_valid())
+            {
+                throw CGAL::Assertion_exception("", "", "", 0, "");
+            }
+        }
+        catch(const CGAL::Assertion_exception&)
+        {
+            std::string _msg = "SMeshLib::importOBJ: Error loading " + fileName;
+            //throw std::exception(_msg.c_str());
+        }
+    }
+}
+
+
 
 Pointd DrawableGrid::sceneCenter() const
 {

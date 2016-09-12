@@ -12,6 +12,38 @@
 #include "lib/common/importobj.h"
 
 
+void TrimeshManager::importOBJ(const std::string& fileName, Polyhedrone* polyhedron)
+{
+    if(polyhedron)
+    {
+        try
+        {
+            // Build Polyhedron_3 from the OBJ file.
+            BuildCgalPolyhedronFromObj<Polyhedron::HalfedgeDS> _buildPolyhedron(fileName);
+
+            // Calls is_valid at the end. Throws an exception in debug mode if polyhedron is not
+            // manifold.
+            polyhedron->delegate(_buildPolyhedron);
+
+            // CGAL::Assert_exception is thrown in the debug mode when
+            // CGAL::Polyhedron_incremental_builder_3 is destroyed in BuildCgalPolyhedronFromObj.
+            // However, in the release mode assertions is disabled and hence no exception is thrown.
+            // Thus for uniform error reporting, if the polyhedron is not valid then throw a dummy
+            // exception in release mode.
+            if(!polyhedron->is_valid())
+            {
+                throw CGAL::Assertion_exception("", "", "", 0, "");
+            }
+        }
+        catch(const CGAL::Assertion_exception&)
+        {
+            std::string _msg = "SMeshLib::importOBJ: Error loading " + fileName;
+            //throw std::exception(_msg.c_str());
+        }
+    }
+}
+
+
 TrimeshManager::TrimeshManager(QWidget *parent) : QDockWidget(parent), ui(new Ui::Trimesh_manager)
 {
     ui->setupUi(this);
@@ -39,7 +71,7 @@ void TrimeshManager::on_butLoadTrimesh_clicked()
         if(t != NULL){ t->clear(); visibleGrid = NULL; visibleBoundingBox = NULL;}
         t = new DrawableTrimesh(filename.toStdString().c_str());
         p = new Polyhedron();
-        SMeshLib::IO::importOBJ(filename.toStdString(), p);
+        importOBJ(filename.toStdString(), p);
         ((MainWindow*)mw)->push_obj(t);
         ((MainWindow*)mw)->updateGlCanvas();
 

@@ -6,8 +6,8 @@
 #include <QDebug>
 #include "GUI/objects/sphere.h"
 #include "GUI/objects/cylinder.h"
-#include "common.h"
 #include "lib/hexmesh/mesh.h"
+#include "lib/common/importobj.h"
 
 
 
@@ -29,7 +29,8 @@ class DrawableGrid : public Grid ,
          void setVisibleGrid(bool b);
          bool getVisibleGrid();
 
-    private:
+         void importOBJ(const std::string &fileName, Polyhedrone *polyhedron);
+private:
          bool visible;
          bool visibleGrid;
 
